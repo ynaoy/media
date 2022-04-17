@@ -52,7 +52,9 @@ jobs:
       - run:
           name: webpacker compile
           command: bundle exec rails webpacker:compile
-      - ruby/rspec-test
+      - run:
+          name: test
+          command: bundle exec rspec
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
