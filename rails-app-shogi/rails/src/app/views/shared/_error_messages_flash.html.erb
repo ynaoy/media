@@ -1,0 +1,9 @@
+<% unless flash.empty? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <% flash.each do |key,value| %>
+        <%= value %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

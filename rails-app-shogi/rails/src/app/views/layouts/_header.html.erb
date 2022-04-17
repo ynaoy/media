@@ -1,0 +1,33 @@
+<header class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <div class="container">
+    <%= link_to "将棋のお時間", root_url, {class:"logo"} %>
+    <nav>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+        <%= form_with(scope: :post, url: "#",class:"d-flex search_form") do |f| %>
+          <%= f.text_field :search, class: 'form-control' %>
+          <%= f.submit "検索", class: "btn btn-primary" %>
+        <% end %>
+        </li>
+        <% if logged_in? %>
+          <li class="dropdown collapse navbar-collapse">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-toggle="dropdown">
+              <%= current_user.name %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><%= link_to "Settings", '#', {class:"dropdown-item"} %></li>
+              <li class="divider dropdown-divider"></li>
+              <li>
+                <%= link_to "Log out", logout_path, {class:"dropdown-item",method: :delete} %>
+              </li>
+            </ul>
+          </li>>
+        <% else %>
+          <li><%= link_to "ログイン", login_path, {class:"nav-link dropdown-item"} %></li>
+          <li><%= link_to "新規登録", signup_path, {class:"nav-link dropdown-item"} %></li>
+        <% end %>
+      </ul>
+    </nav>
+
+  </div>
+</header>

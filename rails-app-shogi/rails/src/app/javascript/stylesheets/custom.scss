@@ -1,0 +1,150 @@
+@import '~bootstrap/scss/bootstrap';
+@import "bootstrap";
+
+@mixin box_sizing {
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}
+
+/* universal */
+
+body {
+  padding-top: 60px;
+}
+section {
+  overflow: auto;
+}
+h1{
+  text-align: center;
+  margin-bottom: 30px;
+}
+.logo{
+  float: left;
+  font-size: 1.4em;
+  //color: #000000;
+  color: #fff;
+  //padding-top: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+}
+.logo:hover {
+  color: #fff;
+}
+.search_form{
+  padding-right: 6px;
+  //padding-top: 9px;
+}
+
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+  @include box_sizing;
+  background: #d3d3d3;
+}
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+.gravatar_edit {
+  margin-top: 15px;
+}
+
+/* forms */
+
+.form_signup{
+  input, textarea, select, .uneditable-input {
+    border: 1px solid #bbb;
+    width:100%;
+    margin-bottom: 15px;
+    @include box_sizing;
+  }
+  input {
+    height: auto !important;
+  }
+  .form_kifu{
+    display: flex;
+    p {
+      margin-left: 2px;
+      color: red;
+    }
+  }
+}
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 30px 0;
+  }
+}
+
+.field_with_errors {
+  .form-control {
+    @extend .is-invalid;
+    //color: $state-danger-text;
+  }
+}
+/* #user/index */
+.user{
+  border: solid 1px;
+  border-radius: 4px;
+  margin:0 auto;
+  margin-bottom: 1%;
+  width: 60%;
+  a{
+    text-decoration: none;
+    font-size: 180%;
+  }
+  span:hover{
+    background-color: #D6D6D8;/* 背景色を変更 */
+  }
+  p{
+    padding: 0;
+    margin: 0;
+  }
+  #delete{
+    color: red;
+    font-size: 60%;
+    float: right;
+    padding-top: 12px;
+    padding-right: 5px;
+  }
+}
+/* #kifu/index */
+.kifu{
+  border: solid 1px;
+  border-radius: 4px;
+  margin-bottom: 1%;
+  a{
+    text-decoration: none;
+    height:100%;
+    width: 100%;
+  }
+  p{
+    color: black;
+    font-size: 180%;
+    padding: 0;
+    margin: 0;
+  }
+  #vs{
+    margin: 3%;
+  }
+  #win{
+    color: lime;
+  }
+  #created{
+    font-size: 70%;
+    float: right;
+  }
+  :hover{
+    background-color: #D6D6D8;/* 背景色を変更 */
+  }
+}
+/* pagination */
+.pagination{
+  justify-content: right;
+  margin: 3% 0;
+}

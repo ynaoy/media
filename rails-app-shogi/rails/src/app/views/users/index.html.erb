@@ -1,0 +1,16 @@
+<h1>Users#index</h1>
+<p>Find me in app/views/users/index.html.erb</p>
+<% if @users.any? %>
+<%= paginate @users %>
+<% @users.each do | user | %>
+  <%= tag.div class: "user" do %>
+    <%= link_to user_path(user) do %>
+      <%= tag.span user.name, id: "user_name" %>
+    <% end %>
+    <%= link_to controller: "users", action: "show", id: "delete" do %>
+      <%= tag.span "delete", id: "delete" %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= paginate @users %>
+<% end %>
