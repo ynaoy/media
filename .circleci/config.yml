@@ -5,22 +5,28 @@ version: 2.1
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
+  node: circleci/node@5.0.2
   ruby: circleci/ruby@1.1.2
+  browser-tools: circleci/browser-tools@1.1.3
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.7
+      - image: cimg/ruby:2.7.4-browsers
     working_directory: ~/media/rails-app-shogi/rails/src
     steps:
       - checkout:
-          path: ~/media/rails-app-shogi/rails
+          path: ~/media #一階層しか無理っぽい。~/media/rails-app-shogiとかできない
       - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
   test:
     docker:
-      - image: circleci/ruby:2.7
+      - image: cimg/ruby:2.7.4-browsers
       - image: circleci/mysql:5.5
         environment:
           MYSQL_ROOT_PASSWORD: password
@@ -34,11 +40,18 @@ jobs:
     working_directory: ~/media/rails-app-shogi/rails/src
     steps:
       - checkout:
-          path: ~/media/rails-app-shogi/rails
+          path: ~/media
       - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - run:
           name: Database setup
           command: bundle exec rails db:migrate
+      - run:
+          name: webpacker compile
+          command: bundle exec rails webpacker:compile
       - run:
           name: test
           command: bundle exec bin/rspec
