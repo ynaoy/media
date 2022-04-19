@@ -91,9 +91,33 @@ RSpec.describe "UsersIndeces", type: :system do
 
     # <<< Todo 正しくユーザーページへ遷移するか　>>>
 
+    it "work delete button ", js: true do 
 
-    # <<< Todo 正しくユーザーをdeleteできるか　>>>
+      #まずはログインする
+      log_in_e2e(@admin_user) 
+      expect(page).to have_no_link(href:login_path)
+      #expect(page).to have_link(href:logout_path)
 
+      #users/indexに遷移する
+      visit users_path
+      user_name = @users[0].name
+      expect(page).to have_content(user_name)
+      
+      #ユーザーを削除する
+      page.accept_confirm do
+        all("#delete")[0].click
+        #click_on "delete", match: :first
+      end
+
+      #削除後再度users/index画面に戻っているか確認
+      for i in 1..19 do
+        expect(page).to have_content(@users[i].name)
+        expect(page).to have_content("delete")
+      end
+      #削除したユーザーが表示されていないか確認
+      expect(page).to have_no_content(user_name)
+
+    end
 
   end
 end

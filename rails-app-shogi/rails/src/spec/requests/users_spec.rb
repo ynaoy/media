@@ -45,4 +45,11 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "Delete /destroy" do
+    it "returns http redirect" do
+      delete user_path(@user)
+      expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
+    end
+  end
+
 end
