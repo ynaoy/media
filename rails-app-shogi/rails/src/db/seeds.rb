@@ -12,7 +12,7 @@
               password:              password,
               password_confirmation: password,
               )
-end
+=end
 
 #棋譜
 content = "棋戦：
@@ -43,4 +43,4 @@ user = User.find_by(name:"admin_user")
                       win: 2,
                       content: content)
 end
-=end
+

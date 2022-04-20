@@ -45,10 +45,10 @@ RSpec.describe "KifusIndices", type: :system do
     sleep 10
     expect(page).to have_content("show")
     #<<< Todo クリックして遷移するとvueが正しく機能しない問題。新しくページを開くと正しく機能する >>>
-    #text = ["飛","角","金","銀","桂","香","歩","王"]
-    #for t in text do
-      #expect(page).to have_content(t)
-    #end
+    text = ["飛","角","金","銀","桂","香","歩","王"]
+    for t in text do
+      expect(page).to have_content(t)
+    end
   end
 
 end

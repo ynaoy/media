@@ -4,7 +4,7 @@
 <%= paginate @kifus %>
 <% @kifus.each do | kifu | %>
   <%= tag.div class: "kifu" do %>
-    <%= link_to kifu_path(kifu) do %>
+    <%= link_to kifu_path(kifu), data: {"turbolinks"=>false} do %>
       <%= tag.p class: "kifuUrl" do %>
         先手：
         <%= tag.span kifu.player1, id: win_or_lose(1,kifu) %>
