@@ -53,10 +53,11 @@ RSpec.describe "Kifus", type: :request do
     end
   end
 
-  describe "GET /delete" do
-    it "returns http success" do
-      get "/kifus/delete"
-      expect(response).to have_http_status(:success)
+  describe "Delete /destroy" do
+    it "returns http redirect" do
+      log_in_as @user
+      delete kifu_path(@kifu)
+      expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
     end
   end
 

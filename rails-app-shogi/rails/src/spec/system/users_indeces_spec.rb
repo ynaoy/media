@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe "UsersIndeces", type: :system do
 
   before do
-    
+
+    @admin_user = FactoryBot.create(:user)
     @users = []
     60.times do |i|
       @users.push(FactoryBot.create(:user,
@@ -15,7 +16,7 @@ RSpec.describe "UsersIndeces", type: :system do
                                   )
       )
     end
-    @admin_user = FactoryBot.create(:user)
+    @users.reverse!
 
   end
 
@@ -107,7 +108,7 @@ RSpec.describe "UsersIndeces", type: :system do
       page.accept_confirm do
         all("#delete")[0].click
       end
-
+      sleep 10
       #削除後再度users/index画面に戻っているか確認
       for i in 1..19 do
         expect(page).to have_content(@users[i].name)
@@ -124,7 +125,7 @@ RSpec.describe "UsersIndeces", type: :system do
       page.accept_confirm do
         all("#delete")[0].click
       end
-
+      sleep 10
       #削除後再度users/index画面に戻っているか確認
       for i in 22..41 do
         expect(page).to have_content(@users[i].name)

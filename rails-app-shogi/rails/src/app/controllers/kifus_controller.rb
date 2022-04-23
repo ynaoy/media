@@ -29,7 +29,10 @@ class KifusController < ApplicationController
     @kifus = Kifu.search_kifu("user_id",current_user.id).order(id: "desc").page(params[:page]).per(20)
   end
 
-  def delete
+  def destroy
+    Kifu.find(params[:id]).destroy
+    flash[:success] = "Kifu deleted"
+    redirect_back_or(root_url)
   end
 
   private

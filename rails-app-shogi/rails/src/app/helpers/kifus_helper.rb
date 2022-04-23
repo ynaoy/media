@@ -151,8 +151,7 @@ module KifusHelper
     win = params[:content].scan(reg_win)
 
     params[:win] = if !win.empty?
-      1 if( win[0] == "先手の勝ち" )
-      2 if( win[0] == "後手の勝ち" )
+      ( win[0] == "先手の勝ち" )? 1 : 2
     else
       0
     end

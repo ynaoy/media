@@ -4,7 +4,7 @@
 <%= paginate @kifus %>
 <% @kifus.each do | kifu | %>
   <%= tag.div class: "kifu" do %>
-    <%= link_to kifu_path(kifu), data: {"turbolinks"=>false} do %>
+    <%= link_to kifu_path(kifu), data: {turbolinks: false} do %>
       <%= tag.p class: "kifuUrl" do %>
         先手：
         <%= tag.span kifu.player1, id: win_or_lose(1,kifu) %>
@@ -14,8 +14,18 @@
         <%= tag.span timewithzone_to_str(kifu.created_at) , id: "created" %>
       <% end %>
     <% end %>
+    <% if @current_user.id == kifu.user_id %>
+      <%= link_to kifu_path(kifu), method: :delete, 
+      data: {confirm: "本当に削除してよろしいですか？"},
+      id:"deleteUrl" do %>
+        <%= tag.p do %>
+          <%= tag.span "delete", id: "delete" %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
 <%= paginate @kifus %>
+<%= javascript_pack_tag 'store_location', 'data-turbolinks-track': 'reload' %>
 <% end %>
 

@@ -12,5 +12,5 @@ Rails.application.routes.draw do
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
   resources :users
-  resources :kifus, only: %i[new create show index]
+  resources :kifus, only: %i[new create show index destroy]
 end
