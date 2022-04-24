@@ -13,7 +13,7 @@
 <script>
 
 export default {
-
+  name: "Admin",
   inject: {
     board_flg:['board_flg'],
     board_text:['board_text'],
