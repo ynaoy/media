@@ -3,6 +3,12 @@
 #
 =begin
 #User
+User.create!(name:  admin_user,
+              email: admin_user@example.com,
+              password:              password,
+              password_confirmation: password,
+              admin: true,
+              )
 99.times do |n|
   name = Faker::Name.name.slice(0..9)
   email = "example-#{n+1}@example.com"

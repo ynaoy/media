@@ -11,15 +11,15 @@ export default {
 </script>
 <style lang="scss" scoped>
   #index{
-    display: flex;
+   display: flex;
     text-align: center;
     align-items: center;
-    width: 306px;
-    margin-left: 10px;
+    width: 22.99vw;
+    margin-left: 0.751vw;
     border:  none;
-    font-size: 9px;
+    font-size: 0.676vw;
   }
   #ind{
-    width:34px;
+    width:2.554vw;
   }
 </style>

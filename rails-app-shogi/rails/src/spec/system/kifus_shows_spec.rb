@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "KifusShows", type: :system do
   before do
     @user = FactoryBot.create(:user)
-    @kifu = FactoryBot.create(:kifu, user_id: @user.id)
+    @kifu = FactoryBot.create(:kifu, user_id: @user.id,)
   end
 
   describe "Kifu_Test" do
@@ -17,8 +17,7 @@ RSpec.describe "KifusShows", type: :system do
         expect(page).to have_content(t)
       end
 
-      expect(page).to have_selector("#player1")
-      expect(page).to have_selector("#player2")
+      expect(page).to have_selector("#player")
 
       #最初はstateが0
       expect(page).to have_selector("#state", text: 0)

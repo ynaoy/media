@@ -47,8 +47,8 @@ export default {
   #board{
     display: flex;
     border:  none;
-    width: 626px;
-    height: 346px;
+    width: 47.032vw;
+    height: 25.995vw;
     background-color: #DCF0BE;
   }
 </style>

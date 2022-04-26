@@ -16,12 +16,12 @@ export default {
 </script>
 <style lang="scss" scoped>
   #columns{
-    height: 306px;
+    height: 22.99vw;
     border:  none;
-    font-size: 9px;
+    font-size: 0.676vw;
   }
   #col{
-    height:34px;
+    height:2.554vw;
     display: flex;
     text-align: center;
     align-items: center;

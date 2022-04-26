@@ -5,7 +5,7 @@ class Kifu < ApplicationRecord
   validates :player1, length: { maximum: 10 }
   validates :player2, length: { maximum: 10 }
   default_scope -> { order(created_at: :desc) }
-  REGEX = /[[１-９]|同][[^[)|打]]]*[)|打]/
+  REGEX = /[[１-９]|同][[^[)|打]]]*[)|打]/  #1～9か同から始まって、[)と打]を含まない文字が続き、[)と打]
 
   #:contentからviewに渡す情報を取り出す
   def extract_kifu

@@ -26,27 +26,27 @@ export default {
   #sub_board1{
     display: grid;
     place-content: center;
-    grid-template-columns: 34px 34px;
-    grid-template-rows: 34px 34px 34px 34px;
-    gap: 2px 20px;
+    grid-template-columns: 2.554vw 2.554vw;
+    grid-template-rows: 2.554vw 2.554vw 2.554vw 2.554vw;
+    gap: 0.15vw 1.503vw;
     border: 2px solid #7F5E1E;
-    margin: 0 10px;
-    margin-top:20px;
-    width: 120px;
-    height: 150px;
+    margin: 0 0.751vw;
+    margin-top:1.503vw;
+    width: 9.016vw;
+    height: 11.27vw;
     background-color: #E3A936;
   }
   #sub_cell{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 1.803vw;
     font-family:serif;
   }
   #num{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
+    font-size: 0.902vw;
   }
 </style>

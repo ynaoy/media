@@ -1,8 +1,8 @@
 <template>
   <div id="right_board">
   <div>
-    <p id="player"> {{ player1 }}</p>
-    <p id="player"> {{ player2 }}</p>
+    <p id="player"> 先手:  {{ player1 }}</p>
+    <p id="player"> 後手:  {{ player2 }}</p>
   </div>  
   <subBoard0></subBoard0>
 </div>
@@ -43,7 +43,7 @@ export default {
     align-content: end;
   }
   #player{
-    font-size: 11px;
-    margin: 10px;
+    font-size: 0.826vw;
+    margin: 0.751vw;
   }
 </style>
