@@ -1,35 +1,5 @@
 <h1>Kifus#index</h1>
 <p>Find me in app/views/kifus/index.html.erb</p>
-<% if @kifus.any? %>
-<%= paginate @kifus %>
-<% @kifus.each do | kifu | %>
-  <%= tag.div class: "kifu" do %>
-    <%= link_to kifu_path(kifu), data: {turbolinks: false} do %>
-      <%= tag.p class: "kifuUrl" do %>
-        <% if(kifu.title != "") %>
-          <%= kifu.title %>
-        <% else %>
-          先手：
-          <%= tag.span kifu.player1, id: win_or_lose(1,kifu) %>
-          <%= tag.span "VS", id: "vs" %>
-          後手：
-          <%= tag.span kifu.player2, id: win_or_lose(2,kifu) %>
-        <% end %>
-        <%= tag.span timewithzone_to_str(kifu.created_at) , id: "created" %>
-      <% end %>
-    <% end %>
-    <% if @current_user.id == kifu.user_id %>
-      <%= link_to kifu_path(kifu), method: :delete, 
-      data: {confirm: "本当に削除してよろしいですか？"},
-      id:"deleteUrl" do %>
-        <%= tag.p do %>
-          <%= tag.span "delete", id: "delete" %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-<%= paginate @kifus %>
+<%= render "shared/kifus_item" %>
 <%= javascript_pack_tag 'store_location', 'data-turbolinks-track': 'reload' %>
-<% end %>
 

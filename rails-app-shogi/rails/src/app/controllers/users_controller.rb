@@ -7,6 +7,11 @@ class UsersController < ApplicationController
     @users = User.all.order(id: "desc").page(params[:page]).per(20)
   end
 
+  def show
+    @user = User.find(params[:id])
+    @kifus = Kifu.search_kifu(attribute = "user_id",str = params[:id]).order(id: "desc").page(params[:page]).per(20)
+  end
+
   def new
     @user = User.new
   end

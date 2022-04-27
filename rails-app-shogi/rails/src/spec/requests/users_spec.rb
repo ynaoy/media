@@ -28,6 +28,13 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "GET /show" do
+    it "returns http success" do
+      get user_path(@user)
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "GET /new" do
     it "returns http success" do
       get signup_path

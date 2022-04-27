@@ -158,7 +158,7 @@ module KifusHelper
     return params
   end
 
-  #棋譜一覧表示時に勝っているほうにidを付与する
+  #棋譜一覧表示時に勝った方にidを付与する
   def win_or_lose(win,kifu)
     "win" if win == kifu.win
   end
@@ -168,4 +168,9 @@ module KifusHelper
      date.to_s.match(/[^+]*/)[0]
   end
 
+  #pagination用のkifusデータから合計サイズを抜き出す
+  def get_kifus_size(kifus,size=20)
+    kifu_size = (kifus.length-1)*size + kifus[-1].length
+    "#{kifu_size}件の棋譜"
+  end
 end
