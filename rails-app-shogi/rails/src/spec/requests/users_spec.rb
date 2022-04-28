@@ -52,6 +52,36 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "GET /edit" do
+
+    it "returns http redirect with not login" do
+      get edit_user_path(@user)
+      expect(response).to redirect_to(login_url) #ページがlogin_urlにリダイレクトする
+    end
+
+    it "returns http success" do
+      log_in_as @user
+      get edit_user_path(@user)
+      expect(response).to have_http_status(:success)
+    end
+
+  end
+
+  describe "patch /update" do
+
+    it "returns http redirect with not login" do
+      patch user_path(@user) , params: { user: { name: "User4"}}
+      expect(response).to redirect_to(login_url) #ページがlogin_urlにリダイレクトする
+    end
+
+    it "returns http redirect" do
+      log_in_as @user
+      patch user_path(@user) , params: { user: { name: "User4"}}
+      expect(response).to redirect_to(user_path(@user)) #ページがusers/showにリダイレクトする
+    end
+
+  end
+
   describe "Delete /destroy" do
     it "returns http redirect" do
       delete user_path(@user)

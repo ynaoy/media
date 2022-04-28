@@ -1,4 +1,9 @@
 module KifusHelper
+  # loginしているuser.id==kifu.idかどうかを調べる
+  def my_kifu?(kifu)
+    current_user.nil? ? false : current_user.id == kifu.user_id
+  end
+
   # kifusをviewに渡す形式に変換する
   def kifu_to_board(kifus)
     last_ind = [0,0]

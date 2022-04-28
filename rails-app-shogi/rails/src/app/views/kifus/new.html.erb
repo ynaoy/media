@@ -2,7 +2,7 @@
 <h1>棋譜を追加</h1>
 <div class="row justify-content-md-center">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_with(model:@kifu,class:"form_signup") do |f| %>
+    <%= form_with(model:@kifu,class:"form_css") do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= f.label :title, "タイトル" %>
       <%= f.text_field :title, class: 'form-control' %>

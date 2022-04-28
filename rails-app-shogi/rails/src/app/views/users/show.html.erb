@@ -4,7 +4,7 @@
   <%= tag.div class: "user_data" do %>
     <%= tag.h1 @user.name, id: "user_name" %>
     <% if current_user?(@user) %> 
-      <%= link_to "[編集]", user_path(@user), id:"edit_url" %>
+      <%= link_to "[編集]", edit_user_path(@user), id:"edit_url" %>
     <% end %>
     <%= tag.div "#{@kifus.total_count}件の棋譜", id: "user_info" %>
   <% end %>

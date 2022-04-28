@@ -19,7 +19,19 @@ h1{
   text-align: center;
   margin-bottom: 30px;
 }
-
+.logo{
+  float: left;
+  font-size: 1.4em;
+  //color: #000000;
+  color: #fff;
+  //padding-top: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: none;
+}
+.logo:hover {
+  color: #fff;
+}
 .search_form{
   padding-right: 6px;
   //padding-top: 9px;
@@ -36,7 +48,7 @@ h1{
 
 /* forms */
 
-.form_signup{
+.form_css{
   input, textarea, select, .uneditable-input {
     border: 1px solid #bbb;
     width:100%;

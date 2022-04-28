@@ -16,7 +16,7 @@
         <%= tag.span timewithzone_to_str(kifu.created_at) , id: "created" %>
       <% end %>
     <% end %>
-    <% if current_user.id == kifu.user_id %>
+    <% if my_kifu?(kifu) %>
       <%= link_to kifu_path(kifu), method: :delete, 
       data: {confirm: "本当に削除してよろしいですか？"},
       id:"deleteUrl" do %>
