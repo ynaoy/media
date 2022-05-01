@@ -33,7 +33,8 @@ RSpec.describe "Kifus", type: :request do
                  1 ７六歩(77)        ( 0:01/00:00:01)
                  2 ８四歩(83)        ( 0:02/00:00:02)
                  3 ２六歩(27)        ( 0:01/00:00:02)
-                " } }
+                ",
+                tag:{ tag_ids:[0,1,2] } } }
       expect(response).to redirect_to( kifu_url(id:@kifu.id+1) ) #ページがShowにリダイレクトする
     end
   end

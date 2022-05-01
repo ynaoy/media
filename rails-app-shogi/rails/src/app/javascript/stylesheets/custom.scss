@@ -51,18 +51,26 @@ h1{
 .form_css{
   input, textarea, select, .uneditable-input {
     border: 1px solid #bbb;
-    width:100%;
     margin-bottom: 15px;
     @include box_sizing;
-  }
-  input {
-    height: auto !important;
   }
   .form_kifu{
     display: flex;
     p {
       margin-left: 2px;
       color: red;
+    }
+  }
+  .btn{
+    width:100%;
+    height: auto !important;
+  }
+  .tag_form{
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    div{
+      margin-left: 4px;
     }
   }
 }

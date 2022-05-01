@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_26_051233) do
+ActiveRecord::Schema.define(version: 2022_05_01_002939) do
+
+  create_table "kifu_tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "tag_id", null: false
+    t.bigint "kifu_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["kifu_id", "tag_id"], name: "index_kifu_tags_on_kifu_id_and_tag_id"
+    t.index ["kifu_id"], name: "index_kifu_tags_on_kifu_id"
+  end
 
   create_table "kifus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "content"
@@ -25,6 +34,13 @@ ActiveRecord::Schema.define(version: 2022_04_26_051233) do
     t.index ["user_id"], name: "index_kifus_on_user_id"
   end
 
+  create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -35,5 +51,6 @@ ActiveRecord::Schema.define(version: 2022_04_26_051233) do
     t.string "remember_digest"
   end
 
+  add_foreign_key "kifu_tags", "kifus"
   add_foreign_key "kifus", "users"
 end

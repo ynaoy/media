@@ -4,13 +4,19 @@ class KifusController < ApplicationController
 
   def new
     @kifu = Kifu.new
+    @tag = Tag.new
   end
 
   def create
     params[:kifu] = get_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
+
     if @kifu.save
-      flash[:success] = "Kifu created!"
+
+      @tag = @kifu.save_kifu_tag(tags_params[:tag][:tag_ids])
+      render new if !@tag
+
+      flash.now[:success] = "Kifu created!"
       redirect_to kifu_path(id:@kifu.id)
     end
   end
@@ -31,7 +37,7 @@ class KifusController < ApplicationController
 
   def destroy
     Kifu.find(params[:id]).destroy
-    flash[:success] = "Kifu deleted"
+    flash.now[:success] = "Kifu deleted"
     redirect_back_or(root_url)
   end
 
@@ -39,6 +45,10 @@ class KifusController < ApplicationController
 
     def kifus_params
       params.require(:kifu).permit(:title, :player1, :player2, :content, :win )
+    end
+
+    def tags_params
+      params.require(:kifu).permit(tag: [tag_ids:[] ])
     end
 
     def correct_user
