@@ -22,13 +22,13 @@ class KifusController < ApplicationController
   end
 
   def show
-    kifus = Kifu.find(params[:id])
+    kifu = Kifu.find(params[:id])
+    @tags = kifu.get_tags 
+    @player1 = kifu.player1
+    @player2 = kifu.player2
 
-    @player1 = kifus.player1
-    @player2 = kifus.player2
-
-    kifus = kifus.extract_kifu
-    @kifus_text, @kifus_flg = kifu_to_board(kifus)
+    kifu = kifu.extract_kifu
+    @kifu_text, @kifu_flg = kifu_to_board(kifu)
   end
 
   def index

@@ -18,7 +18,12 @@ class Kifu < ApplicationRecord
       render new if !@tag
     end
   end
-  
+
+  #kifu_tags.tag_idとtags.idを照会してtags.nameを返す
+  def get_tags
+    self.kifu_tags.joins("INNER JOIN tags ON tags.id = kifu_tags.tag_id").select("kifu_tags.*","tags.name")
+  end
+
   #:contentからviewに渡す情報を取り出す
   def extract_kifu
     self.content.scan(REGEX)

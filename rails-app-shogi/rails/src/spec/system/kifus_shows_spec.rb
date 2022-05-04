@@ -4,12 +4,14 @@ RSpec.describe "KifusShows", type: :system do
   before do
     @user = FactoryBot.create(:user)
     @kifu = FactoryBot.create(:kifu, user_id: @user.id,)
+    @tag1 = FactoryBot.create(:tag, name:"こんばんは")
+    @kifu_tag = @kifu.kifu_tags.build(tag_id:@tag1.id)
+    @kifu_tag.save
   end
 
   describe "Kifu_Test" do
 
-    it "change state" , js: true do
-
+    it "display normaly",js:true do
       visit kifu_path(id:@kifu.id)
 
       text = ["飛","角","金","銀","桂","香","歩","王"]
@@ -18,6 +20,11 @@ RSpec.describe "KifusShows", type: :system do
       end
 
       expect(page).to have_selector("#player")
+    end
+
+    it "change state" , js: true do
+
+      visit kifu_path(id:@kifu.id)
 
       #最初はstateが0
       expect(page).to have_selector("#state", text: 0)
@@ -44,6 +51,14 @@ RSpec.describe "KifusShows", type: :system do
       find("#back_1").click
       expect(page).to have_selector("#state", text: 0)
 
+    end
+
+    it "display tags", js: true do
+      visit kifu_path(id:@kifu.id)
+      #id=tagsのwrapperが存在するか確認
+      expect(page).to have_selector("#tags")
+      #tagの中身が存在するか確認
+      expect(page).to have_content(@tag1.name)
     end
 
   end

@@ -198,3 +198,24 @@ h1{
   justify-content: right;
   margin: 3% 0;
 }
+/* #kifu/show */
+#tags{
+  margin-top:1vw;
+  width: 47.032vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+#tag{
+  text-decoration: none;
+  background-color: 	#ECECEC;
+  margin-left: 1.026vw;
+  margin-top: 0.5vw;
+  padding: 0.8vw;
+  border: 1px solid 	#D4D4D4;
+  border-radius: 12px;
+  font-size: 1.126vw;
+  color: black;
+}
+#tag:hover{
+  background-color: #E5E5E5;
+}
