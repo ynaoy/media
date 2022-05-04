@@ -13,7 +13,7 @@
 <script>
 
 export default {
-
+  name: "Admin",
   inject: {
     board_flg:['board_flg'],
     board_text:['board_text'],
@@ -49,8 +49,8 @@ export default {
 }
 img{
   cursor: pointer;
-  margin-right: 5px;
-  margin-left: 5px;
+  margin-right: 0.376vw;
+  margin-left: 0.376vw;
   width:6%;
   height:6%;
 }
@@ -58,16 +58,13 @@ img{
   transform: scale(-1, 1);
 }
 #state{
-  width: 6%;
+  width:6%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: solid 2px;
-  border-radius: 4px;
-  font-size: 26px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 0.301vw;
+  font-size: 2.179vw;
 }
 
 </style>

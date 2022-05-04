@@ -2,7 +2,7 @@
 <h1>棋譜を追加</h1>
 <div class="row justify-content-md-center">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_with(model:@kifu,class:"form_signup") do |f| %>
+    <%= form_with(model:@kifu, class:"form_css") do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= f.label :title, "タイトル" %>
       <%= f.text_field :title, class: 'form-control' %>
@@ -13,11 +13,26 @@
       <%= f.label :player2, "後手" %>
       <%= f.text_field :player2, class: 'form-control',maxlength:10 %>
 
-      <div class=form_kifu>
+      <%= tag.div class: "form_kifu" do %>
         <%= f.label :content, "棋譜" %>
         <p>※必須</p>
-      </div>
+      <% end %>
       <%= f.text_area :content, size: "0x8", class: 'form-control', required: true %>
+
+      <%= f.label :tag, "タグ" %>
+      <%= tag.div class: "tag_form" do %>
+        <%= f.fields_for :tag do |i| %>
+          <%= i.collection_check_boxes(:tag_ids, Tag.all, :id, :name) do |b| %>
+
+            <%= tag.div class:"form-check form-check-inline" do%>
+              <%= b.check_box class:"form-check-input" %>
+              <%= b.label class:"form-check-label" do %>
+                <%= b.text %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
 
       <%= f.submit "作成", class: "btn btn-primary" %>
     <% end %>

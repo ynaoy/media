@@ -1,7 +1,6 @@
 <h1>Kifus#show</h1>
 <p>Find me in app/views/kifus/show.html.erb</p>
 <div id="js-hello-vue"></div>
-<%= tag.div '', id: "js-shogi-vue", data: { kifu_text: @kifus_text, kifu_flg: @kifus_flg,
+<%= tag.div '', id: "js-shogi-vue", data: { kifu_text: @kifu_text, kifu_flg: @kifu_flg,
    player1: @player1, player2: @player2 }%>
-
-
+<%= render "shared/kifu_tag" %>

@@ -2,6 +2,7 @@ FactoryBot.define do
 
   factory :kifu do
     user_id { 1 }
+    title { "" }
     player1 { "" }
     player2 { "" }
     win { 2 }

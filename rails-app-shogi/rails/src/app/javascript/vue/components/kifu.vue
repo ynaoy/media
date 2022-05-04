@@ -22,7 +22,7 @@ export default {
 
   data() {
     return {
-      mode:"test",
+      mode:"",
       state:0,
       old_state:0,
       max_state:0,
@@ -36,10 +36,6 @@ export default {
   },
   provide() {
     return {
-      board_margin_lr: "150",
-      board_margin_ud: "10",
-      sub_board_width:"120",
-      sub_board_height:"150",
       board_flg:      computed(() => this.board_flg),
       board_text:     computed(() => this.board_text),
       state:          computed(() => this.state),

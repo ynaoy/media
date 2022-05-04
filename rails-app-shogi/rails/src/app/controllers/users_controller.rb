@@ -1,10 +1,15 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: :index
+  before_action :logged_in_user, only: %i[index edit update]
   before_action :admin_user,     only: :index
 
   def index 
-    @users = User.all.page(params[:page]).per(20)
+    @users = User.all.order(id: "desc").page(params[:page]).per(20)
+  end
+
+  def show
+    @user = User.find(params[:id])
+    @kifus = Kifu.search_kifu(attribute = "user_id",str = params[:id]).order(id: "desc").page(params[:page]).per(20)
   end
 
   def new
@@ -22,9 +27,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
+  def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      respond_to do |format|
+        format.html do
+          flash.now[:success] = "Profile updated"
+          redirect_to @user
+        end
+        format.json { render json: @user, status: 200 }
+      end
+    else
+      respond_to do |format|
+        format.html { render 'edit'}
+        format.json { render json: @user.errors, status: 400}
+      end
+    end
+  end
+
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "User deleted"
+    flash.now[:success] = "User deleted"
     redirect_back_or(root_url)
   end
 

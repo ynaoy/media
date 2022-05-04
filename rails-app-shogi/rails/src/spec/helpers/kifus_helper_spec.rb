@@ -11,6 +11,27 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe KifusHelper, type: :helper do
+  describe "my_kifu?" do
+
+    before do
+      @user = FactoryBot.create(:user)
+      @user2 = FactoryBot.create(:user,
+                                  email:"user4@example.com")
+      @kifu1 = FactoryBot.create(:kifu, user_id: @user.id)
+      @kifu2 = FactoryBot.create(:kifu, user_id: @user2.id)
+    end
+
+    it "should work" do
+      flg = helper.my_kifu?(@kifu1)
+      expect(flg).to eq false
+      session[:user_id] = @user.id
+      flg = helper.my_kifu?(@kifu1)
+      expect(flg).to eq true
+      flg = helper.my_kifu?(@kifu2)
+      expect(flg).to eq false
+    end
+  end
+
   describe "kifu_to_board" do
     it "should work" do
       kifu = %w[７六歩(77) ８四歩(83) ２六歩(27) ８五歩(84) ２五歩(26) ３二金(41) ７七角(88) ３四歩(33) ７八銀(79) ７七角成(22)]

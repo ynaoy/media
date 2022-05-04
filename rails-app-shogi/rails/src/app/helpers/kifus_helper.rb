@@ -1,4 +1,9 @@
 module KifusHelper
+  # loginしているuser.id==kifu.idかどうかを調べる
+  def my_kifu?(kifu)
+    current_user.nil? ? false : current_user.id == kifu.user_id
+  end
+
   # kifusをviewに渡す形式に変換する
   def kifu_to_board(kifus)
     last_ind = [0,0]
@@ -151,15 +156,14 @@ module KifusHelper
     win = params[:content].scan(reg_win)
 
     params[:win] = if !win.empty?
-      1 if( win[0] == "先手の勝ち" )
-      2 if( win[0] == "後手の勝ち" )
+      ( win[0] == "先手の勝ち" )? 1 : 2
     else
       0
     end
     return params
   end
 
-  #棋譜一覧表示時に勝っているほうにidを付与する
+  #棋譜一覧表示時に勝った方にidを付与する
   def win_or_lose(win,kifu)
     "win" if win == kifu.win
   end
@@ -169,4 +173,9 @@ module KifusHelper
      date.to_s.match(/[^+]*/)[0]
   end
 
+  #pagination用のkifusデータから合計サイズを抜き出す
+  def get_kifus_size(kifus,size=20)
+    kifu_size = (kifus.length-1)*size + kifus[-1].length
+    "#{kifu_size}件の棋譜"
+  end
 end

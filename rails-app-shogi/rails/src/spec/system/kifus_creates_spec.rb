@@ -4,6 +4,7 @@ RSpec.describe "KifusCreates", type: :system do
 
   before do
     @user = FactoryBot.create(:user)
+    @tag = FactoryBot.create(:tag)
     @content = "棋戦：
            戦型：
            開始日時：
@@ -54,6 +55,8 @@ RSpec.describe "KifusCreates", type: :system do
     fill_in "先手", with: ""
     fill_in "後手",     with: ""
     fill_in "棋譜",with: @content
+    page.has_css?('#kifu_tag_tag_ids_1')
+    find('input[type="checkbox"]').click#タグを選択
     # 作成をクリックする
     click_on "作成"
 

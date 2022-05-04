@@ -1,0 +1,16 @@
+<h1>Users#show</h1>
+<p>Find me in app/views/users/show.html.erb</p>
+<%= tag.div class: "user_show" do %>
+  <%= tag.div class: "user_data" do %>
+    <%= tag.h1 @user.name, id: "user_name" %>
+    <% if current_user?(@user) %> 
+      <%= link_to "[編集]", edit_user_path(@user), id:"edit_url" %>
+    <% end %>
+    <%= tag.div "#{@kifus.total_count}件の棋譜", id: "user_info" %>
+  <% end %>
+  <%= render "shared/kifus_item" %>
+  <% if !@kifus.any? %>
+    <%= tag.div "このユーザーには棋譜がありません。", class: "no_kifu" %>
+  <% end %>
+<% end %>
+
