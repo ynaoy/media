@@ -8,7 +8,7 @@ class KifusController < ApplicationController
   end
 
   def create
-    params[:kifu] = get_data_from_content(params[:kifu])
+    params[:kifu] = convert_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
 
     if @kifu.save
@@ -27,8 +27,8 @@ class KifusController < ApplicationController
     @player1 = kifu.player1
     @player2 = kifu.player2
 
-    kifu = kifu.extract_kifu
-    @kifu_text, @kifu_flg = kifu_to_board(kifu)
+    kifu_list = kifu.extract_kifu
+    @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
   end
 
   def index

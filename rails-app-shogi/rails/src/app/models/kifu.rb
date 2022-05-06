@@ -19,7 +19,7 @@ class Kifu < ApplicationRecord
     end
   end
 
-  #kifu_tags.tag_idとtags.idを照会してtags.nameを返す
+  #kifu_tags.tag_idとtags.idを照会してINNER JOINする
   def get_tags
     self.kifu_tags.joins("INNER JOIN tags ON tags.id = kifu_tags.tag_id").select("kifu_tags.*","tags.name")
   end
