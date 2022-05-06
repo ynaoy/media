@@ -72,12 +72,12 @@ module KifusHelper
     end
 
     # textとflgの今いる駒の位置を取得
-    x = 8-kifu_str[4].to_i-1 # kifu_strでは始点が右上なのでlist形式で使えるように左上に変更する
+    x = 8-(kifu_str[4].to_i-1) # kifu_strでは始点が右上なのでlist形式で使えるように左上に変更する
     y = kifu_str[5].to_i-1
 
     # textとflgの次に進む位置を取得
     if(kifu_str[0] == "同") # 同〇では直前の相手の駒の位置に移動する
-      next_x = 8-old_pos[0]
+      next_x = old_pos[0]
       next_y = old_pos[1]
     else 
       next_x,next_y = convert_xy(kifu_str)
@@ -86,18 +86,17 @@ module KifusHelper
     # textとflgを次の状態にupdateする
     if(kifu_str[-1] == "打") 
       text_list, flg_list =
-        update_text_and_flg(text_list, flg_list, kifu_str[2], turn, next_x=next_x, next_y=next_y)
+        update_text_and_flg(text_list, flg_list, kifu_str, turn, nil, nil, next_x, next_y)
     else
       text_list, flg_list = 
-        update_text_and_flg(text_list, flg_list, kifu_str[2], turn, x, y, next_x, next_y)
+        update_text_and_flg(text_list, flg_list, kifu_str, turn, x, y, next_x, next_y)
     end
 
     return text_list, flg_list, [next_x,next_y]
   end
 
   #textとflgをstrとturnでupdateする
-  def update_text_and_flg(text_list, flg_list, str, turn, x=nil, y=nil, next_x=nil, next_y=nil)
-
+  def update_text_and_flg(text_list, flg_list, kifu_str, turn, x, y, next_x, next_y)
     sub_board_dict = {"飛"=> 0, "角"=> 1, "金"=> 2, "銀"=> 3, "桂"=> 4, "香"=> 5, "歩"=> 6, "玉"=> 7,
                       "龍"=> 0, "馬"=> 1,           "全"=> 3, "圭"=> 4, "杏"=> 5, "と"=> 6,}
 
@@ -106,14 +105,18 @@ module KifusHelper
       flg_list[8+turn][sub_board_dict[text_list[next_y][next_x]]] +=1
     end
 
-    if(x.nil? || y.nil?) #〇〇打の時は元いた位置はtextとflgには関係しない
+    if(kifu_str[-1] == "打") #sub_boardから駒を使うとき
+      flg_list[8+turn][sub_board_dict[kifu_str[2]]] -=1
+    end
+
+    if(!(x.nil? || y.nil?)) #〇〇打の時は元いた位置はtextとflgには関係しない
       #元々駒がいた位置のtextを空に、flgを0に
       text_list[y][x] = ""
       flg_list[y][x] = 0
     end
 
     #進んだ位置のtextを変更、flgをturnに
-    text_list[next_y][next_x] = str
+    text_list[next_y][next_x] = kifu_str[2]
     flg_list[next_y][next_x] = turn
 
     return text_list,flg_list
@@ -147,12 +150,12 @@ module KifusHelper
   #kifu_strの３四や２五等を半角数字に変換する
   def convert_xy(kifu)
     kanji_to_integer = {"一"=> 1, "二"=> 2, "三"=> 3, "四"=> 4, "五"=> 5, "六"=> 6, "七"=> 7, "八"=> 8, "九"=> 9}
-    x = kifu[0].tr('０-９','0-9').to_i-1
+    x = 8-(kifu[0].tr('０-９','0-9').to_i-1)
     y = kanji_to_integer[kifu[1]]-1
     return x,y
   end
 
-  #params[:content]からデータを取り出す
+  #params[:content]からplayer1、player2、winを取り出してparamに含める
   def convert_data_from_content(params)
 
     reg = /[先|後]手：.{,10}/
