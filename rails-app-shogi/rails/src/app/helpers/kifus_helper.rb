@@ -1,117 +1,126 @@
 module KifusHelper
-  # loginしているuser.id==kifu.idかどうかを調べる
+
+  # loginしているuserのidとKifuモデルのuser_idが一致するかどうかを調べる
   def my_kifu?(kifu)
     current_user.nil? ? false : current_user.id == kifu.user_id
   end
 
-  # kifusをviewに渡す形式に変換する
-  def kifu_to_board(kifus)
-    last_ind = [0,0]
+  # 指し手の集まりをviewに渡す形式に変換する
+  def kifu_to_board(kifu_list)
+    old_pos = [0,0]
     turn = 1
-    kifu_text = [
-                  [["香","桂","銀","金","王","金","銀","桂","香"],
-                  ["","飛","","","","","","角",""],
-                  ["歩","歩","歩","歩","歩","歩","歩","歩","歩"],
-                  ["","","","","","","","",""],
-                  ["","","","","","","","",""],
-                  ["","","","","","","","",""],
-                  ["歩","歩","歩","歩","歩","歩","歩","歩","歩"],
-                  ["","角","","","","","","飛",""],
-                  ["香","桂","銀","金","王","金","銀","桂","香"]]
-                ]
-    kifu_flg =  [
-                  [[2,2,2,2,2,2,2,2,2],
-                  [0,2,0,0,0,0,0,2,0],
-                  [2,2,2,2,2,2,2,2,2],
-                  [0,0,0,0,0,0,0,0,0],
-                  [0,0,0,0,0,0,0,0,0],
-                  [0,0,0,0,0,0,0,0,0],
-                  [1,1,1,1,1,1,1,1,1],
-                  [0,1,0,0,0,0,0,1,0],
-                  [1,1,1,1,1,1,1,1,1],
-                  [0,0,0,0,0,0,0,0],
-                  [0,0,0,0,0,0,0,0]]
-                ]
-    for n in 0..(kifus.length-1) do
-      (n%2==0)? turn=1:turn=2
-      last_text = kifu_text[n].deep_dup
-      last_flg = kifu_flg[n].deep_dup
 
-      text, flg, last_ind = get_text_and_flg(kifus[n], last_text, last_flg, turn, last_ind)
-      kifu_text.push(text)
-      kifu_flg.push(flg)
+    return_text_lists = 
+    [
+      [
+        ["香","桂","銀","金","王","金","銀","桂","香"],
+        ["","飛","","","","","","角",""],
+        ["歩","歩","歩","歩","歩","歩","歩","歩","歩"],
+        ["","","","","","","","",""],
+        ["","","","","","","","",""],
+        ["","","","","","","","",""],
+        ["歩","歩","歩","歩","歩","歩","歩","歩","歩"],
+        ["","角","","","","","","飛",""],
+        ["香","桂","銀","金","王","金","銀","桂","香"]
+      ]
+    ]
+
+    return_flg_lists =  
+    [
+      [
+        [2,2,2,2,2,2,2,2,2],
+        [0,2,0,0,0,0,0,2,0],
+        [2,2,2,2,2,2,2,2,2],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [1,1,1,1,1,1,1,1,1],
+        [0,1,0,0,0,0,0,1,0],
+        [1,1,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0]
+      ]
+    ]
+
+    for n in 0..(kifu_list.length-1) do
+      (n%2==0)? turn=1: turn=2
+      old_text_list = return_text_lists[n].deep_dup
+      old_flg_list = return_flg_lists[n].deep_dup
+
+      text_list, flg_list, old_pos =
+                        extract_text_and_flg(kifu_list[n], old_text_list, old_flg_list, turn, old_pos)
+      return_text_lists.push(text_list)
+      return_flg_lists.push(flg_list)
     end
-    return kifu_text,kifu_flg
+
+    return return_text_lists,return_flg_lists
   end
 
-  #kifuとtext,flg,indexに変換
-  def get_text_and_flg(kifu, text, flg, turn, last_ind)
-    sub_board_ind = {"飛"=> 0, "角"=> 1, "金"=> 2, "銀"=> 3, "桂"=> 4, "香"=> 5, "歩"=> 6, "玉"=> 7,
-                     "龍"=> 0, "馬"=> 1,           "全"=> 3, "圭"=> 4, "杏"=> 5, "と"=> 6,}
+  #kifu_strをtext,flg,indexに変換
+  def extract_text_and_flg(kifu_str, text_list, flg_list, turn, old_pos)
+    # 〇〇駒成(××)、〇〇成駒(××)、同駒(××)、〇〇駒打、〇〇駒(××)の５つをパターン分けして処理する
+    # ××にある駒が〇〇に移動する
 
-    if(kifu[3] == "成")
-      kifu[2] = convert_str(kifu[2])
-      kifu.slice!(3)
+    if(kifu_str[3] == "成") # 例: ３二銀成(33) → ３二全(33)、２二桂成(23) →２二圭(23)
+      kifu_str[2] = convert_nari(kifu_str[2])
+      kifu_str.slice!(3)
     end
 
-    #３二成銀、４五成桂のような棋譜を３二全、４五圭のように変換する
-    if(kifu[2] == "成")
-      kifu.slice!(2)
-      kifu[2] = convert_str(kifu[2])
+    if(kifu_str[2] == "成") # 例: ３二成銀(33) → ３二全(33)、 ２二成桂(23) →２二圭(23)
+      kifu_str[3] = convert_nari(kifu_str[3])
+      kifu_str.slice!(2)
     end
 
-    x = kifu[4].to_i-1
-    y = kifu[5].to_i-1
+    # textとflgの今いる駒の位置を取得
+    x = 8-kifu_str[4].to_i-1 # kifu_strでは始点が右上なのでlist形式で使えるように左上に変更する
+    y = kifu_str[5].to_i-1
 
-    if(kifu[0] == "同")
+    # textとflgの次に進む位置を取得
+    if(kifu_str[0] == "同") # 同〇では直前の相手の駒の位置に移動する
+      next_x = 8-old_pos[0]
+      next_y = old_pos[1]
+    else 
+      next_x,next_y = convert_xy(kifu_str)
+    end
 
-      next_x = last_ind[0]
-      next_y = last_ind[1]
-
-      #flgの持ち駒ゾーンに取った駒を追加する
-      if(text[next_y][8-next_x]!= "")
-        flg[8+turn][sub_board_ind[text[next_y][8-next_x]]] +=1
-      end
-
-      text[y][8-x] = ""
-      flg[y][8-x] = 0
-
-      text[next_y][8-next_x] = kifu[2]
-      flg[next_y][8-next_x] = turn
+    # textとflgを次の状態にupdateする
+    if(kifu_str[-1] == "打") 
+      text_list, flg_list =
+        update_text_and_flg(text_list, flg_list, kifu_str[2], turn, next_x=next_x, next_y=next_y)
     else
-
-      next_x,next_y = convert_xy(kifu)
-
-      if(kifu[-1] == "打")
-
-        text[next_y][8-next_x] = kifu[2]
-        flg[next_y][8-next_x] = turn
-
-        #flgの持ち駒ゾーンから使う駒を減らす
-        flg[8+turn][sub_board_ind[kifu[2]]] -=1
-
-      else
-
-        #flgの持ち駒ゾーンに取った駒を追加する
-        if(text[next_y][8-next_x]!= "")
-          flg[8+turn][sub_board_ind[text[next_y][8-next_x]]] +=1
-        end
-
-        text[y][8-x] = ""
-        flg[y][8-x] = 0
-
-        text[next_y][8-next_x] = kifu[2]
-        flg[next_y][8-next_x] = turn
-
-      end
-
+      text_list, flg_list = 
+        update_text_and_flg(text_list, flg_list, kifu_str[2], turn, x, y, next_x, next_y)
     end
 
-    return text, flg, [next_x,next_y]
+    return text_list, flg_list, [next_x,next_y]
   end
 
-  #kifu[3]が成の時にstrを変換する　例:歩→と 飛→龍
-  def convert_str(str)
+  #textとflgをstrとturnでupdateする
+  def update_text_and_flg(text_list, flg_list, str, turn, x=nil, y=nil, next_x=nil, next_y=nil)
+
+    sub_board_dict = {"飛"=> 0, "角"=> 1, "金"=> 2, "銀"=> 3, "桂"=> 4, "香"=> 5, "歩"=> 6, "玉"=> 7,
+                      "龍"=> 0, "馬"=> 1,           "全"=> 3, "圭"=> 4, "杏"=> 5, "と"=> 6,}
+
+    if(text_list[next_y][next_x]!= "")
+      #移動先に相手の駒がある時、先手ならflg[9][index]、後手ならflg[10][index]に取った駒を追加する
+      flg_list[8+turn][sub_board_dict[text_list[next_y][next_x]]] +=1
+    end
+
+    if(x.nil? || y.nil?) #〇〇打の時は元いた位置はtextとflgには関係しない
+      #元々駒がいた位置のtextを空に、flgを0に
+      text_list[y][x] = ""
+      flg_list[y][x] = 0
+    end
+
+    #進んだ位置のtextを変更、flgをturnに
+    text_list[next_y][next_x] = str
+    flg_list[next_y][next_x] = turn
+
+    return text_list,flg_list
+  end
+
+  #kifu_str[3]が成の時にstrを変換する　例:歩→と 飛→龍
+  def convert_nari(str)
     case str
 
     when "飛"
@@ -135,7 +144,7 @@ module KifusHelper
     end
   end
 
-  #kifuの３四や２五等を半角数字に変換する
+  #kifu_strの３四や２五等を半角数字に変換する
   def convert_xy(kifu)
     kanji_to_integer = {"一"=> 1, "二"=> 2, "三"=> 3, "四"=> 4, "五"=> 5, "六"=> 6, "七"=> 7, "八"=> 8, "九"=> 9}
     x = kifu[0].tr('０-９','0-9').to_i-1
@@ -144,7 +153,7 @@ module KifusHelper
   end
 
   #params[:content]からデータを取り出す
-  def get_data_from_content(params)
+  def convert_data_from_content(params)
 
     reg = /[先|後]手：.{,10}/
     reg_win = /[先|後]手の勝ち/
@@ -168,14 +177,14 @@ module KifusHelper
     "win" if win == kifu.win
   end
 
-  #Timewithzoneクラスから必要な情報を抜き出して文字列型で返す
+  #Timewithzoneクラスから" + "までの情報を抜き出して文字列型で返す
   def timewithzone_to_str(date)
      date.to_s.match(/[^+]*/)[0]
   end
 
-  #pagination用のkifusデータから合計サイズを抜き出す
-  def get_kifus_size(kifus,size=20)
-    kifu_size = (kifus.length-1)*size + kifus[-1].length
+  #pagination用のデータから合計サイズを抜き出す
+  def get_kifus_size(pagi_data,size=20)
+    kifu_size = (pagi_data.length-1)*size + pagi_data[-1].length
     "#{kifu_size}件の棋譜"
   end
 end
