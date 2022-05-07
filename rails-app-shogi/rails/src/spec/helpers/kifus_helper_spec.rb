@@ -74,7 +74,7 @@ RSpec.describe KifusHelper, type: :helper do
             player2:"bbbb",
             content:@content
             }
-      params = helper.convert_data_from_content(params)
+      params = helper.fetch_data_from_content(params)
       expect(params[:player1]).to eq "aaaa"
       expect(params[:player2]).to eq "bbbb"
     end
