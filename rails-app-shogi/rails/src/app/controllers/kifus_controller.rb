@@ -8,7 +8,7 @@ class KifusController < ApplicationController
   end
 
   def create
-    params[:kifu] = convert_data_from_content(params[:kifu])
+    params[:kifu] = fetch_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
 
     if @kifu.save
