@@ -2,8 +2,12 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
 
-=begin
 #Tag
+tag_0 = ["相居飛車","相振り飛車","対抗系"]
+for n in tag_0 do
+  Tag.create!(name: n)
+end
+
 tag_1 = ["角換わり","相掛かり","雁木","矢倉"]
 tag_2 = ["棒銀","早繰り銀","腰掛銀"]
 
@@ -22,15 +26,16 @@ end
 
 another_tag = ["横歩取り","右玉","筋違い角","嬉野流","アヒル戦法",
 "対振り急戦","対振り持久戦","向かい飛車","三間飛車","石田流三間飛車","四間飛車","中飛車",
-"角交換向かい飛車","角交換三間飛車","角交換四間飛車","角交換中飛車","相振り飛車",]
+"角交換向かい飛車","角交換三間飛車","角交換四間飛車","角交換中飛車",]
 #another_tagの中身をcreateする
 for n in another_tag do
   Tag.create!(name: n)
 end
 
 #User
-User.create!(name:  admin_user,
-              email: admin_user@example.com,
+password = "password"
+User.create!(name:  "admin_user",
+              email: "admin_user@example.com",
               password:              password,
               password_confirmation: password,
               admin: true,
@@ -38,13 +43,12 @@ User.create!(name:  admin_user,
 99.times do |n|
   name = Faker::Name.name.slice(0..9)
   email = "example-#{n+1}@example.com"
-  password = "password"
   User.create!(name:  name,
               email: email,
               password:              password,
               password_confirmation: password,
               )
-
+end
 
 #棋譜
 content = "棋戦：
@@ -70,10 +74,16 @@ content = "棋戦：
 user = User.find_by(name:"admin_user")
 99.times do |n|
   name = Faker::Name.name.slice(0..9)
-  user.kifus.create!( player1: name,
+  kifu = user.kifus.create!(
+                      title: "",
+                      player1: name,
                       player2: user.name,
                       win: 2,
                       content: content)
+  kifu.kifu_tags.build(tag_id:1)
+  kifu.kifu_tags.build(tag_id:7)
+  kifu.save
 end
-=end
+
+
 

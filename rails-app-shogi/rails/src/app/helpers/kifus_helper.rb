@@ -46,7 +46,7 @@ module KifusHelper
 
     # viewに渡す形に変換してreturn_〇〇_listにpush
     for n in 0..(kifu_list.length-1) do
-      (n%2==0)? turn=1: turn=2
+      turn = (n%2==0)? 1: 2
       text_list = return_text_lists[n].deep_dup
       flg_list = return_flg_lists[n].deep_dup
 

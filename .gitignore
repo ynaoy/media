@@ -35,3 +35,4 @@ rails-app-shogi/rails/src/yarn-error.log
 rails-app-shogi/rails/src/yarn-debug.log*
 rails-app-shogi/rails/src/.yarn-integrity
 rails-app-shogi/rails/src/db/mysql_data
+rails-app-shogi/rails/src/db/seeds.rb
