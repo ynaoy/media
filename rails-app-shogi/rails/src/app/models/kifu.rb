@@ -39,4 +39,17 @@ class Kifu < ApplicationRecord
     end
   end
 
+  #kifuモデルからattributeをstrで検索する
+  #OR tagモデルのnameカラムをstrで検索してそのidとkifu_tagモデルのtag_idカラム
+  def Kifu.search_kifu_and_tag(attribute = nil,str = nil)
+    if attribute && str
+      if attribute!="user_id"
+        str = "%"+str+"%"
+      end
+      kifu_ids = "SELECT kifu_id FROM kifu_Tags WHERE tag_id"
+      tag_ids =  "SELECT id FROM Tags WHERE (name LIKE :str)"
+      Kifu.where("#{attribute} LIKE :str OR id IN ( #{kifu_ids} IN (#{tag_ids}) )",str: str)
+    end
+  end
+
 end
