@@ -41,7 +41,7 @@ RSpec.describe KifusHelper, type: :helper do
     end
   end
 
-  describe "convert_data_from_content" do
+  describe "fetch_data_from_content" do
     before do
       @content = "棋戦：
        戦型：
@@ -62,7 +62,7 @@ RSpec.describe KifusHelper, type: :helper do
             player2:"",
             content:@content
             }
-      params = helper.convert_data_from_content(params)
+      params = helper.fetch_data_from_content(params)
       expect(params[:player1]).to eq "Player1"
       expect(params[:player2]).to eq "Player2"
       expect(params[:win]).to eq 2
@@ -74,7 +74,7 @@ RSpec.describe KifusHelper, type: :helper do
             player2:"bbbb",
             content:@content
             }
-      params = helper.convert_data_from_content(params)
+      params = helper.fetch_data_from_content(params)
       expect(params[:player1]).to eq "aaaa"
       expect(params[:player2]).to eq "bbbb"
     end
