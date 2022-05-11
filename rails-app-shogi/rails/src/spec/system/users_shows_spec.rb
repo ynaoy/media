@@ -2,17 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "UsersShows", type: :system do
   before do
+
     @user = FactoryBot.create(:user)
-    @kifus = []
-    40.times do |i|
-      @kifus.push(FactoryBot.create(:kifu,
-                                    user_id: @user.id,
-                                    player1:Faker::Name.name.slice(0..9),
-                                    player2: @user.name,
-        )
-      )
-    end
-    @kifus.reverse!
+    @kifus = make_kifus(user_id:@user.id, player2:@user.name, n:40)
     @user2 = FactoryBot.create(:user,
                                 name: "user20",
                                 email: "user20@example.com",
@@ -20,7 +12,8 @@ RSpec.describe "UsersShows", type: :system do
                                 password_confirmation: "password",
                                 admin: false,
                                   )
-  end
+  
+                                end
 
   describe "Users_index_test" do
 
@@ -33,7 +26,7 @@ RSpec.describe "UsersShows", type: :system do
       expect(page).to have_content("#{@kifus.length}件の棋譜")
       expect(page).to have_selector(".pagination")
       for i in 0..19 do
-        expect(page).to have_content(@kifus[i].player1)
+        expect(page).to have_content(@kifus[i].title)
       end
 
     end
