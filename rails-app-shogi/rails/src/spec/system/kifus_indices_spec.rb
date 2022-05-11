@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "KifusIndices", type: :system do
 
   before do
-
+    
     @user= FactoryBot.create(:user)
     @kifus = []
     60.times do |i|
