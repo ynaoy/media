@@ -42,7 +42,7 @@ RSpec.describe "Searches", type: :system do
   end
 
   it "search tag" do
-    
+
     @tag = FactoryBot.create(:tag, name:"hello")
     kifu_tag = @kifus[0].kifu_tags.build(tag_id:@tag.id)
     kifu_tag.save

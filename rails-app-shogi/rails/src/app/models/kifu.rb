@@ -46,8 +46,8 @@ class Kifu < ApplicationRecord
       if attribute!="user_id"
         str = "%"+str+"%"
       end
-      kifu_ids = "SELECT kifu_id FROM kifu_Tags"
-      tag_ids =  "SELECT id FROM Tags WHERE (name LIKE :str)"
+      kifu_ids = "SELECT kifu_id FROM kifu_tags"
+      tag_ids =  "SELECT id FROM tags WHERE (name LIKE :str)"
       Kifu.where("#{attribute} LIKE :str OR id IN ( #{kifu_ids} WHERE tag_id IN (#{tag_ids}) )",str: str)
     end
   end
