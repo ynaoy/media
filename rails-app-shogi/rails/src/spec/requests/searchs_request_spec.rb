@@ -2,9 +2,14 @@ require 'rails_helper'
 
 RSpec.describe "Searchs", type: :request do
 
-  describe "Post  /search" do
+  before do
+    @user = FactoryBot.create(:user)
+    @kifu = FactoryBot.create(:kifu, user_id: @user.id)
+  end
+
+  describe "Get  /search" do
     it "returns http success" do
-      post search_path, params: { search: { query: "相居飛車"} }
+      get search_path, params: { query: @user.name } 
       expect(response).to have_http_status(:success)
     end
   end

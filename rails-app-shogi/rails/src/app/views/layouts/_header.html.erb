@@ -4,8 +4,8 @@
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <li>
-        <%= form_with(scope: :post, url: "#",class:"d-flex search_form") do |f| %>
-          <%= f.text_field :search, class: 'form-control' %>
+        <%= form_with(method: :get, url: search_path, class:"d-flex search_form") do |f| %>
+          <%= f.text_field :query, required: true, class: 'form-control' %>
           <%= f.submit "検索", class: "btn btn-primary" %>
         <% end %>
         </li>

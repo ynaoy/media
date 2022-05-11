@@ -1,5 +1,3 @@
-<% if @kifus.any? %>
-<%= paginate @kifus %>
 <% @kifus.each do | kifu | %>
   <%= tag.div class: "kifu" do %>
     <%= link_to kifu_path(kifu), data: {turbolinks: false} do %>
@@ -26,6 +24,4 @@
       <% end %>
     <% end %>
   <% end %>
-<% end %>
-<%= paginate @kifus %>
 <% end %>

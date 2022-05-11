@@ -8,8 +8,11 @@
     <% end %>
     <%= tag.div "#{@kifus.total_count}件の棋譜", id: "user_info" %>
   <% end %>
-  <%= render "shared/kifus_item" %>
-  <% if !@kifus.any? %>
+  <% if @kifus.any? %>
+    <%= paginate @kifus %>
+    <%= render "shared/kifus_item" %> 
+    <%= paginate @kifus %>
+  <% else %>
     <%= tag.div "このユーザーには棋譜がありません。", class: "no_kifu" %>
   <% end %>
 <% end %>

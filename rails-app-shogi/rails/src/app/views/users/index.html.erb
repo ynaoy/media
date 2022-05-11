@@ -2,17 +2,9 @@
 <p>Find me in app/views/users/index.html.erb</p>
 <% if @users.any? %>
 <%= paginate @users %>
-<% @users.each do | user | %>
-  <%= tag.div class: "user" do %>
-    <%= link_to user_path(user) do %>
-      <%= tag.span user.name, id: "user_name" %>
-    <% end %>
-    <%= link_to user_path(user), method: :delete,       
-        data: { confirm: "本当に削除してよろしいですか？" } ,id: "deleteUrl" do %>
-      <%= tag.span "delete", id: "delete" %>
-    <% end %>
-  <% end %>
-<% end %>
+
+<%= render 'shared/users_item' %>
+
 <%= paginate @users %>
 <%= javascript_pack_tag 'store_location', 'data-turbolinks-track': 'reload' %>
 <% end %>
