@@ -3,7 +3,7 @@
 <% if @kifus.any? %>
 <%= paginate @kifus %>
 
-<%= render "shared/kifus_item" %>
+<%= render "shared/kifus_item", kifus: @kifus %>
 
 <%= paginate @kifus %>
 <% end %>
