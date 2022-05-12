@@ -5,18 +5,7 @@ RSpec.describe "UsersIndeces", type: :system do
   before do
 
     @admin_user = FactoryBot.create(:user)
-    @users = []
-    60.times do |i|
-      @users.push(FactoryBot.create(:user,
-                                    name: Faker::Name.name.slice(0..9),
-                                    email: Faker::Internet.email,
-                                    password: "password",
-                                    password_confirmation: "password",
-                                    admin: false,
-                                  )
-      )
-    end
-    @users.reverse!
+    @users = make_users()
 
   end
 
@@ -75,17 +64,8 @@ RSpec.describe "UsersIndeces", type: :system do
 
       #users/indexに遷移する
       visit users_path
-      expect(page).to have_selector(".pagination")
-      for i in 0..19 do
-        expect(page).to have_content(@users[i].name)
-        expect(page).to have_content("delete")
-      end
-      #次のページへ遷移する
-      click_on "次", match: :first
-      for i in 20..39 do
-        expect(page).to have_content(@users[i].name)
-        expect(page).to have_content("delete")
-      end
+      
+      work_paginate(users:@users)
 
     end
 

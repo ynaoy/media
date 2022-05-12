@@ -1,11 +1,11 @@
 <% if @users.any? && params[:page].nil? %>
   <h1> ユーザー </h1>
-  <%= render "shared/users_item" %>
+  <%= render "shared/users_item", users: @users[0..5] %>
 <% end %>
 <% if @kifus.any? %>
   <%= paginate @kifus %>
   <h1> 棋譜 </h1>
-  <%= render "shared/kifus_item" %>
+  <%= render "shared/kifus_item", kifus: @kifus %>
 
   <%= paginate @kifus %>
 <% end %>

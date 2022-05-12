@@ -1,22 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe "Searches", type: :system do
+  
   before do
+
     @search ="search"
     @path_with_params = "#{search_path}?query=#{@search}"
 
     @user= FactoryBot.create(:user,name:@search)
-
-    @kifus = []
-    60.times do |i|
-      @kifus.push(kifu = FactoryBot.create(:kifu,
-                                            title: "sample_#{i}",
-                                            user_id: @user.id,
-                                            player1:Faker::Name.name.slice(0..9),
-                                            player2: @user.name,)
-        )
-    end
-    @kifus.reverse!
+    @kifus = make_kifus(user_id:@user.id, player2:@user.name)
 
   end
 
@@ -57,17 +49,10 @@ RSpec.describe "Searches", type: :system do
   it "work paginate"  do
 
     visit @path_with_params
-    #paginationが存在するか確認
-    expect(page).to have_selector(".pagination")
-    for i in 0..19 do
-      expect(page).to have_content(@kifus[i].title)
-    end
-    click_on "次", match: :first
+    
+    work_paginate(kifus:@kifus)
     #2ページ以降にはuserが表示されずkifuだけが表示される
     expect(page).to have_no_selector(".user")
-    for i in 20..39 do
-      expect(page).to have_content(@kifus[i].title)  
-    end
 
   end
 
