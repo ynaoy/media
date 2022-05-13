@@ -87,7 +87,6 @@ end
 
 10.times do |n|
   history = user.histories.create!(kifu_id: 1)
-  history.save
 end
 10.times do |n|
   history = user.histories.create!(kifu_id: 1)

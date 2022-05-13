@@ -57,7 +57,7 @@ class UsersController < ApplicationController
 
   def history
     @user = User.find(params[:id])
-    @histories = @user.histories
+    @hist_and_kifus = History.hist_and_kifus(@user.id) if @user
   end
 
   private

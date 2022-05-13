@@ -29,6 +29,10 @@ class KifusController < ApplicationController
 
     kifu_list = kifu.extract_kifu
     @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
+
+    if logged_in?
+      current_user.histories.create!(kifu_id: params[:id] )
+    end
   end
 
   def index
