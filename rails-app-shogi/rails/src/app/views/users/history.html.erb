@@ -1,1 +1,15 @@
-<%= render "shared/kifus_item", kifus: @hist_and_kifus %> 
+<h1> 閲覧履歴 </h1>
+<% old_time="", watched_ids = [] %>
+<% @hist_and_kifus.each do | hist_kifu | %>
+  <% now_time = timewithzone_to_str(hist_kifu.watch_at) %>
+  <% if old_time != now_time %>
+    <%= tag.h3 display_day(now_time) %>
+    <% old_time = now_time %>
+    <% watched_ids = [] %>
+  <% end %>
+
+  <% if !watched_ids.include?(hist_kifu.id) %>
+    <%= render "shared/kifu_url_create", kifu: hist_kifu %> 
+    <% watched_ids.push(hist_kifu.id) %>
+  <% end %>
+<% end %>

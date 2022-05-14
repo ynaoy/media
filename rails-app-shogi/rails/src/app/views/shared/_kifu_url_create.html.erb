@@ -10,7 +10,7 @@
         後手：
         <%= tag.span kifu.player2, id: win_or_lose(2,kifu) %>
       <% end %>
-      <%= tag.span timewithzone_to_str(kifu.created_at) , id: "created" %>
+      <%= tag.span timewithzone_to_str(kifu.created_at,format="%Y年%-m月%-d日%-H時%-M分"), id: "created" %>
     <% end %>
   <% end %>
   <% if my_kifu?(kifu) %>
