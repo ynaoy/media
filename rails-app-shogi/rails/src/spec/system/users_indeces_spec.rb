@@ -40,7 +40,6 @@ RSpec.describe "UsersIndeces", type: :system do
 
     it "display normaly " do
 
-      #まずはログインする
       log_in_e2e(@admin_user) 
       expect(page).to have_no_link(href:login_path)
       expect(page).to have_link(href:logout_path)
@@ -57,7 +56,6 @@ RSpec.describe "UsersIndeces", type: :system do
 
     it "work paginate " do
 
-      #まずはログインする
       log_in_e2e(@admin_user) 
       expect(page).to have_no_link(href:login_path)
       expect(page).to have_link(href:logout_path)
@@ -69,12 +67,22 @@ RSpec.describe "UsersIndeces", type: :system do
 
     end
 
+    it "work jump page", js: true do
 
-    # <<< Todo 正しくユーザーページへ遷移するか　>>>
+      log_in_e2e(@admin_user)
+      #users/indexに遷移する
+      visit users_path
+
+      #users/showに遷移する
+      first("#user_name").click
+      sleep 10
+      expect(page).to have_content(@users[0].name)
+      expect(page).to have_content("0件の棋譜")
+      expect(page).to have_content("このユーザーには棋譜がありません。")
+    end
 
     it "work delete button ", js: true do 
 
-      #まずはログインする
       log_in_e2e(@admin_user) 
       expect(page).to have_no_link(href:login_path)
       #expect(page).to have_link(href:logout_path)
