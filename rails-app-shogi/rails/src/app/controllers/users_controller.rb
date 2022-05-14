@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: %i[index edit update]
+  before_action :logged_in_user, only: %i[index edit update history]
   before_action :admin_user,     only: :index
 
   def index 
@@ -53,6 +53,11 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash.now[:success] = "User deleted"
     redirect_back_or(root_url)
+  end
+
+  def history
+    @user = User.find(params[:id])
+    @hist_and_kifus = History.hist_and_kifus(@user.id) if @user
   end
 
   private
