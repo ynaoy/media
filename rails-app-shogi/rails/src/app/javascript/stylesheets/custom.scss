@@ -10,7 +10,18 @@
 /* universal */
 
 body {
-  padding-top: 60px;
+  padding-top: 90px;
+  background-color: #E2E3E5;
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-width:thin;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #AAAAAA;
+  border-radius: 100px;
 }
 section {
   overflow: auto;
@@ -36,7 +47,27 @@ h1{
   padding-right: 6px;
   //padding-top: 9px;
 }
-
+.app_wrapper{
+  display: flex;
+  .side{
+    width: 18vw;
+    height: 85vh;
+    overflow: scroll;
+    overflow-x: hidden;
+    scrollbar-width:thin;
+    #tags{
+      width: 100%;
+      margin-top:1vw;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  .container{
+    width: 82vw;
+    padding-top: 2vh;
+    background-color: white;
+  }
+}
 .debug_dump {
   clear: both;
   float: left;
