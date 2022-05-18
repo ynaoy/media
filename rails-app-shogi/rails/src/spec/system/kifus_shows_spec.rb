@@ -60,6 +60,12 @@ RSpec.describe "KifusShows", type: :system do
       expect(page).to have_content(@tag1.name)
     end
 
+    it "tag clicked, move to search url" do
+      visit kifu_path(id:@kifu.id)
+      click_on @tag1.name
+      expect(current_url).to eq search_url+"?"+URI.encode_www_form(query: @tag1.name)
+    end
+
     it "display normaly",js:true do
       visit kifu_path(id:@kifu.id)
 
