@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get :history
+      get :favorite
     end
   end
   resources :kifus, only: %i[new create show index destroy]

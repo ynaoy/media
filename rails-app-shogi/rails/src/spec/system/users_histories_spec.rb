@@ -4,7 +4,7 @@ RSpec.describe "UsersHistories", type: :system do
   before do
     @user = FactoryBot.create(:user)
     @kifu = FactoryBot.create(:kifu, title:"title", user_id: @user.id,)
-    @histories = make_histories(user_id:@user.id, kifu_id:@kifu.id)
+    @histories = make_records("history",user_id:@user.id, kifu_id:@kifu.id)
     @history_path = user_path(@user)+"/history"
   end
 

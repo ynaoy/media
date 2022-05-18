@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: %i[index edit update history]
+  before_action :logged_in_user, only: %i[index edit update history favorite]
   before_action :admin_user,     only: :index
 
   def index 
@@ -58,6 +58,11 @@ class UsersController < ApplicationController
   def history
     @user = User.find(params[:id])
     @hist_and_kifus = History.hist_and_kifus(@user.id) if @user
+  end
+
+  def favorite
+    @user = User.find(params[:id])
+    @favorite_kifus = Favorite.favorite_kifus(@user.id).page(params[:page]).per(20) if @user
   end
 
   private
