@@ -12,6 +12,12 @@ RSpec.describe "Searches", type: :system do
 
   end
 
+  it "no search user and kifu" do
+    visit "#{search_path}?query=no_search"
+    expect(page).to have_selector("#no-search")
+    expect(page).to have_content( "「no_search」の検索結果はありません" )
+  end
+
   it "search user" do
 
     visit @path_with_params
@@ -74,7 +80,7 @@ RSpec.describe "Searches", type: :system do
     #kifus/showに遷移する
     first(".kifuUrl").click
     sleep 10
-    expect(page).to have_content("show")
+
     text = ["飛","角","金","銀","桂","香","歩","王"]
     for t in text do
       expect(page).to have_content(t)
