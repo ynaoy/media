@@ -31,7 +31,8 @@ class KifusController < ApplicationController
     @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
 
     if logged_in?
-      current_user.histories.create!(kifu_id: params[:id] )
+      current_user.histories.create!(kifu_id: kifu.id)
+      @favorite_flg = current_user.is_favorite_kifu?(kifu_id = kifu.id)
     end
   end
 

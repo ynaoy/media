@@ -18,7 +18,7 @@ export default {
     Admin
   },
 
-  props:["kifuText","kifuFlg","player1","player2"],
+  props:["kifuText","kifuFlg","favorite_flg","player1","player2"],
 
   data() {
     return {
@@ -28,6 +28,7 @@ export default {
       max_state:0,
       board_text: [],
       board_flg: [],
+      favorite_flg: null,
       sub_board_label:["飛","角","金","銀","桂","香","歩","玉"],
       sub_board_text:[],
       sub_board_num:[],
@@ -38,6 +39,7 @@ export default {
     return {
       board_flg:      computed(() => this.board_flg),
       board_text:     computed(() => this.board_text),
+      favorite_flg:   computed(() => this.favorite_fig),
       state:          computed(() => this.state),
       max_state:      computed(() => this.max_state),
       sub_board_text: computed(() => this.sub_board_text),
