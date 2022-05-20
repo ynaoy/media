@@ -56,7 +56,11 @@ class User < ApplicationRecord
   def admin?
     self.admin
   end
-  
+
+  def is_favorite_kifu?(kifu_id) 
+    !self.favorites.where(kifu_id: kifu_id).empty?
+  end
+
   private
 
     # メールアドレスをすべて小文字にする
