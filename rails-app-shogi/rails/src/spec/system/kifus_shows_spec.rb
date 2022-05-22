@@ -156,5 +156,35 @@ RSpec.describe "KifusShows", type: :system do
       end
     end
 
+    it "not display favorite button with not login", js: true do
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_no_selector(".favorite_button")
+      expect(page).to have_no_content("お気に入りに追加")
+    end
+
+    it "display favorite button with login", js: true do
+      log_in_e2e(@user)
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_selector(".favorite_button")
+      expect(page).to have_content("お気に入りに追加")
+    end
+
+    it "favorite button clicked, change to value", js: true do
+      log_in_e2e(@user)
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_content("お気に入りに追加")
+
+      click_on "お気に入りに追加"
+      expect(page).to have_content("お気に入りに追加",count:0)
+      expect(page).to have_content("お気に入りから削除")
+
+      click_on "お気に入りから削除"
+      expect(page).to have_content("お気に入りに追加")
+      expect(page).to have_content("お気に入りから削除",count:0)
+    end
+
   end
 end

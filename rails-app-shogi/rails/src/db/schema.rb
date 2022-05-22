@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_12_021549) do
+ActiveRecord::Schema.define(version: 2022_05_18_081119) do
+
+  create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "kifu_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
 
   create_table "histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "kifu_id", null: false
@@ -59,6 +67,7 @@ ActiveRecord::Schema.define(version: 2022_05_12_021549) do
     t.string "remember_digest"
   end
 
+  add_foreign_key "favorites", "users"
   add_foreign_key "histories", "users"
   add_foreign_key "kifu_tags", "kifus"
   add_foreign_key "kifus", "users"
