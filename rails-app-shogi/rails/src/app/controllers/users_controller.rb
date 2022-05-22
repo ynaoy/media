@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in_user, only: %i[index edit update history favorite]
   before_action :admin_user,     only: :index
+  before_action :correct_user,   only: %i[history favorite]
 
   def index 
     @users = User.all.order(id: "desc").page(params[:page]).per(20)
@@ -50,6 +51,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    # << Todo current_userかadmin_userのみが使えるようにする >>
     User.find(params[:id]).destroy
     flash.now[:success] = "User deleted"
     redirect_back_or(root_url)

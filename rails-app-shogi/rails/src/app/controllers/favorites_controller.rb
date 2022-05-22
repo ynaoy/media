@@ -10,7 +10,7 @@ class FavoritesController < ApplicationController
       @favorite.save
       respond_to do |format|
         format.html { kifu_path(@kifu) }
-        format.js
+        format.js 
       end
     end
   end
@@ -23,7 +23,7 @@ class FavoritesController < ApplicationController
       @favorite.save
       respond_to do |format|
         format.html { kifu_path(@kifu) }
-        format.js
+        format.js 
       end
     end
   end
