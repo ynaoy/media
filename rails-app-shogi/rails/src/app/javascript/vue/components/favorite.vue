@@ -1,5 +1,7 @@
 <template>
-  <button v-bind:disabled= processing.value v-on:click= change_favorite_flg class= favorite_button>
+  <button v-if = "!isUnderfind(favorite_flg.value)"
+          v-bind:disabled= processing.value 
+          v-on:click= change_favorite_flg class= favorite_button >
     <div v-if = "favorite_flg.value==true">
       お気に入りから削除 
     </div>
@@ -22,6 +24,9 @@ export default {
     change_favorite_flg() {
       this.$emit('change_favorite_flg', !this.favorite_flg.value)
     },
+    isUnderfind(value) {
+      return typeof(value) == 'undefined'
+    }
   },
 
 }

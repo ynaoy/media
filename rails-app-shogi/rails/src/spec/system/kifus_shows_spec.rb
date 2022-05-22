@@ -156,7 +156,14 @@ RSpec.describe "KifusShows", type: :system do
       end
     end
 
-    it "display favorite button", js: true do
+    it "not display favorite button with not login", js: true do
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_no_selector(".favorite_button")
+      expect(page).to have_no_content("お気に入りに追加")
+    end
+
+    it "display favorite button with login", js: true do
       log_in_e2e(@user)
       visit kifu_path(id:@kifu.id)
 
