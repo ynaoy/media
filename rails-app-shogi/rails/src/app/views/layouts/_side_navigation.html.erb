@@ -2,7 +2,7 @@
 
   <% if logged_in? %>
     <%= link_to "マイページ" ,user_path(current_user) ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
-    <%= link_to "お気に入り" ,"#" ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
+    <%= link_to "お気に入り" ,user_path(current_user)+"/favorite" ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
     <%= link_to "棋譜を追加" ,new_kifu_path ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
     <%= link_to "閲覧履歴" ,user_path(current_user)+"/history" ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
   <% end %>
