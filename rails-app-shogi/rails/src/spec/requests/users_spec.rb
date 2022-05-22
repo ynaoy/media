@@ -102,4 +102,17 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "GET /:id/favorite" do
+    it "returns http redirect with not login" do
+      get user_path(@user) + "/favorite"
+      expect(response).to redirect_to(login_url) #ページがlogin_urlにリダイレクトする
+    end
+
+    it "returns http redirect" do
+      log_in_as @user
+      get user_path(@user) + "/favorite"
+      expect(response).to have_http_status(:success)
+    end
+  end
+
 end

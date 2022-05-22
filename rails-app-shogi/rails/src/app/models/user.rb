@@ -3,6 +3,7 @@ class User < ApplicationRecord
   attr_accessor :remember_token
   has_many :kifus, dependent: :destroy
   has_many :histories, dependent: :destroy
+  has_many :favorites, dependent: :destroy
   before_save   :downcase_email
   validates :name,  presence: true, length: { maximum: 16 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
@@ -55,7 +56,11 @@ class User < ApplicationRecord
   def admin?
     self.admin
   end
-  
+
+  def is_favorite_kifu?(kifu_id) 
+    !self.favorites.where(kifu_id: kifu_id).empty?
+  end
+
   private
 
     # メールアドレスをすべて小文字にする
