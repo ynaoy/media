@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     var btns = document.querySelectorAll(selector)
     for(var i = 0; i < btns.length; i++){
       btns[i].onclick = function() {
-        document.cookie = 'forwarding_url='+location.href; //cookieに元居たページのurlを保存しておく
+        //cookieに元居たページのurlを保存しておく
+        document.cookie = `forwarding_url=${location.href};path=/`
       }
     }
   }

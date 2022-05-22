@@ -1,0 +1,20 @@
+<div class="list-group list-group-flush">
+
+  <% if logged_in? %>
+    <%= link_to "マイページ" ,user_path(current_user) ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
+    <%= link_to "お気に入り" ,user_path(current_user)+"/favorite" ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
+    <%= link_to "棋譜を追加" ,new_kifu_path ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
+    <%= link_to "閲覧履歴" ,user_path(current_user)+"/history" ,class:"list-group-item list-group-item-action list-group-item-secondary" %>
+  <% end %>
+
+  <%= tag.div class:"list-group-item list-group-item-action list-group-item-secondary" do %>
+    好みの棋譜を探す
+    <% tags= %w[相掛かり 矢倉 角換わり 横歩取り 三間飛車 四間飛車 角交換四間飛車 角交換中飛車]%>
+    <%= tag.div id:"tags" do %>
+      <% tags.each do | tag | %>
+        <%= link_to tag ,search_path+"?"+japanese_encode(tag), id:"tag" %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+</div>

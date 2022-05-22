@@ -8,7 +8,7 @@ module TestHelper
   # テストユーザーとしてログインする
   def log_in_as(user)
     post login_path, params: { session: { email: user.email,
-                                         password: "password" } }
+                                          password: "password" } }
 
   end
 
@@ -50,6 +50,32 @@ module TestHelper
       )
     end
     kifus.reverse!
+  end
+
+  # attributeのレコードを大量に作成
+  def make_records(model,user_id:1, kifu_id:1, n:10)
+    records = []
+    created_at = Time.zone.now
+
+    3.times do
+      n.times do |i|
+        records.push(FactoryBot.create(
+                  model,
+                  user_id:user_id,
+                  kifu_id:kifu_id,
+                  created_at:created_at,
+          )
+        )
+      end
+      created_at-= 86400 if model=="history"#1日は86400秒 
+    end
+
+    return records
+  end
+
+  #Timewithzoneクラスをformat型のstrに変換して返す
+  def timewithzone_to_str(date, format="%Y年%-m月%-d日")
+    date.strftime(format)
   end
 
   # paginationが正常に動作しているかを確認
