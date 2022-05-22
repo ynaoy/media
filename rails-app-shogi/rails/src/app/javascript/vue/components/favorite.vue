@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click= change_favorite_flg class= favorite_button>
+  <button v-bind:disabled= processing.value v-on:click= change_favorite_flg class= favorite_button>
     <div v-if = "favorite_flg.value==true">
       お気に入りから削除 
     </div>
@@ -15,6 +15,7 @@ export default {
   name: "Favorite",
   inject: {
     favorite_flg:['favorite_flg'],
+    processing:['processing'],
   },
 
   methods:{

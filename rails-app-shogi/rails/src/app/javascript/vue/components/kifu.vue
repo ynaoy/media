@@ -30,6 +30,7 @@ export default {
       old_state:0,
       max_state:0,
       favorite_flg: this.favoriteFlg,
+      processing: false,
       board_text: [],
       board_flg: [],
       sub_board_label:["飛","角","金","銀","桂","香","歩","玉"],
@@ -42,6 +43,7 @@ export default {
       board_flg:      computed(() => this.board_flg),
       board_text:     computed(() => this.board_text),
       favorite_flg:   computed(() => this.favorite_flg),
+      processing:     computed(() => this.processing),
       state:          computed(() => this.state),
       max_state:      computed(() => this.max_state),
       sub_board_text: computed(() => this.sub_board_text),
@@ -82,12 +84,16 @@ export default {
     },
 
     change_button(event) {
+      this.processing = true;
       if(this.favorite_flg){
         this.delete_favorite_path(event)
       }
       else{
         this.post_favorite_path(event)
       }
+      setTimeout(function(){
+        this.processing = false;
+      }.bind(this),1000)
     },
 
     post_favorite_path(event) {
