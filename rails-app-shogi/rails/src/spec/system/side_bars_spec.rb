@@ -68,7 +68,7 @@ RSpec.describe "SideBars", type: :system do
         log_in_e2e(@user) 
         visit root_url
         click_on "お気に入り"
-        #expect(current_url).to eq user_url(@user)+'/favorite'
+        expect(current_url).to eq user_url(@user)+'/favorite'
 
       end
 
