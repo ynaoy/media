@@ -89,7 +89,7 @@ export default {
     //"change_favorite"イベントで発火
     //お気に入りフラグがtrueならdeleteメソッドを、falseならpostメソッドを飛ばして、お気に入りフラグを更新する
     //processing.valueは子コンポーネントに飛ばして処理中ならお気に入りbuttonを押せなくする
-    const change_button = function(event) {
+    const change_button = function(event){
       processing.value = true;
 
       if(favorite_flg.value){
@@ -107,7 +107,7 @@ export default {
     //favoritesコントローラーにpostメソッドを飛ばしてDBと通信
     const post_favorite_path= function(event, kifu_id){
       axios
-        .post(set_uri()+'/favorites', {
+        .post(set_url('favorites'), {
           'favorite':{'kifu_id': kifu_id}
         })
         .then((res) => {
@@ -121,7 +121,7 @@ export default {
     //favoritesコントローラーにdeleteメソッドを飛ばしてDBと通信
     const delete_favorite_path= function(event, kifu_id){
       axios
-        .delete(set_uri()+'/favorites', { data:{
+        .delete(set_url('favorites'), { data:{
           'favorite':{'kifu_id': kifu_id}}
         })
         .then((res) => {
@@ -132,8 +132,8 @@ export default {
         });
     }
 
-    const set_uri= function(){
-      return `${location.protocol}//${location.host}`
+    const set_url= function(controller){
+      return `${location.protocol}//${location.host}/${controller}`
     }
 
     //csrfTokenを設定して、CSRF対策を回避する
@@ -164,7 +164,7 @@ export default {
       change_button,
       post_favorite_path,
       delete_favorite_path,
-      set_uri,
+      set_url,
       set_csrf_token,
     }
   }
