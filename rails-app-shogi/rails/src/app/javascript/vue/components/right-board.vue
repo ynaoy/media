@@ -4,36 +4,39 @@
     <p id="player"> 先手:  {{ player1 }}</p>
     <p id="player"> 後手:  {{ player2 }}</p>
   </div>  
-  <subBoard0></subBoard0>
+  <subBoard></subBoard>
 </div>
 </template>
 
 <script>
 
-import { computed } from 'vue'
-import subBoard0 from './sub-board0.vue'
+import { provide, inject } from 'vue'
+import subBoard from './sub-board.vue'
 
 export default {
+
   name: "rightBoard",
+  
   components: {
-    subBoard0
+    subBoard
   },
 
-  inject: {
-    sub_board_text:['sub_board_text'],
-    sub_board_num: ['sub_board_num'],
-    player1: ['player1'],
-    player2: ['player2'],
-  },
+  setup(props,context){
 
-  provide() {
-    return {
-      board_flg: computed(() => this.board_flg.value),
-      board_text: computed(() => this.board_text.value),
-      sub_board_text: computed(() => this.sub_board_text.value),
-      sub_board_num: computed(() => this.sub_board_num.value),
-    }
-  },
+    //親コンポーネントから貰う変数群
+    const sub_board_text =  inject('sub_board_text')
+    const sub_board_num =   inject('sub_board_num')
+    const player1 =         inject('player1')
+    const player2 =         inject('player2')
+
+    //子コンポーネントに渡す変数群
+    provide('sub_board_text', sub_board_text)
+    provide('sub_board_num',  sub_board_num)
+    provide('sub_board_id',  0)
+
+    return{player1, player2}
+  }
+
 }
 </script>
 

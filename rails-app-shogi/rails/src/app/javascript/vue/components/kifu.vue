@@ -47,8 +47,8 @@ export default {
     provide('board_flg',      board_flg)
     provide('sub_board_text', sub_board_text)
     provide('sub_board_num',  sub_board_num)
-    provide('player1',        player1)
-    provide('player2',        player2)
+    provide('player1',        props.player1)
+    provide('player2',        props.player2)
   
     //メソッド群
 

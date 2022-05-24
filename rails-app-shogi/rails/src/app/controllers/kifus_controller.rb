@@ -24,8 +24,6 @@ class KifusController < ApplicationController
   def show
     @kifu = Kifu.find(params[:id])
     @tags = @kifu.get_tags 
-    #@player1 = kifu.player1
-    #@player2 = kifu.player2
 
     kifu_list = @kifu.extract_kifu
     @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
