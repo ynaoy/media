@@ -3,7 +3,7 @@
     <img class= back_img id= back_10 src="../../images/next_to_10_times.png" alt="前へ×10" v-on:click= "update_state('down_10')">
     <img class= back_img id= back_1 src="../../images/next_to.png" alt="前へ" v-on:click= "update_state('down')">
     <div id= "state">
-      <p> {{ this.state.value }} </p>
+      <p> {{ state }} </p>
     </div>
     <img id= next_1 src="../../images/next_to.png" alt="次へ" v-on:click= "update_state('up')">
     <img id= next_10 src="../../images/next_to_10_times.png" alt="次へ×10" v-on:click= "update_state('up_10')">
@@ -11,32 +11,35 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 
 export default {
+  
   name: "Admin",
-  inject: {
-    board_flg:['board_flg'],
-    board_text:['board_text'],
-    state:['state'],
-    max_state:['max_state'],
-  },
 
-  methods:{
-    update_state(str){
+  setup(props, context){
+
+    const state = inject('state')
+    const max_state = inject('max_state')
+
+    //strに応じて"update_state"イベントを発火させる
+    const update_state = function(str){
       if(str=="down"){
-        (this.state.value-1<0)? this.$emit('update_state', 0): this.$emit('update_state', this.state.value-1)
+        (state.value-1<0)? context.emit('update_state', 0): context.emit('update_state', state.value-1)
       }
       else if(str=="down_10"){
-        (this.state.value-10<0)? this.$emit('update_state', 0): this.$emit('update_state', this.state.value-10)
+        (state.value-10<0)? context.emit('update_state', 0): context.emit('update_state', state.value-10)
       }
       else if(str=="up"){
-        (this.state.value+1>this.max_state.value)? this.$emit('update_state', this.max_state.value):this.$emit('update_state', this.state.value+1)
+        (state.value+1>max_state.value)? context.emit('update_state', max_state.value):context.emit('update_state', state.value+1)
       }
       else if(str=="up_10"){
-        (this.state.value+10>this.max_state.value)? this.$emit('update_state', this.max_state.value):this.$emit('update_state', this.state.value+10)
+        (state.value+10>max_state.value)? context.emit('update_state', max_state.value):context.emit('update_state', state.value+10)
       }
     }
-  }
+
+    return { state, max_state, update_state }
+  },
 }
 </script>
 

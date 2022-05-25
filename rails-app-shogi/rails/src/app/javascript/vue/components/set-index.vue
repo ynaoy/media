@@ -1,6 +1,6 @@
 <template>
   <div id="index">
-    <div v-for="n in 9" id="ind"> {{ 10-n }} </div>
+    <div v-for="(key,n) in 9" :key="key" id="ind"> {{ 9-n }} </div>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   #index{
-   display: flex;
+    display: flex;
     text-align: center;
     align-items: center;
     width: 22.99vw;

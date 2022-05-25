@@ -3,8 +3,8 @@
     <setIndex></setIndex>
     <div id="main">
       <div id="inner_board">
-        <div v-for="n in 81" id="cell" :style=setStyle(n)>
-          {{ this.board_text.value[compute_i(n)][compute_j(n)] }}
+        <div v-for="(key,n) in 81" :key="key" :style=setStyle(n) id="cell" >
+          {{ board_text[compute_i(n)][compute_j(n)] }}
         </div>
       </div>
       <setColumns></setColumns>
@@ -13,35 +13,46 @@
 </template>
 
 <script>
+
+import { inject } from 'vue'
 import setIndex from './set-index.vue'
 import setColumns from './set-columns.vue'
 
 export default {
+
   name: "mainBoard",
+
   components: {
     setIndex,
     setColumns,
   },
 
-  inject: {
-    board_flg:['board_flg'],
-    board_text:['board_text'],
-  },
+  setup(props,context){
 
-  methods:{
-    compute_i(n){
-      return Math.floor((n-1)/9)
-    },
+    //親コンポーネントから貰う変数群
+    const board_text = inject('board_text')
+    const board_flg  = inject('board_flg')
 
-    compute_j(n){
-      return (n-1)%9
-    },
-    setStyle(n){
-      if(this.board_flg.value[this.compute_i(n)][this.compute_j(n)]==2){
+    //メソッド群
+    // nには1..81以下の整数が入る。それをlist[i][j]の形に変換する
+
+    const compute_i= function(n){
+      return Math.floor((n)/9)
+    }
+
+    const compute_j= function(n){
+      return (n)%9
+    }
+
+    const setStyle= function(n){
+      if(board_flg.value[compute_i(n)][compute_j(n)] == 2){
         return "transform: scale(-1,-1);"
       }
     }
-  },
+
+    return {  board_text,
+              compute_i, compute_j, setStyle }
+  }
 }
 </script>
 <style lang="scss" scoped>

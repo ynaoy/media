@@ -1,17 +1,19 @@
 <template>
   <div id="columns">
-    <div v-for= "n in 9" id="col"> {{ columns[n-1] }} </div>
+    <div v-for= "(key,n) in 9" :key="key" id="col"> {{ columns[n] }} </div>
   </div> 
 </template>
 
 <script>
 export default {
+
   name: "setColumns",
-  data(){
+
+  setup(props,context){
     return{
       columns: ["一","二","三","四","五","六","七","八","九"],
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
