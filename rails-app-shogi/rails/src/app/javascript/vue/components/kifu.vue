@@ -64,7 +64,7 @@ export default {
     //sub_board_textとsub_board_numを更新する
     //表示される駒をtextsに、その枚数をnumsに入れる。padsには表示されない部分を数合わせとして入れる
     //それを先手と後手二つ分用意する
-    const set_sub_board= function(){
+    function set_sub_board(){
       sub_board_text.value=[]
       sub_board_num.value=[]
       for (let i=0; i<2; i++){
@@ -87,58 +87,50 @@ export default {
     }
 
     //"change_favorite"イベントで発火
-    //お気に入りフラグがtrueならdeleteメソッドを、falseならpostメソッドを飛ばして、お気に入りフラグを更新する
     //processing.valueは子コンポーネントに飛ばして処理中ならお気に入りbuttonを押せなくする
-    const change_button = function(event){
+    const change_button = async function(event){
       processing.value = true;
+      await send_favorites(event, props.kifuId)
+      processing.value = false;
+    }
+
+    //favoritesコントローラーに対して、
+    //お気に入りフラグがtrueならdeleteメソッドを、falseならpostメソッドを飛ばして、お気に入りフラグを更新する
+    async function send_favorites(event, kifu_id){
+      let request
 
       if(favorite_flg.value){
-        delete_favorite_path(event, props.kifuId)
+        request = send_delete('favorites', {'favorite': {'kifu_id': kifu_id} })
       }
       else{
-        post_favorite_path(event, props.kifuId)
+         request = send_post('favorites', {'favorite': {'kifu_id': kifu_id} })
       }
-
-      setTimeout(function(){
-        processing.value = false;
-      }.bind(this),1000)
+      return  request
+              .then((res) => {
+                favorite_flg.value = event
+              })
+              .catch((err) => {
+                console.log(err)
+              })
     }
 
-    //favoritesコントローラーにpostメソッドを飛ばしてDBと通信
-    const post_favorite_path= function(event, kifu_id){
-      axios
-        .post(set_url('favorites'), {
-          'favorite':{'kifu_id': kifu_id}
-        })
-        .then((res) => {
-          favorite_flg.value = event
-        })
-        .catch((err) => {
-          console.log(err)
-        });
+    //コントローラーにpostメソッドを飛ばしてDBと通信
+    function send_post(controller, params){
+      return axios.post(set_url(controller), params)
     }
 
-    //favoritesコントローラーにdeleteメソッドを飛ばしてDBと通信
-    const delete_favorite_path= function(event, kifu_id){
-      axios
-        .delete(set_url('favorites'), { data:{
-          'favorite':{'kifu_id': kifu_id}}
-        })
-        .then((res) => {
-          favorite_flg.value = event
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    //コントローラーにdeleteメソッドを飛ばしてDBと通信
+    function send_delete(controller, params){
+      return axios.delete(set_url(controller), { 'data': params })
     }
 
-    const set_url= function(controller){
+    function set_url(controller){
       return `${location.protocol}//${location.host}/${controller}`
     }
 
     //csrfTokenを設定して、CSRF対策を回避する
     //CSRFとは？→ https://www.trendmicro.com/ja_jp/security-intelligence/research-reports/threat-solution/csrf.html
-    const set_csrf_token= function(){
+    function set_csrf_token(){
       let csrfToken = document.querySelector('[name="csrf-token"]').getAttribute('content');
       axios.defaults.headers.common = {
         "X-CSRF-TOKEN": csrfToken
@@ -160,12 +152,7 @@ export default {
       sub_board_num,
 
       update_board,
-      set_sub_board,
       change_button,
-      post_favorite_path,
-      delete_favorite_path,
-      set_url,
-      set_csrf_token,
     }
   }
 }
