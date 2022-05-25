@@ -5,7 +5,10 @@
 </template>
 
 <script>
-import { computed, ref, provide, onMounted } from 'vue'
+import { ref, provide, toRefs  } from 'vue'
+import kifuObject from '../composables/kifuObject'
+import requestObject from '../composables/requestObject'
+import provideObject from '../composables/provideObject'
 import axios from 'axios'
 import Board from './board.vue'
 import Admin from './admin.vue'
@@ -25,132 +28,21 @@ export default {
 
   setup (props,context) {
 
-    //リアクティブでない変数群
-    const sub_board_label = ["飛","角","金","銀","桂","香","歩","玉"]
-
-    //リアクティブな変数群
-    const state =          ref(0)
-    const max_state =      ref(props.kifuText.length-1)
-    const favorite_flg =   ref(props.favoriteFlg)
-    const processing =     ref(false)
-    const board_text =     ref([]) //[n][8][8]
-    const board_flg =      ref([]) //[n][10][8] ※[n][9][8]と[n][10][8]は持ち駒の枚数
-    const sub_board_text = ref([]) //[2][8]
-    const sub_board_num =  ref([]) //[2][8]
+    //リアクティブな変数群とメソッド群
+    const { kifu_states, kifu_methods } = kifuObject(props)
+    const { request_states, request_methods } = requestObject(props)
 
     //子コンポーネントに渡す変数群
-    provide('state',          state)
-    provide('max_state',      max_state)
-    provide('favorite_flg',   favorite_flg)
-    provide('processing',     processing)
-    provide('board_text',     board_text)
-    provide('board_flg',      board_flg)
-    provide('sub_board_text', sub_board_text)
-    provide('sub_board_num',  sub_board_num)
+    provideObject(toRefs(kifu_states))
+    provideObject(toRefs(request_states))
     provide('player1',        props.player1)
     provide('player2',        props.player2)
   
-    //メソッド群
-
-    //'update_state'イベントが発火されたら、
-    //画面に表示されるリアクティブな変数を更新する
-    const update_board= function(event){
-      state.value = event;
-      board_text.value = props.kifuText[state.value];
-      board_flg.value = props.kifuFlg[state.value];
-      set_sub_board()
-    }
-
-    //sub_board_textとsub_board_numを更新する
-    //表示される駒をtextsに、その枚数をnumsに入れる。padsには表示されない部分を数合わせとして入れる
-    //それを先手と後手二つ分用意する
-    function set_sub_board(){
-      sub_board_text.value=[]
-      sub_board_num.value=[]
-      for (let i=0; i<2; i++){
-        let texts = []
-        let nums = []
-        let pads =[]
-        for(let j=0; j<sub_board_label.length;j++){
-          if(board_flg.value[9+i][j]==0){
-            pads.push("");
-            continue;
-          }
-          texts.push(sub_board_label[j]);
-          nums.push(board_flg.value[9+i][j]);
-        }
-        texts= texts.concat(pads);
-        nums=  nums.concat(pads);
-        sub_board_text.value.push(texts);
-        sub_board_num.value.push(nums);
-      }
-    }
-
-    //"change_favorite"イベントで発火
-    //processing.valueは子コンポーネントに飛ばして処理中ならお気に入りbuttonを押せなくする
-    const change_button = async function(event){
-      processing.value = true;
-      await send_favorites(event, props.kifuId)
-      processing.value = false;
-    }
-
-    //favoritesコントローラーに対して、
-    //お気に入りフラグがtrueならdeleteメソッドを、falseならpostメソッドを飛ばして、お気に入りフラグを更新する
-    async function send_favorites(event, kifu_id){
-      let request
-
-      if(favorite_flg.value){
-        request = send_delete('favorites', {'favorite': {'kifu_id': kifu_id} })
-      }
-      else{
-         request = send_post('favorites', {'favorite': {'kifu_id': kifu_id} })
-      }
-      return  request
-              .then((res) => {
-                favorite_flg.value = event
-              })
-              .catch((err) => {
-                console.log(err)
-              })
-    }
-
-    //コントローラーにpostメソッドを飛ばしてDBと通信
-    function send_post(controller, params){
-      return axios.post(set_url(controller), params)
-    }
-
-    //コントローラーにdeleteメソッドを飛ばしてDBと通信
-    function send_delete(controller, params){
-      return axios.delete(set_url(controller), { 'data': params })
-    }
-
-    function set_url(controller){
-      return `${location.protocol}//${location.host}/${controller}`
-    }
-
-    //csrfTokenを設定して、CSRF対策を回避する
-    //CSRFとは？→ https://www.trendmicro.com/ja_jp/security-intelligence/research-reports/threat-solution/csrf.html
-    function set_csrf_token(){
-      let csrfToken = document.querySelector('[name="csrf-token"]').getAttribute('content');
-      axios.defaults.headers.common = {
-        "X-CSRF-TOKEN": csrfToken
-      };
-    }
-
-    //作成されると同時に実行される奴ら
-    onMounted(set_csrf_token)
-    update_board(0)
+    //このコンポーネントで使うメソッド
+    const update_board = kifu_methods['update_board']
+    const change_button = request_methods['change_button']
 
     return {
-      state,
-      max_state,
-      favorite_flg,
-      processing,
-      board_text,
-      board_flg,
-      sub_board_text,
-      sub_board_num,
-
       update_board,
       change_button,
     }

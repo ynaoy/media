@@ -4,7 +4,7 @@
     <div id="main">
       <div id="inner_board">
         <div v-for="(key,n) in 81" :key="key" :style=setStyle(n) id="cell" >
-          {{ board_text[compute_i(n)][compute_j(n)] }}
+          {{  board_text[compute_i(n)][compute_j(n)] }}
         </div>
       </div>
       <setColumns></setColumns>
@@ -15,6 +15,7 @@
 <script>
 
 import { inject } from 'vue'
+import  mainBoardObject from '../composables/mainBoardObject'
 import setIndex from './set-index.vue'
 import setColumns from './set-columns.vue'
 
@@ -29,29 +30,17 @@ export default {
 
   setup(props,context){
 
-    //親コンポーネントから貰う変数群
+    //リアクティブな変数群とメソッド群
     const board_text = inject('board_text')
     const board_flg  = inject('board_flg')
+    const { main_board_methods } = mainBoardObject(board_text, board_flg)
 
-    //メソッド群
-    // nには1..81以下の整数が入る。それをlist[i][j]の形に変換する
+    //このコンポーネントで使うメソッド
+    const compute_i = main_board_methods['compute_i']
+    const compute_j = main_board_methods['compute_j']
+    const setStyle = main_board_methods['setStyle']
 
-    const compute_i= function(n){
-      return Math.floor((n)/9)
-    }
-
-    const compute_j= function(n){
-      return (n)%9
-    }
-
-    const setStyle= function(n){
-      if(board_flg.value[compute_i(n)][compute_j(n)] == 2){
-        return "transform: scale(-1,-1);"
-      }
-    }
-
-    return {  board_text,
-              compute_i, compute_j, setStyle }
+    return { board_text, compute_i, compute_j, setStyle }
   }
 }
 </script>
