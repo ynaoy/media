@@ -188,12 +188,12 @@ module KifusHelper
     "win" if win == kifu.win
   end
 
-  #Timewithzoneクラスをformat型のstrに変換して返す
+  #Timewithzoneクラスのtime_zoneをTokyoに変換して、さらにformat型のstrに変換して返す
   def timewithzone_to_str(date, format="%Y年%-m月%-d日")
-    date.strftime(format)
+    date.in_time_zone('Tokyo').strftime(format)
   end
 
-  #history.html.erbでnow_timeごとに返す値を変更
+  #history.html.erbでnow_timeごとに返す値を変更。
   def display_day(now_time)
     if(now_time== timewithzone_to_str(Time.zone.now))
       return "今日"

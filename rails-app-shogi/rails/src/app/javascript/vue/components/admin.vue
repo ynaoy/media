@@ -12,6 +12,7 @@
 
 <script>
 import { inject } from 'vue'
+import  adminObject from '../composables/adminObject'
 
 export default {
   
@@ -19,26 +20,15 @@ export default {
 
   setup(props, context){
 
+    //リアクティブな変数群とメソッド群
     const state = inject('state')
     const max_state = inject('max_state')
+    const{ admin_methods } = adminObject(state, max_state,context)
 
-    //strに応じて"update_state"イベントを発火させる
-    const update_state = function(str){
-      if(str=="down"){
-        (state.value-1<0)? context.emit('update_state', 0): context.emit('update_state', state.value-1)
-      }
-      else if(str=="down_10"){
-        (state.value-10<0)? context.emit('update_state', 0): context.emit('update_state', state.value-10)
-      }
-      else if(str=="up"){
-        (state.value+1>max_state.value)? context.emit('update_state', max_state.value):context.emit('update_state', state.value+1)
-      }
-      else if(str=="up_10"){
-        (state.value+10>max_state.value)? context.emit('update_state', max_state.value):context.emit('update_state', state.value+10)
-      }
-    }
+    //このコンポーネントで使うメソッド
+    const update_state = admin_methods['update_state']
 
-    return { state, max_state, update_state }
+    return { state, update_state }
   },
 }
 </script>
