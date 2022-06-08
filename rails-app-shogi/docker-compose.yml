@@ -16,10 +16,24 @@ services:
     build: ./rails
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - ./rails/src:/app
+      - ./rails/src:/rails
     ports:
       - "3000:3000"
     environment:
       RAILS_ENV: development
     depends_on:
       - db
+
+  app:
+    build: ./nuxt
+    #command: yarn dev -p 3001
+    volumes:
+      - ./nuxt/src:/nuxt:cached
+    #working_dir: "/nuxt/src"
+    ports:
+      - "3001:3001"
+      - "24678:24678"
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
