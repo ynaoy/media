@@ -24,8 +24,8 @@
             </ul>
           </li>
 
-          <li v-if="!loginFlg"><nuxt-link to="/" class="nav-link dropdown-item">ログイン</nuxt-link></li>
-          <li v-if="!loginFlg"><nuxt-link to="/" class="nav-link dropdown-item">新規登録</nuxt-link></li>
+          <li v-if="!loginFlg"><nuxt-link to="/login" class="nav-link dropdown-item">ログイン</nuxt-link></li>
+          <li v-if="!loginFlg"><nuxt-link to="/signup" class="nav-link dropdown-item">新規登録</nuxt-link></li>
         </ul>
       </nav>
 
