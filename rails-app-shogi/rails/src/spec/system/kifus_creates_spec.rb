@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "KifusCreates", type: :system do
-
   before do
     @user = FactoryBot.create(:user)
     @tag = FactoryBot.create(:tag)

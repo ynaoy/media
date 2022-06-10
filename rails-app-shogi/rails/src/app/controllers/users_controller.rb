@@ -20,11 +20,25 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      #sessionで管理する用。いずれ削除する
       log_in(@user) #sessionに@user.idを追加
       remember(@user) #cookieに@user.idを追加
-      redirect_to root_url
+
+      #user_idをjwtトークンにencodeしてjson形式で渡す
+      payload = { user_id: @user.id }
+      token = encode_token(payload)
+      #redirect_to root_url
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.json { render json: { jwt: token } }
+      end
+
     else
-      render 'new'
+      #render 'new'
+      respond_to do |format|
+        format.html { render 'new' }
+        format.json { render json: {errors: @user.errors.full_messages},status: :not_acceptable }
+      end
     end
   end
 

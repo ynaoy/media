@@ -50,6 +50,25 @@ RSpec.describe "Users", type: :request do
                          password_confirmation: "password" } }
       expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
     end
+
+    it "return json object error" do
+
+      post signup_path, params: { user: { name: "User4",
+                                         email: "user4@example.com",
+                                      password: "password",
+                         password_confirmation: "falsepassword" },
+                        format: "json"}
+      expect(JSON.parse(response.body)['errors'].nil?).to eq false
+    end
+
+    it "return json object" do
+      post signup_path, params: { user: { name: "User4",
+                                         email: "user4@example.com",
+                                      password: "password",
+                         password_confirmation: "password" },
+                         format: "json"}
+      expect(JSON.parse(response.body)['jwt'].nil?).to eq false
+    end
   end
 
   describe "GET /edit" do

@@ -5,12 +5,34 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user && @user.authenticate(params[:session][:password])
-        log_in(@user) #sessionに@user.idを追加
-        remember(@user) #cookieに@user.idを追加
-        redirect_back_or(root_url)
+      #sessionで管理する用。いずれ削除する
+      log_in(@user) #sessionに@user.idを追加
+      remember(@user) #cookieに@user.idを追加
+
+      #user_idをjwtトークンにencodeしてjson形式で渡す
+      payload = {user_id: @user.id }
+      token = encode_token(payload)
+      #redirect_to root_url
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.json { render json: { jwt: token, success: "Welcome back" } }
+      end
+
     else
       flash.now[:danger] = 'メールアドレス、又はパスワードに誤りがあります'
-      render 'new'
+      #render 'new'
+      respond_to do |format|
+        format.html { render 'new' }
+        format.json { response_unauthorized }
+      end
+    end
+  end
+
+  def auto_login
+    if session_user 
+      render json: session_user
+    else
+      render json: {errors: "No user Logged In"}
     end
   end
 
