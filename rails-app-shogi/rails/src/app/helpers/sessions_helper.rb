@@ -76,8 +76,8 @@ module SessionsHelper
   end
 
   # リクエストのヘッダにdecode_tokenが存在するならUserModelを返し、存在しなければnilを返す
-  def session_user
-    decoded_hash = decoded_token
+  def session_user(token)
+    decoded_hash = decoded_token(token)
     if !decoded_hash.empty?
         user_id = decoded_hash[0]['user_id']
         @user = User.find_by(id: user_id)
@@ -92,11 +92,11 @@ module SessionsHelper
 
   #リクエストのヘッダに'Authorization'が含まれているならjwtトークンをデコードして返す
   #含まれていなければ空のlistを返す
-  def decoded_token
-    if auth_header
-      token = auth_header.split(' ')[1]
+  def decoded_token(token)
+    if token
+      token = token.split(' ')[1]
       begin
-        JWT.decode(token, 'my_secret', true, algorithm: 'HS256')
+        JWT.decode(token, 'my_secret_key', true, algorithm: 'HS256')
       rescue JWT::DecodeError
         []
       end

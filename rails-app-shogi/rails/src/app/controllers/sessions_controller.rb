@@ -29,8 +29,10 @@ class SessionsController < ApplicationController
   end
 
   def auto_login
-    if session_user 
-      render json: session_user
+    token = request.headers['Authorization']
+    auth = session_user(token)
+    if auth
+      render json: auth
     else
       render json: {errors: "No user Logged In"}
     end
