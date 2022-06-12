@@ -27,14 +27,9 @@ class SessionsController < ApplicationController
   end
 
   def login_check
-    p request.cookies["jwt"]
     token = request.cookies["jwt"]
     auth = session_user(token)
-    if auth
-      render json: auth
-    else
-      render json: {errors: "No user Logged In"}
-    end
+    render json: auth
   end
 
   def destroy

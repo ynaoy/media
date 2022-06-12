@@ -15,7 +15,7 @@
 
           <li v-if="loginFlg" class="dropdown collapse navbar-collapse">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-toggle="dropdown">
-              {{ search_form.text }}
+              {{ user_name }}
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
               <li><nuxt-link to="/" class="dropdown-item">Setting</nuxt-link></li>
@@ -34,10 +34,14 @@
 </template>
 
 <script setup>
+  //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意
+  const user_name = inject('user_name')
+  const loginFlg = inject('loginFlg')
 
-  const { loginFlg }  = globalState()
-  const { login_check } = SessionHelper()
+  //フォームで使うやつら
   const search_form = { text: ""}
+
+  //日本語の変換確定してないときに正しく入力されない問題をクリアする
   const  bindKeyword = function({ target }){
     search_form.text =  target.value;
   }
@@ -46,7 +50,6 @@
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
     console.log(search_form.text)
-    loginFlg.value = !loginFlg.value
   }
 
 </script>
