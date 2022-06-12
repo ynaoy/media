@@ -62,43 +62,53 @@ module SessionsHelper
   end
 
   #---------------------------------------------------
-  # ここからRailsApi+NuxtSpaで認証で、jwtトークンをLocalStrageに保存する場合
+  # ここからRailsApi+NuxtSpaで認証で、jwtトークンをcookieに保存する場合
   #---------------------------------------------------
 
   # 認証が通らなかったときに"401 Unauthorized"が入ったjsonオブジェクトを返す
   def response_unauthorized
     render status: 401, json: { status: 401, message: 'Unauthorized' }
   end
-  
+
+  def login_params(params)
+    email =    (params[:session].nil?)? params[:email] : params[:session][:email]
+    password = (params[:session].nil?)? params[:password] : params[:session][:password]
+    return email, password
+  end
+
+  #cookieにjwtトークンをセットする
+  def jwt_token(user)
+    payload = {user_id: user.id }
+    token = encode_token(payload)
+    cookies[:jwt] = { value:token,httponly:true }
+  end
+
   # payloadをjwtトークンにエンコードする
   def encode_token(payload)
     JWT.encode(payload,'my_secret_key','HS256')
   end
 
-  # リクエストのヘッダにdecode_tokenが存在するならUserModelを返し、存在しなければnilを返す
+  # jwtトークンをでコードしてuser_idが存在するならUserModelを返し、存在しなければnilを返す
   def session_user(token)
     decoded_hash = decoded_token(token)
-    if !decoded_hash.empty?
+    if decoded_hash
         user_id = decoded_hash[0]['user_id']
         @user = User.find_by(id: user_id)
+        { user_id:@user.id, user_name:@user.name }
     else 
         nil
     end
   end
 
-  def auth_header
-    request.headers['Authorization']
-  end 
-
-  #リクエストのヘッダに'Authorization'が含まれているならjwtトークンをデコードして返す
+  #トークンがnilじゃなければjwtトークンをデコードして返す
   #含まれていなければ空のlistを返す
   def decoded_token(token)
     if token
-      token = token.split(' ')[1]
+      #token = token.split(' ')[1]
       begin
         JWT.decode(token, 'my_secret_key', true, algorithm: 'HS256')
       rescue JWT::DecodeError
-        []
+        nil
       end
     end
   end

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
+  get '/login_check', to: 'sessions#login_check'
   get '/search', to: 'searchs#search'
   post '/favorites', to:'favorites#create'
   delete '/favorites', to:'favorites#destroy'

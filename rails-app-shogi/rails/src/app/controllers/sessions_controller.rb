@@ -3,19 +3,17 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(email: params[:session][:email].downcase)
-    if @user && @user.authenticate(params[:session][:password])
+    email,password = login_params(params)
+    @user = User.find_by(email: email.downcase)
+    if @user && @user.authenticate(password)
       #sessionで管理する用。いずれ削除する
       log_in(@user) #sessionに@user.idを追加
       remember(@user) #cookieに@user.idを追加
-
       #user_idをjwtトークンにencodeしてjson形式で渡す
-      payload = {user_id: @user.id }
-      token = encode_token(payload)
-      #redirect_to root_url
+      jwt_token(@user)
       respond_to do |format|
         format.html { redirect_to root_url }
-        format.json { render json: { jwt: token, success: "Welcome back" } }
+        format.json { render json: { success: "Welcome back" } }
       end
 
     else
@@ -28,8 +26,9 @@ class SessionsController < ApplicationController
     end
   end
 
-  def auto_login
-    token = request.headers['Authorization']
+  def login_check
+    p request.cookies["jwt"]
+    token = request.cookies["jwt"]
     auth = session_user(token)
     if auth
       render json: auth

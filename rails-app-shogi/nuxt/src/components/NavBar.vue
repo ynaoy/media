@@ -36,6 +36,7 @@
 <script setup>
 
   const { loginFlg }  = globalState()
+  const { login_check } = SessionHelper()
   const search_form = { text: ""}
   const  bindKeyword = function({ target }){
     search_form.text =  target.value;

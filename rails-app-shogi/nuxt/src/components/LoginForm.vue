@@ -18,18 +18,18 @@
         </form>
       </div>
     </div>
+    <button @click="login_check()">User 情報</button>
   </div>
 </template>
 
 <script setup>
-
+  const { login, login_check} = SessionHelper()
   const session_form = { email: "", password:"" }
 
   const submit = async function(){
-    //<<Bug inputに日本語と英字両方が混ざっていると
+    //<<バグ inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    console.log(session_form.email)
-    console.log(session_form.password)
+    login({ 'email':session_form.email, 'password':session_form.password })
   }
 
 </script>
