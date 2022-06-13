@@ -25,7 +25,7 @@ RSpec.describe SessionsHelper, type: :helper do
     it "should work" do
       payload = { user_id: 0 }
       token = helper.encode_token(payload)
-      token = "a "+token+" b"
+
       decode_token = helper.decoded_token(token)
       expect(decode_token[0]['user_id']).to eq payload[:user_id]
     end
@@ -40,9 +40,8 @@ RSpec.describe SessionsHelper, type: :helper do
     it "should work" do
       payload =  { user_id: @user.id }
       token = helper.encode_token(payload)
-      token = "a "+token+" b"
       user = helper.session_user(token)
-      expect(user.id).to be @user.id
+      expect(user[:user_id]).to be @user.id
     end
   end
   

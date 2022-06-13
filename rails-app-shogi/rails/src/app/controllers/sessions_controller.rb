@@ -3,14 +3,19 @@ class SessionsController < ApplicationController
   end
 
   def create
-    email,password = login_params(params)
-    @user = User.find_by(email: email.downcase)
-    if @user && @user.authenticate(password)
+    if(params[:format]=="json")
+      params[:session] = JSON.parse(params[:session],symbolize_names: true)
+    end
+
+    @user = User.find_by(email: params[:session][:email].downcase)
+    if @user && @user.authenticate(params[:session][:password])
       #sessionで管理する用。いずれ削除する
       log_in(@user) #sessionに@user.idを追加
       remember(@user) #cookieに@user.idを追加
-      #user_idをjwtトークンにencodeしてjson形式で渡す
+
+      #user_idをjwtトークンにencodeしてcookieにjwtトークンをセットする
       jwt_token(@user)
+
       respond_to do |format|
         format.html { redirect_to root_url }
         format.json { render json: { success: "Welcome back" } }

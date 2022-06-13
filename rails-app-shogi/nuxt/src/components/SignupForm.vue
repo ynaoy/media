@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+  const { create_user } = UserHelper()
 
   const signup_form = { name:"",
                         email: "", 
@@ -44,10 +45,7 @@
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    console.log(signup_form.name)
-    console.log(signup_form.email)
-    console.log(signup_form.password)
-    console.log(signup_form.password_confirmation)
+    create_user({ user: JSON.stringify(signup_form)})
   }
 
 </script>

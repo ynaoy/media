@@ -70,12 +70,6 @@ module SessionsHelper
     render status: 401, json: { status: 401, message: 'Unauthorized' }
   end
 
-  def login_params(params)
-    email =    (params[:session].nil?)? params[:email] : params[:session][:email]
-    password = (params[:session].nil?)? params[:password] : params[:session][:password]
-    return email, password
-  end
-
   #cookieにjwtトークンをセットする
   def jwt_token(user)
     payload = {user_id: user.id }
@@ -88,7 +82,7 @@ module SessionsHelper
     JWT.encode(payload,'my_secret_key','HS256')
   end
 
-  # jwtトークンをでコードしてuser_idが存在するならUserModelを返し、存在しなければnilを返す
+  # jwtトークンをデコードしてuser_idが存在するならUserModelを返し、存在しなければnilを返す
   def session_user(token)
     decoded_hash = decoded_token(token)
     if decoded_hash
@@ -101,10 +95,8 @@ module SessionsHelper
   end
 
   #トークンがnilじゃなければjwtトークンをデコードして返す
-  #含まれていなければ空のlistを返す
   def decoded_token(token)
     if token
-      #token = token.split(' ')[1]
       begin
         JWT.decode(token, 'my_secret_key', true, algorithm: 'HS256')
       rescue JWT::DecodeError

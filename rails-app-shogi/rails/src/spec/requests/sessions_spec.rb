@@ -22,18 +22,20 @@ RSpec.describe "Sessions", type: :request do
     end
 
     it "returns json error" do
-      post login_path, params: { session: { email: @user.email,
-                                          password: "falsepassword" },
+      #ネストした部分がjson形式で送られてくるので注意
+      post login_path, params: { session: ({ email: @user.email,
+                                          password: "falsepassword" }).to_json,
                                  format: "json" }
       expect(response).to have_http_status(401)
       expect(JSON.parse(response.body)['status']).to eq 401
     end
 
     it "returns http object" do
-      post login_path, params: { session: { email: @user.email,
-                                          password: "password" },
+      #ネストした部分がjson形式で送られてくるので注意
+      post login_path, params: { session: ({ email: @user.email,
+                                          password: "password" }).to_json,
                                 format: "json" }
-      expect(JSON.parse(response.body)['jwt'].nil?).to eq false
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
     end
 
   end

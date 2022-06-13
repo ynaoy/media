@@ -29,7 +29,7 @@
   const submit = async function(){
     //<<バグ inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    login({ 'email':session_form.email, 'password':session_form.password })
+    login({ session: JSON.stringify(session_form)} )
   }
 
 </script>

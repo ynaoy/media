@@ -52,22 +52,23 @@ RSpec.describe "Users", type: :request do
     end
 
     it "return json object error" do
-
-      post signup_path, params: { user: { name: "User4",
+      #ネストした部分がjson形式で送られてくるので注意
+      post signup_path, params: { user: ({ name: "User4",
                                          email: "user4@example.com",
                                       password: "password",
-                         password_confirmation: "falsepassword" },
+                         password_confirmation: "falsepassword" }).to_json,
                         format: "json"}
       expect(JSON.parse(response.body)['errors'].nil?).to eq false
     end
 
     it "return json object" do
-      post signup_path, params: { user: { name: "User4",
+      #ネストした部分がjson形式で送られてくるので注意
+      post signup_path, params: { user: ({ name: "User4",
                                          email: "user4@example.com",
                                       password: "password",
-                         password_confirmation: "password" },
+                         password_confirmation: "password" }).to_json,
                          format: "json"}
-      expect(JSON.parse(response.body)['jwt'].nil?).to eq false
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
     end
   end
 
