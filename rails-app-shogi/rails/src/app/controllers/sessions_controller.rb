@@ -1,9 +1,12 @@
 class SessionsController < ApplicationController
+  before_action :set_csrf_token,     only: :login_check
+
   def new
   end
 
   def create
     if(params[:format]=="json")
+      return if(!check_csrf_token)
       params[:session] = JSON.parse(params[:session],symbolize_names: true)
     end
 
@@ -34,6 +37,7 @@ class SessionsController < ApplicationController
   def login_check
     token = request.cookies["jwt"]
     auth = session_user(token)
+    set_csrf_token
     render json: auth
   end
 

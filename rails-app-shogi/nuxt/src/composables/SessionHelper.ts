@@ -4,11 +4,12 @@ export const SessionHelper = () => {
 
   //サーバーサイドのログインURLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
-  const login = async (params:{ session:{ email:string, password:string}} ) =>{
+  const login = async (params:{ session:{ email:string, password:string}},headers:{} ) =>{
     params['format'] = 'json'
     await FetchResponse('http://localhost:3000/login',
       { method:'post',
         params: params,
+        headers: headers,
         credentials: 'include'
       })
       .then((data) => {
@@ -25,15 +26,20 @@ export const SessionHelper = () => {
   const login_check = async() =>{
     let Flg = false
     let data = {}
-    await FetchResponse('http://localhost:3000/login_check',{ credentials: 'include' })
-    .then((res) => {
-      data = res
-      Flg = (res['errors'] == null )? true : false 
+    let csrf_token :string
+    await fetch('http://localhost:3000/login_check',{ credentials: 'include' })
+    .then((response) => {
+      csrf_token = response.headers.get("csrf_token")
+      return response.json()
+    })
+    .then(json => {
+      data = json
+    Flg = (json['user_id'] == null )? false : true 
     })
     .catch((error) => {
       console.log(error)
     })
-    return { 'data':data, 'loginFlg':Flg }
+    return { 'data':data, 'loginFlg':Flg, 'csrf_token':csrf_token, }
   }
   return {  login: login,
             login_check: login_check }

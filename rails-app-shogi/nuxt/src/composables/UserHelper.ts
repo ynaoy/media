@@ -10,12 +10,14 @@ export const UserHelper = () => {
                                 email:string, 
                                 password:string,
                                 password_confirmation:string }
-                              }                        
+                              },
+                    headers:{},                      
                   ){
     params['format'] = 'json'
     await FetchResponse('http://localhost:3000/signup',
       { method:'post',
         params: params,
+        headers: headers,
         credentials: 'include'
       })
       .then((data) => {

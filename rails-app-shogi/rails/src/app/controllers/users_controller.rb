@@ -19,6 +19,7 @@ class UsersController < ApplicationController
 
   def create
     if(params[:format]=="json")
+      return if(!check_csrf_token)
       params[:user] = JSON.parse(params[:user],symbolize_names: true)
     end
 

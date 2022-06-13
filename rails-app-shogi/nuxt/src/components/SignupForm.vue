@@ -30,6 +30,9 @@
 </template>
 
 <script setup>
+  //親コンポーネントから貰う奴ら。
+  const csrf_token = inject('csrf_token')
+
   const { create_user } = UserHelper()
 
   const signup_form = { name:"",
@@ -45,7 +48,7 @@
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    create_user({ user: JSON.stringify(signup_form)})
+    create_user({ user: JSON.stringify(signup_form)}, { "Authorization" :csrf_token })
   }
 
 </script>
