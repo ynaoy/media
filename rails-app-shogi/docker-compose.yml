@@ -20,7 +20,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      RAILS_ENV: development
+      - RAILS_ENV=development
+      - SPA_ORIGIN=http://localhost:3001
+      - JWT_SECRET_KEY=my_secret_key
     depends_on:
       - db
 
@@ -37,3 +39,4 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
+      - VITE_API_ORIGIN=http://localhost:3000

@@ -14,7 +14,7 @@ export const UserHelper = () => {
                     headers:{},                      
                   ){
     params['format'] = 'json'
-    await FetchResponse('http://localhost:3000/signup',
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/signup`,
       { method:'post',
         params: params,
         headers: headers,

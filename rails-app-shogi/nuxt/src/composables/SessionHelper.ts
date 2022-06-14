@@ -6,7 +6,7 @@ export const SessionHelper = () => {
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   const login = async (params:{ session:{ email:string, password:string}},headers:{} ) =>{
     params['format'] = 'json'
-    await FetchResponse('http://localhost:3000/login',
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/login`,
       { method:'post',
         params: params,
         headers: headers,
@@ -27,7 +27,8 @@ export const SessionHelper = () => {
     let Flg = false
     let data = {}
     let csrf_token :string
-    await fetch('http://localhost:3000/login_check',{ credentials: 'include' })
+    console.log( import.meta.env.VITE_API_ORIGIN)
+    await fetch(`${import.meta.env.VITE_API_ORIGIN}/login_check`,{ credentials: 'include' })
     .then((response) => {
       csrf_token = response.headers.get("csrf_token")
       return response.json()

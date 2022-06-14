@@ -79,7 +79,7 @@ module SessionsHelper
 
   # payloadをjwtトークンにエンコードする
   def encode_token(payload)
-    JWT.encode(payload,'my_secret_key','HS256')
+    JWT.encode(payload,ENV['JWT_SECRET_KEY'],'HS256')
   end
 
   # jwtトークンをデコードしてuser_idが存在するならUserModelを返し、存在しなければnilを返す
@@ -98,7 +98,7 @@ module SessionsHelper
   def decoded_token(token)
     if token
       begin
-        JWT.decode(token, 'my_secret_key', true, algorithm: 'HS256')
+        JWT.decode(token, ENV['JWT_SECRET_KEY'], true, algorithm: 'HS256')
       rescue JWT::DecodeError
         nil
       end
