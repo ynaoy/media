@@ -34,9 +34,11 @@
 </template>
 
 <script setup>
+//export default{
+  //setup(){
   //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意
-  const user_name = inject('user_name')
-  const loginFlg = inject('loginFlg')
+  const user_name = ref(inject('user_name'))
+  const loginFlg = ref(inject('loginFlg'))
 
   //フォームで使うやつら
   const search_form = { text: ""}
@@ -45,13 +47,16 @@
   const  bindKeyword = function({ target }){
     search_form.text =  target.value;
   }
-
+  const hello = computed(()=>{return "hello"})
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
     console.log(search_form.text)
   }
-
+  defineExpose( user_name,loginFlg,search_form,bindKeyword,submit );
+  //return { user_name,loginFlg,search_form,bindKeyword,submit }
+  //}
+//}
 </script>
 
 <style scoped>

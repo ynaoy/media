@@ -28,7 +28,7 @@ services:
 
   app:
     build: ./nuxt
-    #command: yarn dev -p 3001
+    command: yarn dev -p 3001
     volumes:
       - ./nuxt/src:/nuxt:cached
     #working_dir: "/nuxt/src"
