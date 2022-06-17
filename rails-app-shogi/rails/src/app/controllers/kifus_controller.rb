@@ -22,16 +22,15 @@ class KifusController < ApplicationController
   end
 
   def show
-    kifu = Kifu.find(params[:id])
-    @tags = kifu.get_tags 
-    @player1 = kifu.player1
-    @player2 = kifu.player2
+    @kifu = Kifu.find(params[:id])
+    @tags = @kifu.get_tags 
 
-    kifu_list = kifu.extract_kifu
+    kifu_list = @kifu.extract_kifu
     @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
 
     if logged_in?
-      current_user.histories.create!(kifu_id: params[:id] )
+      current_user.histories.create!(kifu_id: @kifu.id)
+      @favorite_flg = current_user.is_favorite_kifu?(kifu_id = @kifu.id)
     end
   end
 

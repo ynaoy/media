@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "test": "nuxi test"
+  },
+  "devDependencies": {
+    "@nuxt/test-utils-edge": "^3.0.0-rc.4-27585508.c9d4b2e",
+    "@vue/test-utils": "^2.0.1",
+    "add": "^2.0.6",
+    "jsdom": "^19.0.0",
+    "node-sass": "^7.0.1",
+    "nuxt": "3.0.0-rc.3",
+    "sass": "^1.52.3",
+    "sass-loader": "^13.0.0",
+    "unplugin-auto-import": "^0.8.8",
+    "vitest": "^0.15.0",
+    "yarn": "^1.22.19"
+  },
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "bootstrap-vue": "^2.22.0"
+  }
+}

@@ -7,8 +7,9 @@ module TestHelper
 
   # テストユーザーとしてログインする
   def log_in_as(user)
-    post login_path, params: { session: { email: user.email,
-                                          password: "password" } }
+    post login_path, params: {  session: { email: user.email,
+                                          password: "password" }
+                              }
 
   end
 
@@ -18,7 +19,6 @@ module TestHelper
     fill_in "メールアドレス", with: user.email
     fill_in "パスワード", with: "password"
     click_on "ログインする"
-
   end
 
   #userを大量に作成
@@ -52,25 +52,25 @@ module TestHelper
     kifus.reverse!
   end
 
-  # historyを大量に作成
-  def make_histories(user_id:1, kifu_id:1, n:10)
-    histories = []
+  # attributeのレコードを大量に作成
+  def make_records(model,user_id:1, kifu_id:1, n:10)
+    records = []
     created_at = Time.zone.now
 
     3.times do
       n.times do |i|
-        histories.push(FactoryBot.create(
-                  :history,
+        records.push(FactoryBot.create(
+                  model,
                   user_id:user_id,
                   kifu_id:kifu_id,
                   created_at:created_at,
           )
         )
       end
-      created_at-= 86400 #1日は86400秒
+      created_at-= 86400 if model=="history"#1日は86400秒 
     end
 
-    return histories
+    return records
   end
 
   #Timewithzoneクラスをformat型のstrに変換して返す

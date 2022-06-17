@@ -1,30 +1,33 @@
 <template>
   <div id="left_board">
-    <subBoard1></subBoard1>
+    <subBoard></subBoard>
   </div>
 </template>
 
 <script>
 
-import { computed } from 'vue'
-import subBoard1 from './sub-board1.vue'
+import { provide, inject } from 'vue'
+import subBoard from './sub-board.vue'
 
 export default {
+
   name: "leftBoard",
+
   components: {
-    subBoard1
+    subBoard
   },
 
-  inject: {
-    sub_board_text:['sub_board_text'],
-    sub_board_num: ['sub_board_num'],
-  },
+  setup(props,context){
 
-  provide() {
-    return {
-      sub_board_text: computed(() => this.sub_board_text.value),
-      sub_board_num: computed(() => this.sub_board_num.value),
-    }
-  },
+    //親コンポーネントから貰う変数群
+    const sub_board_text = inject('sub_board_text')
+    const sub_board_num  = inject('sub_board_num')
+
+    //子コンポーネントに渡す変数群
+    provide('sub_board_text', sub_board_text)
+    provide('sub_board_num',  sub_board_num)
+    provide('sub_board_id',  1)
+  }
+
 }
 </script>

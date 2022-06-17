@@ -50,6 +50,26 @@ RSpec.describe "Users", type: :request do
                          password_confirmation: "password" } }
       expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
     end
+
+    it "return json object error" do
+      #ネストした部分がjson形式で送られてくるので注意
+      post signup_path, params: { user: ({ name: "User4",
+                                         email: "user4@example.com",
+                                      password: "password",
+                         password_confirmation: "falsepassword" }).to_json,
+                        format: "json"}
+      expect(JSON.parse(response.body)['errors'].nil?).to eq false
+    end
+
+    it "return json object" do
+      #ネストした部分がjson形式で送られてくるので注意
+      post signup_path, params: { user: ({ name: "User4",
+                                         email: "user4@example.com",
+                                      password: "password",
+                         password_confirmation: "password" }).to_json,
+                         format: "json"}
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
+    end
   end
 
   describe "GET /edit" do
@@ -98,6 +118,19 @@ RSpec.describe "Users", type: :request do
     it "returns http redirect" do
       log_in_as @user
       get user_path(@user) + "/history"
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /:id/favorite" do
+    it "returns http redirect with not login" do
+      get user_path(@user) + "/favorite"
+      expect(response).to redirect_to(login_url) #ページがlogin_urlにリダイレクトする
+    end
+
+    it "returns http redirect" do
+      log_in_as @user
+      get user_path(@user) + "/favorite"
       expect(response).to have_http_status(:success)
     end
   end

@@ -11,7 +11,7 @@ RSpec.describe "KifusShows", type: :system do
 
   describe "Kifu_Test" do
 
-    it "change state" , js: true do
+    it "change state", js: true do
 
       visit kifu_path(id:@kifu.id)
 
@@ -60,22 +60,30 @@ RSpec.describe "KifusShows", type: :system do
       expect(page).to have_content(@tag1.name)
     end
 
-    it "display normaly",js:true do
+    it "tag clicked, move to search url" do
+      visit kifu_path(id:@kifu.id)
+      click_on @tag1.name
+      expect(current_url).to eq search_url+"?"+URI.encode_www_form(query: @tag1.name)
+    end
+
+    it "display normaly", js:true do
       visit kifu_path(id:@kifu.id)
 
       expect(page).to have_selector("#player")
 
       #駒がすべて正しい枚数表示されているなら
       text = ["飛","角","王","金","銀","桂","香"]
-      for i in 0..(text.length-1) do
-        (i<3)? num=2: num=4
-        expect(page).to have_content(text[i],count:num)
+      within("#board") do
+        for i in 0..(text.length-1) do
+          (i<3)? num=2: num=4
+          expect(page).to have_content(text[i],count:num)
+        end
+        expect(page).to have_content("歩", count: 18)
       end
-      expect(page).to have_content("歩", count: 18)
 
     end
 
-    it "display koma's move",js:true do
+    it "display koma's move", js:true do
       visit kifu_path(id:@kifu.id)
 
       # 〇〇駒(××)、同　駒(××)、〇〇駒打、〇〇駒成(××)、〇〇成駒(××)、についてそれぞれテストする
@@ -83,9 +91,13 @@ RSpec.describe "KifusShows", type: :system do
 
       # ２六歩(27)、８四歩(83)で歩の移動後、歩が過不足なく表示されている
       find("#next_1").click
-      expect(page).to have_content("歩", count: 18)
+      within("#board") do
+        expect(page).to have_content("歩", count: 18)
+      end
       find("#next_1").click
-      expect(page).to have_content("歩", count: 18)
+      within("#board") do
+        expect(page).to have_content("歩", count: 18)
+      end
 
       3.times do
         find("#next_1").click
@@ -94,9 +106,13 @@ RSpec.describe "KifusShows", type: :system do
       # 同　歩(23)、同　飛(28)で取った相手の駒とその枚数が表示されている
       # 画面上では"駒×1" html上では"駒\n×1"と表示される
       find("#next_1").click
-      expect(page).to have_content("歩\n×1")
+      within("#left_board") do
+        expect(page).to have_content("歩\n×1")
+      end
       find("#next_1").click
-      expect(page).to have_content("歩\n×1",count: 2)
+      within("#right_board") do
+        expect(page).to have_content("歩\n×1")
+      end
 
       3.times do
         find("#next_1").click
@@ -104,11 +120,15 @@ RSpec.describe "KifusShows", type: :system do
 
       # ２三歩打、８七歩打で "歩×2" が" 歩×1" に代わっている
       find("#next_1").click
-      expect(page).to have_content("歩\n×2",count:1)
-      expect(page).to have_content("歩\n×1",count:1)
+      within("#right_board") do
+        expect(page).to have_no_content("歩\n×2")
+        expect(page).to have_content("歩\n×1")
+      end
       find("#next_1").click
-      expect(page).to have_content("歩\n×2",count:0)
-      expect(page).to have_content("歩\n×1",count:2)
+      within("#left_board") do
+        expect(page).to have_no_content("歩\n×2")
+        expect(page).to have_content("歩\n×1")
+      end
 
       14.times do
         find("#next_1").click
@@ -116,18 +136,54 @@ RSpec.describe "KifusShows", type: :system do
 
       # ２三銀成(34)、８七銀成(76)で銀が全に代わっている
       find("#next_1").click
-      expect(page).to have_content("銀",count:3)
-      expect(page).to have_content("全",count:1)
+      within("#board") do
+        expect(page).to have_content("銀",count:3)
+        expect(page).to have_content("全",count:1)
+      end
       find("#next_1").click
-      expect(page).to have_content("銀",count:2)
-      expect(page).to have_content("全",count:2)
+      within("#board") do
+        expect(page).to have_content("銀",count:2)
+        expect(page).to have_content("全",count:2)
+      end
 
       #３二成銀(23)、７八成銀(87)で全の移動後、全が過不足なく表示されている
       #成銀は画面上では全と表示される
       2.times do
         find("#next_1").click
-      expect(page).to have_content("全",count:2)
+        within("#board") do
+          expect(page).to have_content("全",count:2)
+        end
       end
+    end
+
+    it "not display favorite button with not login", js: true do
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_no_selector(".favorite_button")
+      expect(page).to have_no_content("お気に入りに追加")
+    end
+
+    it "display favorite button with login", js: true do
+      log_in_e2e(@user)
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_selector(".favorite_button")
+      expect(page).to have_content("お気に入りに追加")
+    end
+
+    it "favorite button clicked, change to value", js: true do
+      log_in_e2e(@user)
+      visit kifu_path(id:@kifu.id)
+
+      expect(page).to have_content("お気に入りに追加")
+
+      click_on "お気に入りに追加"
+      expect(page).to have_content("お気に入りに追加",count:0)
+      expect(page).to have_content("お気に入りから削除")
+
+      click_on "お気に入りから削除"
+      expect(page).to have_content("お気に入りに追加")
+      expect(page).to have_content("お気に入りから削除",count:0)
     end
 
   end

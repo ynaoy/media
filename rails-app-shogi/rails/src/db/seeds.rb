@@ -1,7 +1,7 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
-=begin
+
 #Tag
 tag_0 = ["相居飛車","相振り飛車","対抗系"]
 for n in tag_0 do
@@ -85,6 +85,7 @@ user = User.find_by(name:"admin_user")
   kifu.save
 end
 
+#タグ
 10.times do |n|
   history = user.histories.create!(kifu_id: 1)
 end
@@ -98,6 +99,11 @@ end
   history.created_at -= (86400*2)
   history.save
 end
-=end
+
+#お気に入り(favoriteモデル)
+10.times do |n|
+  favorite = user.favorites.create!(kifu_id: n)
+  favorite.save
+end
 
 

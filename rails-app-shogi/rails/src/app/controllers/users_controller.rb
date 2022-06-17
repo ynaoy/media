@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: %i[index edit update history]
+  before_action :logged_in_user, only: %i[index edit update history favorite]
   before_action :admin_user,     only: :index
+  before_action :correct_user,   only: %i[history favorite]
 
   def index 
     @users = User.all.order(id: "desc").page(params[:page]).per(20)
@@ -17,13 +18,30 @@ class UsersController < ApplicationController
   end
 
   def create
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+      params[:user] = JSON.parse(params[:user],symbolize_names: true)
+    end
+
     @user = User.new(user_params)
     if @user.save
+      #sessionで管理する用。いずれ削除する
       log_in(@user) #sessionに@user.idを追加
       remember(@user) #cookieに@user.idを追加
-      redirect_to root_url
+
+      #user_idをjwtトークンにencodeしてcookieにセットする
+      jwt_token(@user)
+
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.json { render json: { success: "Welcome!!" } }
+      end
+
     else
-      render 'new'
+      respond_to do |format|
+        format.html { render 'new' }
+        format.json { render json: {errors: @user.errors.full_messages},status: :not_acceptable }
+      end
     end
   end
 
@@ -50,6 +68,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    # << Todo current_userかadmin_userのみが使えるようにする >>
     User.find(params[:id]).destroy
     flash.now[:success] = "User deleted"
     redirect_back_or(root_url)
@@ -60,11 +79,16 @@ class UsersController < ApplicationController
     @hist_and_kifus = History.hist_and_kifus(@user.id) if @user
   end
 
+  def favorite
+    @user = User.find(params[:id])
+    @favorite_kifus = Favorite.favorite_kifus(@user.id).page(params[:page]).per(20) if @user
+  end
+
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
+      params.require(:user).permit( :name, :email, :password,
+                                    :password_confirmation)
     end
     # beforeアクション
 
