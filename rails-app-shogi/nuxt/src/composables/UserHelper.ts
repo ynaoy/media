@@ -13,21 +13,44 @@ export const UserHelper = () => {
                               },
                     headers:{},                      
                   ){
-    params['format'] = 'json'
-    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/signup`,
-      { method:'post',
-        params: params,
-        headers: headers,
-        credentials: 'include'
-      })
-      .then((data) => {
-        console.log(data)
-        location.href = "/"
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
+      params['format'] = 'json'
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/signup`,
+        { method:'POST',
+          params: params,
+          headers: headers,
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          location.href = "/"
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
 
-  return {  create_user: create_user }
+  const update_user = 
+    async function( params:{  id: Int16Array,
+                              user: { name:string }
+                              },
+                    headers:{},                      
+                  ){
+      params['format'] = 'json'
+      console.log(`${import.meta.env.VITE_API_ORIGIN}/users/${params['id']}`)
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params['id']}`,
+        { method:'PATCH',
+          params: params,
+          headers: headers,
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          location.href = "/"
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+
+  return {  create_user: create_user, update_user:update_user }
 }

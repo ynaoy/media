@@ -18,7 +18,7 @@
               {{ user_name }}
             </a>
             <ul class="dropdown-menu dropdown-menu-dark">
-              <li><nuxt-link to="/" class="dropdown-item">Setting</nuxt-link></li>
+              <li><nuxt-link to="/profile" class="dropdown-item">Setting</nuxt-link></li>
               <li class="divider dropdown-divider"></li>
               <li><nuxt-link to="/" class="dropdown-item">Log out</nuxt-link></li>
             </ul>

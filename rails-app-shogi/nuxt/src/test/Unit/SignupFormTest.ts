@@ -32,7 +32,6 @@ export default async function SignupFormTest(){
 
       //フォームが存在するかチェック
       check_form(forms)
-      expect(wrapper.find("input[name='user[password_confirmation]']").exists()).toBeTruthy()
 
       //フォームに値を入力
       await set_form(forms,values)
@@ -44,6 +43,7 @@ export default async function SignupFormTest(){
       expect(wrapper.vm.signup_form.email).toBe(values[1])
       expect(wrapper.vm.signup_form.password).toBe(values[2])
       expect(wrapper.vm.signup_form.password_confirmation).toBe(values[3])
+      //submit関数が呼び出されているかチェック
       expect(spy).toHaveBeenCalled()
       spy.mockReset()
     })

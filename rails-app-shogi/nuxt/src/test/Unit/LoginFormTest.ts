@@ -33,6 +33,7 @@ export default async function LoginFormTest(){
       //フォームに正しく反映されているかチェック
       expect(wrapper.vm.session_form.email).toBe(values[0])
       expect(wrapper.vm.session_form.password).toBe(values[1])
+      //submit関数が呼び出されているかチェック
       expect(spy).toHaveBeenCalled()
       spy.mockReset()
     })

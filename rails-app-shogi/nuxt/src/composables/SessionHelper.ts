@@ -7,7 +7,7 @@ export const SessionHelper = () => {
   const login = async (params:{ session:{ email:string, password:string}},headers:{} ) =>{
     params['format'] = 'json'
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/login`,
-      { method:'post',
+      { method:'POST',
         params: params,
         headers: headers,
         credentials: 'include'
