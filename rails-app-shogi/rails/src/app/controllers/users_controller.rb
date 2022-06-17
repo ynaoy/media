@@ -50,6 +50,10 @@ class UsersController < ApplicationController
   end
 
   def update
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+      params[:user] = JSON.parse(params[:user],symbolize_names: true)
+    end
     @user = User.find(params[:id])
     if @user.update(user_params)
       respond_to do |format|
@@ -57,12 +61,12 @@ class UsersController < ApplicationController
           flash.now[:success] = "Profile updated"
           redirect_to @user
         end
-        format.json { render json: @user, status: 200 }
+        format.json { render json: { success: "Updated!!" } }
       end
     else
       respond_to do |format|
         format.html { render 'edit'}
-        format.json { render json: @user.errors, status: 400}
+        format.json { render json: {errors: @user.errors.full_messages},status: :not_acceptable }
       end
     end
   end

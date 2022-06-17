@@ -18,7 +18,10 @@ class ApplicationController < ActionController::Base
     # Postリクエスト時に、Authorizationヘッダとセッションのcsrf_tokenで認証する
     # 認証失敗ならAuthorizationエラーと返す
     def check_csrf_token
-      if(session[:csrf_token] != request.headers["Authorization"])
+      # テスト時にはチェックしないようにする
+      return true if(ENV["RAILS_ENV"]=="test")
+      # セッションの:csrf_tokenがnilだとエラー。リクエストのヘッダの"Authorization"と違ってもエラー
+      if((session[:csrf_token].nil?) || (session[:csrf_token] != request.headers["Authorization"]))
         render status: 401, json: { status: 401, message: "Can't verify CSRF token authenticity." }
         return false
       end

@@ -100,6 +100,13 @@ RSpec.describe "Users", type: :request do
       expect(response).to redirect_to(user_path(@user)) #ページがusers/showにリダイレクトする
     end
 
+    it "return json object" do
+      log_in_as @user
+      #ネストした部分がjson形式で送られてくるので注意
+      patch user_path(@user), params: { user: ({ name: "User4", }).to_json,
+                        format: "json"}
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
+    end
   end
 
   describe "Delete /destroy" do
