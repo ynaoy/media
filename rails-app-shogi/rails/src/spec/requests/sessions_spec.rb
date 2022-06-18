@@ -47,6 +47,13 @@ RSpec.describe "Sessions", type: :request do
       delete logout_path
       expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
     end
+
+    it "return json object with login" do
+      post login_path, params: { session: { email:    @user.email,
+                                            password: 'password' } }
+      delete logout_path, params:{ format: "json" }
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
+    end
   end
 end
 

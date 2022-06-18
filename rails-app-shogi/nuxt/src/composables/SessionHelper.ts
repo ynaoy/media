@@ -43,9 +43,22 @@ export const SessionHelper = () => {
     return { 'data':data, 'loginFlg':Flg, 'csrf_token':csrf_token, }
   }
 
-  const logout = async ()=>{
-
-    //location.href = "/"
+  const logout = async (headers:{} ) =>{
+    const params = {}
+    params['format'] = 'json'
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/logout`,
+      { method:'DELETE',
+        params: params,
+        headers: headers,
+        credentials: 'include'
+      })
+      .then((data) => {
+        console.log(data)
+        location.href = "/"
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return {  login: login,

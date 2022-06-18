@@ -42,8 +42,16 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+      cookies.delete(:jwt)
+    end
     log_out if logged_in?
-    redirect_to root_url
+
+    respond_to do |format|
+      format.html { redirect_to root_url }
+      format.json { render json: { success: "bye" } }
+    end
   end
 
 end

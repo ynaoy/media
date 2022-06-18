@@ -16,9 +16,9 @@
           <b-dropdown v-if="loginFlg" split split-href="/" :text="user_name"
             variant="dark" split-variant="dark"
             class="dropdown collapse navbar-collapse" menu-class="dropdown-menu-dark">
-            <b-dropdown-item href="/profile" varient="dark">Setting</b-dropdown-item>
+            <b-dropdown-item href="/profile" >Setting</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item href="/" varient="dark" @click="logout">Log out</b-dropdown-item>
+            <b-dropdown-item @click.prevent="session_logout">Log out</b-dropdown-item>
           </b-dropdown>
 
           <li v-if="!loginFlg"><nuxt-link to="/login" class="nav-link dropdown-item">ログイン</nuxt-link></li>
@@ -32,7 +32,9 @@
 
 <script setup>
   const { logout } = SessionHelper()
+
   //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意
+  const csrf_token = inject('csrf_token')
   const user_name = ref(inject('user_name'))
   const loginFlg = ref(inject('loginFlg'))
 
@@ -43,13 +45,23 @@
   const  bindKeyword = function({ target }){
     search_form.text =  target.value;
   }
-  const hello = computed(()=>{return "hello"})
+
+  const session_logout = async function(){
+    logout({ "Authorization" :csrf_token })
+  }
+
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
     console.log(search_form.text)
   }
-  defineExpose( user_name,loginFlg,search_form,bindKeyword,submit );
+
+  defineExpose( user_name,
+                loginFlg,
+                search_form,
+                bindKeyword,
+                session_logout,
+                submit );
 </script>
 
 <style scoped>
