@@ -12,17 +12,14 @@
                 @click.prevent="submit">
             </form>
           </li>
-
-          <li v-if="loginFlg" class="dropdown collapse navbar-collapse">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-toggle="dropdown">
-              {{ user_name }}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><nuxt-link to="/profile" class="dropdown-item">Setting</nuxt-link></li>
-              <li class="divider dropdown-divider"></li>
-              <li><nuxt-link to="/" class="dropdown-item">Log out</nuxt-link></li>
-            </ul>
-          </li>
+          
+          <b-dropdown v-if="loginFlg" split split-href="/" :text="user_name"
+            variant="dark" split-variant="dark"
+            class="dropdown collapse navbar-collapse" menu-class="dropdown-menu-dark">
+            <b-dropdown-item href="/profile" varient="dark">Setting</b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item href="/" varient="dark" @click="logout">Log out</b-dropdown-item>
+          </b-dropdown>
 
           <li v-if="!loginFlg"><nuxt-link to="/login" class="nav-link dropdown-item">ログイン</nuxt-link></li>
           <li v-if="!loginFlg"><nuxt-link to="/signup" class="nav-link dropdown-item">新規登録</nuxt-link></li>
@@ -34,8 +31,7 @@
 </template>
 
 <script setup>
-//export default{
-  //setup(){
+  const { logout } = SessionHelper()
   //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意
   const user_name = ref(inject('user_name'))
   const loginFlg = ref(inject('loginFlg'))
@@ -54,9 +50,6 @@
     console.log(search_form.text)
   }
   defineExpose( user_name,loginFlg,search_form,bindKeyword,submit );
-  //return { user_name,loginFlg,search_form,bindKeyword,submit }
-  //}
-//}
 </script>
 
 <style scoped>

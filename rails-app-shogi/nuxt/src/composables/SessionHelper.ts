@@ -42,6 +42,13 @@ export const SessionHelper = () => {
     })
     return { 'data':data, 'loginFlg':Flg, 'csrf_token':csrf_token, }
   }
+
+  const logout = async ()=>{
+
+    //location.href = "/"
+  }
+
   return {  login: login,
-            login_check: login_check }
+            login_check: login_check,
+            logout: logout,}
 }
