@@ -4,6 +4,7 @@ import { TestHelper } from "../TestHelper"
 import SideNavigation from "../../components/SideNavigation.vue";
 
 export default async function SideNavigationTest(){
+  //コンポーネントをマウント、テストヘルパーの呼び出し
   const wrapper = await shallowMount(SideNavigation)
   const { check_text } = TestHelper(wrapper)
 

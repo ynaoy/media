@@ -4,6 +4,7 @@ import { TestHelper } from "../TestHelper"
 import NavBar from "../../components/NavBar.vue";
 
 export default async function NavBarTest(){
+  //コンポーネントをマウント、テストヘルパーの呼び出し
   const wrapper = await shallowMount(NavBar)
   const { check_text, check_form } = TestHelper(wrapper)
 

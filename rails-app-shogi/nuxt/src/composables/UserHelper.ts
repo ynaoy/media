@@ -30,7 +30,7 @@ export const UserHelper = () => {
     }
 
   const update_user = 
-    async function( params:{  id: Int16Array,
+    async function( params:{  id: number,
                               user: { name:string }
                               },
                     headers:{},                      

@@ -35,7 +35,7 @@ export const SessionHelper = () => {
     })
     .then(json => {
       data = json
-    Flg = (json['user_id'] == null )? false : true 
+      Flg = (json['user_id'] == null )? false : true 
     })
     .catch((error) => {
       console.log(error)

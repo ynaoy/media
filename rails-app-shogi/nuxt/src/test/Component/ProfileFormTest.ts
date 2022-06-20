@@ -1,13 +1,19 @@
-import { describe, it, expect,vi } from 'vitest'
+import { describe, it, expect,vi,afterAll, beforeAll } from 'vitest'
 import { mount,shallowMount } from "@vue/test-utils";
 import { TestHelper } from "../TestHelper"
 import ProfileForm from "../../components/ProfileForm.vue";
 
 export default async function ProfileFormTest(){
+  //テストメソッド内で使われるHelperをモック、コンポーネントをマウント、テストヘルパーの呼び出し
+  vi.stubGlobal("UserHelper",vi.fn().mockReturnValue({ "update_user":vi.fn() }))
   const wrapper = await shallowMount(ProfileForm)
   const { check_text, check_form, set_form } = TestHelper(wrapper)
 
   describe("ProfileForm test", async() => {
+
+    afterAll(()=>{
+      vi.clearAllMocks
+    })
 
     it("テキストが正しく表示されているかチェック", async() => {
       check_text(["ユーザー編集","ユーザー名"])

@@ -1,12 +1,19 @@
-import { describe, it, expect,vi} from 'vitest'
+import { describe, it, expect,vi,afterAll, beforeAll} from 'vitest'
 import { mount,shallowMount } from "@vue/test-utils";
 import { TestHelper } from "../TestHelper"
 import LoginForm from "../../components/LoginForm.vue";
 
 export default async function LoginFormTest(){
+  //テストメソッド内で使われるHelperをモック、コンポーネントをマウント、テストヘルパーの呼び出し
+  vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "login": vi.fn()}))
   const wrapper = await shallowMount(LoginForm)
   const { check_text, check_form, set_form } = TestHelper(wrapper)
+
   describe("LoginForm test", async() => {
+
+    afterAll(()=>{
+      vi.clearAllMocks
+    })
 
     it("テキストが正しく表示されているかチェック", async() => {
       const texts = ["ログイン", "メールアドレス", "パスワード"]
