@@ -40,9 +40,15 @@ RSpec.describe "Kifus", type: :request do
   end
 
   describe "GET /show" do
+
     it "returns http success" do
       get "/kifus/show", params: { id: @kifu.id }
       expect(response).to have_http_status(:success)
+    end
+
+    it "return json object" do
+      get "/kifus/show", params: { id: @kifu.id,format: "json" }
+      expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
     end
   end
 

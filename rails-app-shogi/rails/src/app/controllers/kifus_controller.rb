@@ -32,6 +32,15 @@ class KifusController < ApplicationController
       current_user.histories.create!(kifu_id: @kifu.id)
       @favorite_flg = current_user.is_favorite_kifu?(kifu_id = @kifu.id)
     end
+
+    response_json = { kifu_text: @kifu_text, kifu_flg: @kifu_flg,
+                      favorite_flg: @favorite_flg, kifu_id: @kifu.id,
+                      player1: @kifu.player1, player2: @kifu.player2 }
+
+    respond_to do |format|
+      format.html { render "show"}
+      format.json { render json: response_json }
+    end
   end
 
   def index
