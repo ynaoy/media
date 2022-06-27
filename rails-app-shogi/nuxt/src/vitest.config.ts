@@ -8,7 +8,7 @@ export default defineConfig({
       imports: ["vue"],
     }),],
   test: {
-    include:  ["**/test/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    include:  ["**/test/*/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     environment: "jsdom",
     globals: true,
   },

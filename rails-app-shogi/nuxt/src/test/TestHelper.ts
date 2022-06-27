@@ -4,8 +4,9 @@ export const TestHelper = (wrapper) =>{
 
   //wrapperにテキストが含まれているかチェックする
   const check_text = async (texts)=>{
+    const html = wrapper.html()
     for (let i in texts){
-      expect(wrapper.text()).toContain(texts[i])
+      expect(html).toContain(texts[i])
     }
   }
 
