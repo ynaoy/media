@@ -32,7 +32,7 @@
   const submit = async function(){
     //<<バグ inputに日本語と英字両方が混ざっていると>>
     //<<Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    login({ session: JSON.stringify(session_form)}, { "Authorization" :csrf_token })
+    login({ session: JSON.stringify(session_form)}, { "Authorization" : csrf_token })
   }
   defineExpose( { session_form, login, login_check, submit } );
 
