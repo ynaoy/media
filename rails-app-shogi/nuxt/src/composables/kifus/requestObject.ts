@@ -69,6 +69,6 @@ export default function requestObject(kifu_data, csrf_token){
     })
   }
 
-  const request_methods = { 'change_button': change_button }
+  const request_methods = { 'change_button': change_button,}
   return { request_states, request_methods }
 }

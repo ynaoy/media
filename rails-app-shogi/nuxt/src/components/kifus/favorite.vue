@@ -29,6 +29,7 @@
 
 <style lang="scss" scoped>
   .favorite_button{
+    margin:0 auto;
     margin-left: 36.5vw;
   }
 </style>

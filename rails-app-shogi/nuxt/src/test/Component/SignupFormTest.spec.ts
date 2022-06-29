@@ -49,6 +49,6 @@ describe("SignupForm test", async() => {
     expect(wrapper.vm.signup_form.password_confirmation).toBe(values[3])
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
-      spy.mockReset()
+    spy.mockReset()
   })
 })

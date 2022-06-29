@@ -30,7 +30,7 @@ export default function kifuObject(kifu_data){
     //sub_board_textとsub_board_numを更新する
     //表示される駒をtextsに、その枚数をnumsに入れる。padsには表示されない部分を数合わせとして入れる
     //それを先手と後手二つ分用意する
-    const set_sub_board= function(){
+    const set_sub_board = function(){
         kifu_states.sub_board_text = []
         kifu_states.sub_board_num = []
         for (let i=0; i<2; i++){
@@ -54,6 +54,6 @@ export default function kifuObject(kifu_data){
 
     update_board(0)
 
-    const kifu_methods = { 'update_board': update_board }
+    const kifu_methods = { 'update_board': update_board, }
     return { kifu_states, kifu_methods }
 }

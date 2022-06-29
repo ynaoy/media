@@ -1,7 +1,9 @@
 <template>
-  <Board></Board>
-  <Favorite v-on:change_favorite = "change_button" ></Favorite>
-  <Admin v-on:update_state= "update_board"></Admin>
+  <div class = "kifu_wrapper">
+    <Board></Board>
+    <Favorite v-on:change_favorite = "change_button" ></Favorite>
+    <Admin v-on:update_state= "update_board"></Admin>
+  </div>
 </template>
 
 <script setup>

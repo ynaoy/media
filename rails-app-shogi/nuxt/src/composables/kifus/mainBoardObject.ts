@@ -7,7 +7,7 @@ export default function mainBoardObject(board_text, board_flg){
 
   //メソッド群
 
-  // nには1..81以下の整数が入る。それをlist[i][j]の形に変換する
+  // nには0..80以下の整数が入る。それをlist[i][j]の形に変換する
   const compute_i= function(n){
     return Math.floor((n)/9)
   }
