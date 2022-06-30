@@ -1,12 +1,26 @@
 import { expect } from 'vitest'
+import { shallowMount } from "@vue/test-utils"
+
+export const MountHelper = () =>{
+  //shallowMountをラップする
+  const Mount = (component, provide = {}, props = {}) =>{
+    const wrapper = shallowMount(component, { 
+      global:{ provide: provide },
+      propsData: props
+    })
+    return wrapper
+  }
+
+  return {  Mount: Mount }
+}
 
 export const TestHelper = (wrapper) =>{
 
   //wrapperにテキストが含まれているかチェックする
   const check_text = async (texts)=>{
-    const html = wrapper.html()
+    const text = wrapper.text()
     for (let i in texts){
-      expect(html).toContain(texts[i])
+      expect(text).toContain(texts[i])
     }
   }
 
@@ -29,6 +43,8 @@ export const TestHelper = (wrapper) =>{
     return { 
       kifu_id: 1,
       favorite_flg: false,
+      player1:"player1",
+      player2:"player2",
       kifu_text:  [
         [["香","桂","銀","金","王","金","銀","桂","香"],
         ["","飛","","","","","","角",""],

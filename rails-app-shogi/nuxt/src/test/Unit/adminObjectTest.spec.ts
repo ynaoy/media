@@ -18,7 +18,6 @@ describe("adminObject test", () => {
     function check_update_state(str:String, new_state:number){
       update_state(str)
       expect(emit).toHaveBeenCalled()
-      console.log(emit.mock.results[0].value)
       expect(emit.mock.results[0].value).toBe(new_state)
     }
 

@@ -1,14 +1,19 @@
 import { describe, it, expect,vi } from 'vitest'
-import { mount,shallowMount } from "@vue/test-utils";
-import { TestHelper } from "../TestHelper"
-import NavBar from "../../components/NavBar.vue";
+import { MountHelper,TestHelper } from "../TestHelper"
+import NavBar from "../../components/NavBar.vue"
 
 describe("NavBar test", async() => {
+
+//テストメソッド内で使われるHelperをモック
   const login_check = vi.fn().mockReturnValue( {'data':{user_id:"1",user_name:"TestUser"},
                                                 'loginFlg':true,
                                                 'csrf_token':"this is csrf token"})
   vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "login_check":login_check }))
-  const wrapper = await shallowMount(NavBar)
+  //テストヘルパーの呼び出しとコンポーネントのマウント
+  const { Mount } = MountHelper()
+  const wrapper = Mount(NavBar,{  csrf_token:"this is csrf_token",
+                                  loginFlg:false,
+                                  user_name:"TestUser",  })
   const { check_text, check_form } = TestHelper(wrapper)
 
   it("ログインしてない時にテキストが正しく表示されているかチェック", async() => {

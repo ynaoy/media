@@ -1,13 +1,15 @@
 import { describe, it, expect,vi,afterAll, beforeAll} from 'vitest'
-import { mount,shallowMount } from "@vue/test-utils";
-import { TestHelper } from "../TestHelper"
-import LoginForm from "../../components/LoginForm.vue";
+import { MountHelper,TestHelper } from "../TestHelper"
+import LoginForm from "../../components/LoginForm.vue"
 
 describe("LoginForm test", async() => {
 
-  //テストメソッド内で使われるHelperをモック、コンポーネントをマウント、テストヘルパーの呼び出し
+  //テストメソッド内で使われるHelperをモック
   vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "login": vi.fn()}))
-  const wrapper = await shallowMount(LoginForm)
+
+  //テストヘルパーの呼び出しとコンポーネントのマウント
+  const { Mount } = MountHelper()
+  const wrapper = Mount(LoginForm,{ csrf_token:"this is csrf_token" })
   const { check_text, check_form, set_form } = TestHelper(wrapper)
 
   afterAll(()=>{

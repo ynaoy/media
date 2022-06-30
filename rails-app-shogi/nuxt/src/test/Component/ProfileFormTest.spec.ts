@@ -1,13 +1,17 @@
 import { describe, it, expect,vi,afterAll, beforeAll } from 'vitest'
-import { mount,shallowMount } from "@vue/test-utils";
-import { TestHelper } from "../TestHelper"
-import ProfileForm from "../../components/ProfileForm.vue";
+import { MountHelper,TestHelper } from "../TestHelper"
+import ProfileForm from "../../components/ProfileForm.vue"
 
 describe("ProfileForm test", async() => {
 
-  //テストメソッド内で使われるHelperをモック、コンポーネントをマウント、テストヘルパーの呼び出し
+  //テストメソッド内で使われるHelperをモック
   vi.stubGlobal("UserHelper",vi.fn().mockReturnValue({ "update_user":vi.fn() }))
-  const wrapper = await shallowMount(ProfileForm)
+
+  //テストヘルパーの呼び出しとコンポーネントのマウント
+  const { Mount } = MountHelper()
+  const wrapper = Mount(ProfileForm,{ csrf_token:"this is csrf_token",
+                                      user_id:1,
+                                      user_name:"TestUser",  })
   const { check_text, check_form, set_form } = TestHelper(wrapper)
 
   afterAll(()=>{

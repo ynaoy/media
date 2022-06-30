@@ -24,6 +24,7 @@
   //このコンポーネントで使うメソッド
   const update_state = admin_methods['update_state']
 
+  defineExpose( { state, max_state, update_state } )
 </script>
 
 <style lang="scss" scoped>

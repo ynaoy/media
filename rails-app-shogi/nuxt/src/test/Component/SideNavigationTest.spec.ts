@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { mount,shallowMount } from "@vue/test-utils";
-import { TestHelper } from "../TestHelper"
-import SideNavigation from "../../components/SideNavigation.vue";
+import { MountHelper,TestHelper } from "../TestHelper"
+import SideNavigation from "../../components/SideNavigation.vue"
 
 describe("SideNavigation test", async() => {
 
-  //コンポーネントをマウント、テストヘルパーの呼び出し
-  const wrapper = await shallowMount(SideNavigation)
-  const { check_text } = TestHelper(wrapper)
+  //テストヘルパーの呼び出しとコンポーネントのマウント
+  const { Mount } = MountHelper()
+  const wrapper = Mount(SideNavigation,{ loginFlg:false })
+  const { check_text} = TestHelper(wrapper)
 
   const tags = ["相掛かり","矢倉","角換わり","横歩取り",
                 "三間飛車","四間飛車","角交換四間飛車","角交換中飛車"]

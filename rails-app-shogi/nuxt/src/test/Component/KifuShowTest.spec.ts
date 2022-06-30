@@ -1,6 +1,5 @@
-import { describe, it, expect,vi,afterAll, beforeAll } from 'vitest'
-import { mount,shallowMount,config } from "@vue/test-utils"
-import { TestHelper } from "../TestHelper"
+import { describe, it, expect,vi,afterAll } from 'vitest'
+import { MountHelper } from "../TestHelper"
 import KifuShow from "../../components/KifuShow.vue"
 
 describe("KifuShow test", async() => {
@@ -14,11 +13,11 @@ describe("KifuShow test", async() => {
   //テストメソッド内で使われるHelperをモック
   vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "get_kifu": spy}))
 
-  //コンポーネントをマウント
-  const wrapper = shallowMount(KifuShow,{ 
-    propsData: {
-    id: 1
-  }})
+  //テストヘルパーの呼び出しとコンポーネントのマウント
+  const { Mount } = MountHelper()
+  const wrapper = Mount(KifuShow,{  csrf_token:"this is csrf_token",
+                                    loginFlg:false },
+                                  { id:1 })
 
   afterAll(()=>{
     vi.clearAllMocks
