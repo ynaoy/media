@@ -1,12 +1,14 @@
 <template>
   <div>
     <Kifu :kifu_data="kifu_data" />
+    <kifuTag :tags="JSON.parse(kifu_data.tags)"/>
   </div>
 </template>
 
 <script setup>
 
   import Kifu from './kifus/kifu.vue'
+  import KifuTag from './kifus/kifu-tag.vue'
 
   //このコンポーネントで使うヘルパー
   const { get_kifu } = KifuHelper()
@@ -19,6 +21,7 @@
   provide('loginFlg',loginFlg)
   //APIと通信して棋譜の情報をもらう
   const { kifu_data } = await get_kifu({ id:id }, { "Authorization" :csrf_token })
+
   defineExpose( { get_kifu, kifu_data } )
 </script>
 
