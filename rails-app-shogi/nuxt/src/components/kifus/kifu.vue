@@ -1,8 +1,8 @@
 <template>
   <div class = "kifu_wrapper">
     <Board></Board>
-    <Favorite v-on:change_favorite = "change_button" ></Favorite>
-    <Admin v-on:update_state= "update_board"></Admin>
+    <Favorite @change_favorite = "change_button" ></Favorite>
+    <Admin @update_state= "update_board"></Admin>
   </div>
 </template>
 
@@ -35,4 +35,5 @@
   const update_board = kifu_methods['update_board']
   const change_button = request_methods['change_button']
 
+  defineExpose({ kifu_states, request_states, update_board, change_button })
 </script>

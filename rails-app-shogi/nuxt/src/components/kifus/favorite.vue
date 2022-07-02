@@ -24,7 +24,8 @@
   const change_favorite = function(){
     emit('change_favorite', !favorite_flg.value)
   }
-
+  
+  defineExpose({ loginFlg, favorite_flg, processing, change_favorite })
 </script>
 
 <style lang="scss" scoped>

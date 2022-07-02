@@ -1,12 +1,13 @@
 import { expect } from 'vitest'
-import { shallowMount } from "@vue/test-utils"
+import { mount,shallowMount } from "@vue/test-utils"
 
 export const MountHelper = () =>{
   //shallowMountをラップする
-  const Mount = (component, provide = {}, props = {}) =>{
-    const wrapper = shallowMount(component, { 
+  const Mount = (component, provide = {}, props = {}, shallow = true) =>{
+    const wrapper = mount(component, { 
       global:{ provide: provide },
-      propsData: props
+      propsData: props,
+      shallow:shallow
     })
     return wrapper
   }
