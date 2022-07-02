@@ -29,6 +29,8 @@
   const compute_j = main_board_methods['compute_j']
   const setStyle = main_board_methods['setStyle']
 
+  defineExpose([ board_text, board_flg, setStyle ])
+
 </script>
 
 <style lang="scss" scoped>

@@ -18,7 +18,6 @@ describe("kifu test", async() => {
                               )
 
   it("子コンポーネントが表示されているかチェック", () => {
-    console.log(wrapper.html())
     expect(wrapper.html()).contain("<board")
     expect(wrapper.html()).contain("<favorite")
     expect(wrapper.html()).contain("<admin")
