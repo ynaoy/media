@@ -1,10 +1,6 @@
 Rails.application.routes.draw do
 
   get 'histories/index'
-  get 'kifus/new'
-  get 'kifus/create'
-  get 'kifus/show'
-  get 'kifus/delete'
   get 'sessions/new'
   root 'application#home'
   get  '/signup',  to: 'users#new'

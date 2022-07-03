@@ -8,17 +8,40 @@ class KifusController < ApplicationController
   end
 
   def create
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+      params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
+      params[:kifu][:tag] = JSON.parse(params[:kifu][:tag],symbolize_names: true)
+    end
+
     params[:kifu] = fetch_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
 
     if @kifu.save
 
       @tag = @kifu.save_kifu_tag(tags_params[:tag][:tag_ids])
-      render new if !@tag
+      if @tag
+        respond_to do |format|
+          format.html { flash.now[:success] = "Kifu created!"
+                        redirect_to kifu_path(id:@kifu.id) }
+          format.json { render json: { success: "create kifu!!" } }
+        end
 
-      flash.now[:success] = "Kifu created!"
-      redirect_to kifu_path(id:@kifu.id)
-    end
+      #タグがエラーだった場合
+      else
+        respond_to do |format|
+          format.html { render new }
+          format.json { render json: { errors: "tag error"}, status:500 }
+        end
+      end
+
+    #棋譜がエラーだった場合
+    else
+      respond_to do |format|
+        format.html { render new }
+        format.json { render json: { errors: @kifu.errors.full_messages}, status:500 }
+      end
+    end 
   end
 
   def show

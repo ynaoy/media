@@ -13,9 +13,8 @@ class Kifu < ApplicationRecord
     for id in 0..(list.length-1) do
       next if list[id] == ""
       @tag = self.kifu_tags.build(tag_id: list[id])
-      @tag.save
-      return false if(!@tag)
-      render new if !@tag
+      #@tag.save
+      return false if !@tag.save
     end
   end
 
