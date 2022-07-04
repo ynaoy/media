@@ -11,7 +11,6 @@ class KifusController < ApplicationController
     if(params[:format]=="json")
       return if(!check_csrf_token)
       params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
-      params[:kifu][:tag] = JSON.parse(params[:kifu][:tag],symbolize_names: true)
     end
 
     params[:kifu] = fetch_data_from_content(params[:kifu])
@@ -24,7 +23,7 @@ class KifusController < ApplicationController
         respond_to do |format|
           format.html { flash.now[:success] = "Kifu created!"
                         redirect_to kifu_path(id:@kifu.id) }
-          format.json { render json: { success: "create kifu!!" } }
+          format.json { render json: { success: "create kifu!!", kifu_id: @kifu.id } }
         end
 
       #タグがエラーだった場合

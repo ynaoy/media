@@ -8,8 +8,9 @@ describe("KifuHelper test", async() => {
   vi.stubGlobal("UrlHelper",vi.fn().mockReturnValue( 
     { FetchResponse: spy }
   ))
+
   //このテストでチェックするやつら
-  const { get_kifu } = KifuHelper()
+  const { get_kifu, create_kifu } = KifuHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -20,6 +21,12 @@ describe("KifuHelper test", async() => {
 
   it("get_kifuメソッドが正しく動作するかチェック", async() => {
     await get_kifu({id:1},{})
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it("create_kifuメソッドが正しく動作するかチェック", async() => {
+    await create_kifu({ kifu:{  title:"",player1:"",player2:"",content:"",
+                                tag:{ tag_ids:[] }}}, {})
     expect(spy).toHaveBeenCalled()
   })
 })

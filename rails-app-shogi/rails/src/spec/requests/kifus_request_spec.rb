@@ -47,7 +47,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: content, 
-                                            tag: ({ tag_ids:[0,1,2] }).to_json
+                                            tag: { tag_ids:[0,1,2] }
                                           }).to_json,
                                     format: "json"}
       expect(JSON.parse(response.body)['success'].nil?).to eq false
@@ -59,7 +59,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: "", 
-                                            tag: ({ tag_ids:[0,1,2] }).to_json
+                                            tag: { tag_ids:[0,1,2] }
                                           }).to_json,
                                     format: "json"}
       expect(JSON.parse(response.body)['errors'].nil?).to eq false
@@ -71,7 +71,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: content, 
-                                            tag: ({ tag_ids:["errors"] }).to_json
+                                            tag: { tag_ids:["errors"] }
                                           }).to_json,
                                     format: "json"}
       expect(JSON.parse(response.body)['errors'].nil?).to eq false

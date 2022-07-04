@@ -24,5 +24,27 @@ export const KifuHelper = () => {
     return { "kifu_data": ret }
   }
 
-  return { "get_kifu": get_kifu, }
+  //サーバーサイドkifuコントローラーにparams付きでPostリクエストを送る。
+  //レスポンスには{ success: String, kifu_id: Number }が入ってる
+  const create_kifu = async ( params:{ kifu:{ title:"",player1:"",player2:"",content:"",
+                                              tag:{ tag_ids:[] } }},
+                              headers:{} ) =>{
+    let ret = {}
+    params['format'] = 'json'
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus`,
+      { method:'POST',
+        params: params,
+        headers: headers,
+        credentials: 'include'
+      })
+      .then((data) => {
+        console.log(data)
+        location.href = `/kifus/${data.kifu_id}`
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  return {  "get_kifu": get_kifu,
+            "create_kifu":create_kifu }
 }
