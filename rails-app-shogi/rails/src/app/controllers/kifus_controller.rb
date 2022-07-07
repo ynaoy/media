@@ -67,18 +67,16 @@ class KifusController < ApplicationController
 
   def index
     user_id = if(params[:format]=="json" && !Rails.env.test?)
-      token = request.cookies["jwt"]
-      session_user(token).user_id
+      session_user(request.cookies["jwt"])[:user_id]
     else
       current_user.id
     end
-
+    
     @kifus = Kifu.search_kifu("user_id",user_id).order(id: "desc")
-
     respond_to do |format|
       format.html { @kifus = @kifus.page(params[:page]).per(20)
                     render "index"}
-      format.json { render json: @kifus.to_json(only: %i[ title player1 player2 win created_at ])}
+      format.json { render json: @kifus.to_json(only: %i[ id user_id title player1 player2 win created_at ])}
     end
   end
 

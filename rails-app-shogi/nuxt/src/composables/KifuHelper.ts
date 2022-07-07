@@ -45,6 +45,28 @@ export const KifuHelper = () => {
         console.log(error)
       })
   }
+
+    //ログインしているユーザーの棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
+    const get_users_kifu = async () =>{
+
+      let ret = {} 
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus`,
+        { method:'GET',
+          params: { format: 'json'},
+          headers: {},
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          ret = data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return { "kifus": ret }
+    }
+
   return {  "get_kifu": get_kifu,
-            "create_kifu":create_kifu }
+            "create_kifu": create_kifu,
+            "get_users_kifu": get_users_kifu}
 }
