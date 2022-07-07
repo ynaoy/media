@@ -6,10 +6,13 @@ describe("KifuForm test", async() => {
 
   //テストメソッド内で使われるHelperをモック
   vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "create_kifu": vi.fn()}))
+  vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "force_login": vi.fn()}))
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
-  const wrapper = Mount( KifuForm,{  csrf_token:"this is csrf_token" },{ tags: ["Tag_tes1","Tag_Test2"]}) 
+  const wrapper = Mount( KifuForm,{ csrf_token:"this is csrf_token", 
+                                    loginFlg:true },
+                                  { tags: ["Tag_tes1","Tag_Test2"]}) 
   const { check_text, check_form, set_form } = TestHelper(wrapper)
 
   afterAll(()=>{

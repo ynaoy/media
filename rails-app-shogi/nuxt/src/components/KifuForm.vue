@@ -45,16 +45,19 @@
 </template>
 
 <script setup>
+
   // 親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
+  const loginFlg = inject('loginFlg')
   const { tags } = defineProps(['tags'])
+
   // 使うメソッドをヘルパーからもらう
   const { create_kifu } = KifuHelper()
-  //const { get_all_tag } = TagHelper()
-  //すべてのタグを呼び出す
-  //const tags = await get_all_tag()
-  //const tags = ["aaa","iii","uuu"]
+  const { force_login } = SessionHelper()
 
+  // ログインしていなかったらログインページに飛ばす
+  force_login(loginFlg)
+  
   // フォームをバインドする奴ら
   const kifu_form = { title: "", player1:"", player2:"", content:"",
                       tag: reactive({ tag_ids:[] })} //tagはリアクティブじゃないと動作しなかった 
