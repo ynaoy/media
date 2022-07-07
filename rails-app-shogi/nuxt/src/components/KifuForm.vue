@@ -47,10 +47,14 @@
 <script setup>
   // 親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
+  const { tags } = defineProps(['tags'])
   // 使うメソッドをヘルパーからもらう
   const { create_kifu } = KifuHelper()
-  // 一時的にtagsを宣言。こいつらはAPIからもらう
-  const tags = ["相居飛車", "相振り飛車"]
+  //const { get_all_tag } = TagHelper()
+  //すべてのタグを呼び出す
+  //const tags = await get_all_tag()
+  //const tags = ["aaa","iii","uuu"]
+
   // フォームをバインドする奴ら
   const kifu_form = { title: "", player1:"", player2:"", content:"",
                       tag: reactive({ tag_ids:[] })} //tagはリアクティブじゃないと動作しなかった 

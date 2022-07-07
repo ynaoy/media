@@ -1,24 +1,16 @@
-import { describe, it, expect,vi,afterAll, afterEach } from 'vitest'
+import { describe, it, expect,vi,afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
 import KifuForm from "../../components/KifuForm.vue"
 
 describe("KifuForm test", async() => {
 
-  //create_kifu関数が呼び出されているかのチェック用
-  const spy = vi.fn().mockResolvedValue({ kifu_id:1 })
-
   //テストメソッド内で使われるHelperをモック
-  vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "create_kifu": spy}))
+  vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "create_kifu": vi.fn()}))
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
-  const wrapper = Mount(KifuForm,{  csrf_token:"this is csrf_token" })
+  const wrapper = Mount( KifuForm,{  csrf_token:"this is csrf_token" },{ tags: ["Tag_tes1","Tag_Test2"]}) 
   const { check_text, check_form, set_form } = TestHelper(wrapper)
-
-  afterEach(async() =>{
-    //初期状態に戻す
-    spy.mockReset()
-  })
 
   afterAll(()=>{
     vi.clearAllMocks
@@ -38,7 +30,7 @@ describe("KifuForm test", async() => {
     const spy = await vi.spyOn(wrapper.vm,"submit")
     await wrapper.vm.$forceUpdate()
 
-    //チェックボックスをチェックして値が変わっているか確認
+    //チェックボックスをチェックして、かつ値が変わっているか確認
     for (let key in forms_check){ 
       await wrapper.find(forms_check[key]).setChecked()
       expect(wrapper.find(forms_check[key]).element.checked).toBeTruthy()
