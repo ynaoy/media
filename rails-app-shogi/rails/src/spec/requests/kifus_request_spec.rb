@@ -100,6 +100,12 @@ RSpec.describe "Kifus", type: :request do
       get kifus_path
       expect(response).to have_http_status(:success)
     end
+
+    it "return json object" do
+      log_in_as @user
+      get kifus_path, params: { format: "json" }
+      expect(JSON.parse(response.body).nil?).to eq false
+    end
   end
 
   describe "Delete /destroy" do

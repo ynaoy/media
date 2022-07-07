@@ -66,7 +66,20 @@ class KifusController < ApplicationController
   end
 
   def index
-    @kifus = Kifu.search_kifu("user_id",current_user.id).order(id: "desc").page(params[:page]).per(20)
+    user_id = if(params[:format]=="json" && !Rails.env.test?)
+      token = request.cookies["jwt"]
+      session_user(token).user_id
+    else
+      current_user.id
+    end
+
+    @kifus = Kifu.search_kifu("user_id",user_id).order(id: "desc")
+
+    respond_to do |format|
+      format.html { @kifus = @kifus.page(params[:page]).per(20)
+                    render "index"}
+      format.json { render json: @kifus.to_json(only: %i[ title player1 player2 win created_at ])}
+    end
   end
 
   def destroy
