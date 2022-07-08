@@ -7,7 +7,7 @@ describe("kifu-items test", async() => {
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const { kifus_data } = TestHelper("")
-  const wrapper = Mount( KifuItems, { user_id: 1 },
+  const wrapper = Mount( KifuItems, { user_id: 1, csrf_token:"this is csrf_token" },
                                     { kifus: kifus_data(60)}) 
   
   it("v-forが正しく機能して子コンポーネントの表示件数をチェック", () => {

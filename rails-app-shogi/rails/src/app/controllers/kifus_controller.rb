@@ -81,6 +81,9 @@ class KifusController < ApplicationController
   end
 
   def destroy
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+    end
     Kifu.find(params[:id]).destroy
     respond_to do |format|
       format.html { flash.now[:success] = "Kifu deleted"

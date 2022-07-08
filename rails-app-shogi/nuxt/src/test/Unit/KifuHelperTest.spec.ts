@@ -10,7 +10,7 @@ describe("KifuHelper test", async() => {
   ))
 
   //このテストでチェックするやつら
-  const { get_kifu, create_kifu, get_users_kifu } = KifuHelper()
+  const { get_kifu, create_kifu, delete_kifu, get_users_kifu } = KifuHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -27,6 +27,11 @@ describe("KifuHelper test", async() => {
   it("create_kifuメソッドが正しく動作するかチェック", async() => {
     await create_kifu({ kifu:{  title:"",player1:"",player2:"",content:"",
                                 tag:{ tag_ids:[] }}}, {})
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it("delete_kifuメソッドが正しく動作するかチェック", async() => {
+    await delete_kifu({ id:1 }, {})
     expect(spy).toHaveBeenCalled()
   })
 

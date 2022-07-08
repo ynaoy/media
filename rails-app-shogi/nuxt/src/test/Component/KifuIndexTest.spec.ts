@@ -11,7 +11,7 @@ describe("KifuIndex test", async() => {
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const { kifus_data } = TestHelper("")
-  const wrapper = Mount( KifuIndex, { loginFlg: true, user_id: 1 },
+  const wrapper = Mount( KifuIndex, { loginFlg: true, user_id: 1, csrf_token:"this is csrf_token" },
                                     { kifus: kifus_data()}) 
 
   // kifus_is_emptyメソッドが呼び出されているかの確認用

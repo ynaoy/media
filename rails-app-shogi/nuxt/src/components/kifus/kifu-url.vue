@@ -21,7 +21,7 @@
         </span>
       </p>
     </nuxt-link>
-    <nuxt-link v-if="user_id == kifu.user_id" to="/kifus" id="deleteUrl">
+    <nuxt-link v-if="user_id == kifu.user_id" @click="submit_delete()" id="deleteUrl">
       <p>
         <span id="delete"> delete </span>
       </p>
@@ -31,8 +31,12 @@
 
 <script setup>
 
+  //このコンポーネントで使うヘルパー
+  const { delete_kifu } = KifuHelper()
+
   // 親コンポーネントから貰う奴ら。
   const user_id = inject('user_id')
+  const csrf_token = inject('csrf_token')
   const { kifu } = defineProps(['kifu'])
 
   // このコンポーネントで使うメソッド
@@ -47,8 +51,12 @@
     let hour = time.getHours(), minute = time.getMinutes()
     return `${year}年${month}月${date}日${hour}時${minute}分`
   }
+
+  const submit_delete = ()=>{
+    delete_kifu({ id: kifu.id }, { "Authorization" :csrf_token })
+  }
   
-  defineExpose( { kifu, win_or_lose, timewithzone_to_str } )
+  defineExpose( { kifu, delete_kifu, win_or_lose, timewithzone_to_str } )
 
 </script>
 

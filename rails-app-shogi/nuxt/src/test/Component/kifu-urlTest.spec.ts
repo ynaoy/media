@@ -1,8 +1,12 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
 import KifuUrl from "../../components/kifus/kifu-url.vue"
 
 describe("kifu-url test", async() => {
+
+  //テストメソッド内で使われるHelperをモック
+  const delete_kifu_spy = vi.fn()
+  vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "delete_kifu": delete_kifu_spy }))
 
   // テストヘルパーの呼び出し
   const { Mount } = MountHelper()
@@ -14,6 +18,10 @@ describe("kifu-url test", async() => {
                                     { kifu: kifus[0]}) 
   const wrapper_with_not_delete = Mount( KifuUrl, { user_id: 1 },
                                     { kifu: kifus[1]})
+  
+  afterAll(()=>{
+    vi.clearAllMocks
+  })
 
   it("テキストが正しく表示されているかチェック", () => {
     kifu_text_check(wrapper_with_delete, kifus[0])
@@ -23,10 +31,18 @@ describe("kifu-url test", async() => {
     expect(wrapper_with_not_delete.text()).not.toContain("delete")
   })
 
+  it("delete_kifuメソッドが正し呼び出されているかチェック", async() => {
+    const element = wrapper_with_delete.find("#deleteUrl")
+    expect(element.exists()).toBeTruthy()
+    element.trigger('click')
+    await wrapper_with_delete.vm.$nextTick()
+    expect(delete_kifu_spy).toHaveBeenCalled()
+  })
+
   it("titleが設定されているときにテキストが正しく表示されているかチェック", () => {
     let title="this is title", created_at = set_date()
 
-    const wrapper_with_title = Mount( KifuUrl, { user_id: 1 },
+    const wrapper_with_title = Mount( KifuUrl, { user_id: 1, csrf_token:"this is csrf_token" },
                                           { kifu: { title: title,
                                                     user_id: 1,
                                                     created_at: created_at}})
