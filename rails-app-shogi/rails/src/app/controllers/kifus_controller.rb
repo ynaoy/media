@@ -67,7 +67,7 @@ class KifusController < ApplicationController
 
   def index
     user_id = if(params[:format]=="json" && !Rails.env.test?)
-      session_user(request.cookies["jwt"])[:user_id]
+      session_user(request.cookies["jwt"]).id
     else
       current_user.id
     end
@@ -82,8 +82,11 @@ class KifusController < ApplicationController
 
   def destroy
     Kifu.find(params[:id]).destroy
-    flash.now[:success] = "Kifu deleted"
-    redirect_back_or(root_url)
+    respond_to do |format|
+      format.html { flash.now[:success] = "Kifu deleted"
+                    redirect_back_or(root_url)}
+      format.json { render json: { success: "delete kifu!!" } }
+    end
   end
 
   private
@@ -97,7 +100,15 @@ class KifusController < ApplicationController
     end
 
     def correct_user
-      @kifus = current_user.kifus.find_by(id: params[:id])
-      redirect_to root_url if @kifus.nil?
+      if((ENV["RAILS_ENV"]!="test")&&(params[:format]=="json"))
+        @kifus = session_user(request.cookies["jwt"]).kifus.find_by(id: params[:id])
+        if @kifus.nil?
+          response_unauthorized
+          return 
+        end
+      else
+        @kifus = current_user.kifus.find_by(id: params[:id])
+        redirect_to root_url if @kifus.nil?
+      end
     end
 end

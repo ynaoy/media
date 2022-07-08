@@ -88,9 +88,6 @@ module SessionsHelper
     if decoded_hash
         user_id = decoded_hash[0]['user_id']
         @user = User.find_by(id: user_id)
-        { user_id:@user.id, user_name:@user.name }
-    else 
-      { user_id:nil, user_name:nil, errors: "No user Logged In" }
     end
   end
 

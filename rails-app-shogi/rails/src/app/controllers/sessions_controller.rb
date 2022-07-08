@@ -36,7 +36,12 @@ class SessionsController < ApplicationController
 
   def login_check
     token = request.cookies["jwt"]
-    auth = session_user(token)
+    @user = session_user(token)
+    auth =  if(@user.nil?)
+              { user_id:nil, user_name:nil, errors: "No user Logged In" }
+            else
+              { user_id:@user.id, user_name:@user.name }
+            end
     set_csrf_token
     render json: auth
   end

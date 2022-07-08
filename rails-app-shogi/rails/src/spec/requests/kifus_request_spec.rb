@@ -104,7 +104,6 @@ RSpec.describe "Kifus", type: :request do
     it "return json object" do
       log_in_as @user
       get kifus_path, params: { format: "json" }
-      p JSON.parse(response.body)
       expect(JSON.parse(response.body).nil?).to eq false
     end
   end
@@ -114,6 +113,12 @@ RSpec.describe "Kifus", type: :request do
       log_in_as @user
       delete kifu_path(@kifu)
       expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
+    end
+
+    it "return json object" do
+      log_in_as @user
+      delete kifu_path(@kifu), params: { format: "json" }
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
     end
   end
 

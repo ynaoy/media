@@ -4,9 +4,11 @@ import KifuUrl from "../../components/kifus/kifu-url.vue"
 
 describe("kifu-url test", async() => {
 
-  //テストヘルパーの呼び出しとコンポーネントのマウント
+  // テストヘルパーの呼び出し
   const { Mount } = MountHelper()
   const { kifus_data, set_date } = TestHelper("")
+
+  // コンポーネントのマウント
   const kifus = kifus_data(2)
   const wrapper_with_delete = Mount( KifuUrl, { user_id: 1 },
                                     { kifu: kifus[0]}) 
