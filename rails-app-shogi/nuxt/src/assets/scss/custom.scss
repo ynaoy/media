@@ -231,6 +231,9 @@ h1{
 .pagination{
   justify-content: right;
   margin: 3% 0;
+  .page-item{
+    cursor: pointer;
+  }
 }
 /* #kifu/show */
 .kifu_wrapper{

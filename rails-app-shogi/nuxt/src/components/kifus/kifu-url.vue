@@ -52,6 +52,7 @@
     return `${year}年${month}月${date}日${hour}時${minute}分`
   }
 
+  // 棋譜の削除を実行するメソッド
   const submit_delete = ()=>{
     delete_kifu({ id: kifu.id }, { "Authorization" :csrf_token })
   }
