@@ -61,7 +61,14 @@ export const SessionHelper = () => {
       })
   }
 
+  //ログインしていなかったらログインページに飛ばす
+  const force_login= (loginFlg)=>{
+    if (!loginFlg) {
+      return navigateTo('/login') 
+    }
+  }
   return {  login: login,
             login_check: login_check,
-            logout: logout,}
+            logout: logout,
+            force_login: force_login}
 }

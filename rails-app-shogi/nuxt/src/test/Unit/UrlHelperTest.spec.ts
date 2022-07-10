@@ -1,7 +1,7 @@
 import { describe, it, expect,vi, afterAll} from 'vitest'
 import { UrlHelper } from "../../composables/UrlHelper";
 
-export default async function UrlHelperTest(){
+describe("UrlHelper test", async() => {
 
   vi.stubGlobal("$fetch",vi.fn().mockReturnValue( { data:"data" }))
   //このテストでチェックするやつ
@@ -10,10 +10,8 @@ export default async function UrlHelperTest(){
   afterAll(()=>{
     vi.clearAllMocks()
   })
-  
-  describe("UrlHelper test", async() => {
-    it("FetchResponseメソッドが正しく動作するかチェック", async() => {
-      expect(FetchResponse("",{})["data"]).toBe("data")
-    })
+
+  it("FetchResponseメソッドが正しく動作するかチェック", async() => {
+    expect(FetchResponse("",{})["data"]).toBe("data")
   })
-}
+})

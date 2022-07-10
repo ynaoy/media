@@ -219,6 +219,7 @@ h1{
     width: 5%;
     margin-left: 1%;
     text-align: center;
+    cursor: pointer;
   }
   #delete{
     color: red;
@@ -230,8 +231,14 @@ h1{
 .pagination{
   justify-content: right;
   margin: 3% 0;
+  .page-item{
+    cursor: pointer;
+  }
 }
 /* #kifu/show */
+.kifu_wrapper{
+  margin:0 auto;
+}
 #tags{
   margin-top:1vw;
   width: 47.032vw;

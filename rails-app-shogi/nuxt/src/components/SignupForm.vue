@@ -48,7 +48,7 @@
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    create_user({ user: JSON.stringify(signup_form)}, { "Authorization" :csrf_token })
+    create_user({ user: JSON.stringify(signup_form)}, { "Authorization" : csrf_token })
   }
   defineExpose( { signup_form, submit } );
 </script>

@@ -35,7 +35,7 @@
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
     console.log(update_form.name)
-    update_user({ id:user_id, user: JSON.stringify(update_form)}, { "Authorization" :csrf_token })
+    update_user({ id:user_id, user: JSON.stringify(update_form)}, { "Authorization" : csrf_token })
   }
   defineExpose( { update_form, submit } );
 </script>

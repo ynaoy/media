@@ -8,7 +8,7 @@
       お気に入り
     </nuxt-link>
     
-    <nuxt-link v-if="loginFlg" to="/" :class="class_name">
+    <nuxt-link v-if="loginFlg" to="/kifus/new" :class="class_name">
       棋譜を追加
     </nuxt-link>
     
