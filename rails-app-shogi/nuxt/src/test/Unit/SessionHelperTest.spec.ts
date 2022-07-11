@@ -13,11 +13,10 @@ describe("SessionHelper test", async() => {
     user_id:1,user_name:"TestUser"
   })
 
-  // UrlHelperのFetchResponseメソッドをモックする。login、logoutメソッド内でこれが呼ばれたら成功
-  const spy_url = vi.fn().mockReturnValue( Promise.resolve( { data:"data" } ))
-  vi.stubGlobal("UrlHelper",vi.fn().mockReturnValue( 
-    { FetchResponse: spy_url }
-  ))
+  // $fetchメソッドをモックする。login、logoutメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
+  
   // nuxt独自のメソッドnavigateToをモックする。force_loginメソッド内でこれが呼ばれたら成功
   const spy_navigate = vi.fn()
   vi.stubGlobal("navigateTo", spy_navigate)
@@ -30,19 +29,19 @@ describe("SessionHelper test", async() => {
     mockFetch.clearAll();
   })
   afterEach(()=>{
-    spy_url.mockClear()
+    spy_fetch.mockClear()
     spy_navigate.mockClear()
   })
 
   it("loginメソッドが正しく動作するかチェック", async() => {
     await login({ session:{ email:"testuser@example.com",
                             password:"password",} }, {})
-    expect(spy_url).toHaveBeenCalled()
+    expect(spy_fetch).toHaveBeenCalled()
   })
 
   it("logoutメソッドが正しく動作するかチェック", async() => {
     await logout({})
-    expect(spy_url).toHaveBeenCalled()
+    expect(spy_fetch).toHaveBeenCalled()
   })
 
   it("login_checkメソッドが正しく動作するかチェック", async() => {

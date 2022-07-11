@@ -9,7 +9,7 @@ describe("UserHelper test", async() => {
     { FetchResponse: spy }
   ))
   //このテストでチェックするやつら
-  const { create_user, update_user } = UserHelper()
+  const { create_user, update_user, get_all_user } = UserHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -28,6 +28,11 @@ describe("UserHelper test", async() => {
 
   it("update_userメソッドが正しく動作するかチェック", async() => {
     await update_user({id:1, user:{ name:"TestUser"} },{})
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it("get_all_userメソッドが正しく動作するかチェック", async() => {
+    await get_all_user()
     expect(spy).toHaveBeenCalled()
   })
 })

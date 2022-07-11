@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { @users = @users.page(params[:page]).per(20)
                     render "index"}
-      format.json { render json: @users.to_json(only: %i[ name ])}
+      format.json { render json: @users.to_json(only: %i[ id name ])}
     end
   end
 

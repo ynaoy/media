@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-export default function PaginationObject(items, parPage=20){
+export const PaginationObject = (items, parPage=20)=>{
 
   //リアクティブな変数群
   const currentPage = ref(1)

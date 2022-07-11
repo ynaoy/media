@@ -36,7 +36,6 @@ export const UserHelper = () => {
                     headers:{},                      
                   ){
       params['format'] = 'json'
-      console.log(`${import.meta.env.VITE_API_ORIGIN}/users/${params['id']}`)
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params['id']}`,
         { method:'PATCH',
           params: params,
@@ -52,5 +51,29 @@ export const UserHelper = () => {
         })
     }
 
-  return {  create_user: create_user, update_user:update_user }
+  const get_all_user = 
+    async function( params = {}, headers = {} ){
+
+      let ret = {} 
+      params['format'] = 'json'
+      console.log(`${import.meta.env.VITE_API_ORIGIN}/users`)
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users`,
+        { method:'GET',
+          params: params,
+          headers: headers,
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          ret =data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return { "users": ret }
+    }
+
+  return {  create_user: create_user,
+            update_user: update_user,
+            get_all_user: get_all_user}
 }

@@ -1,6 +1,6 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
 import { TestHelper } from "../TestHelper"
-import  PaginationObject  from "../../composables/PaginationObject"
+import { PaginationObject }  from "../../composables/PaginationObject"
 
 describe("PaginationObject test", () => {
 

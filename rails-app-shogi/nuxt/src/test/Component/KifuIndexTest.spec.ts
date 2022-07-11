@@ -4,19 +4,15 @@ import KifuIndex from "../../components/KifuIndex.vue"
 
 describe("KifuIndex test", async() => {
 
-  //テストメソッド内で使われるHelperをモック
-  const spy_force_login = vi.fn()
-  vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "force_login": spy_force_login}))
+  // nuxt独自のメソッドnavigateToをモックする。force_login(false)メソッド内でこれが呼ばれたら成功
+  const spy_navigate = vi.fn()
+  vi.stubGlobal("navigateTo", spy_navigate)
 
-  //テストヘルパーの呼び出しとコンポーネントのマウント
+  // テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const { kifus_data } = TestHelper("")
   const wrapper = Mount( KifuIndex, { loginFlg: true, user_id: 1, csrf_token:"this is csrf_token" },
                                     { kifus: kifus_data()}) 
-
-  // kifus_is_emptyメソッドが呼び出されているかの確認用
-  const spy_kifus_is_empty = vi.spyOn(wrapper.vm, "kifus_is_empty")
-  await wrapper.vm.$forceUpdate()
 
   afterAll(()=>{
     vi.clearAllMocks
@@ -27,15 +23,16 @@ describe("KifuIndex test", async() => {
     expect(wrapper.html()).toContain("<kifu-items")
   })
 
-  it("kifusが空の時、子コンポーネントが表示されていないかチェック", () => {
+  it("Propsのkifusが空の時、子コンポーネントが表示されていないかチェック", () => {
     const wrapper_empty = Mount( KifuIndex, { loginFlg: true, user_id: 1 },
                                             { kifus: []}) 
     expect(wrapper_empty.html()).not.toContain("<kifu-items")
   })
 
-  it("マウント時にメソッドが呼び出されているかチェック", () => {
-    expect(spy_force_login).toHaveBeenCalled()
-    expect(spy_kifus_is_empty).toHaveBeenCalled()
+  it("ログインしていない時、リダイレクトされているかチェック", () => {
+    const wrapper_not_login = Mount( KifuIndex, { loginFlg: false, user_id: 1 },
+                                                { kifus: kifus_data()}) 
+    expect(spy_navigate).toHaveBeenCalled()
   })
 
 })

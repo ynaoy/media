@@ -107,8 +107,19 @@ export const TestHelper = (wrapper) =>{
         created_at: set_date(),
         player1:"player1",
         player2:"player2",})
-      }
+    }
     return kifus
+  }
+
+  //APIからもらう適当なuser_dataを返す
+  const users_data = (num=60)=>{
+    let users = []
+    for (let i=0; i<num; i++){
+      users.push({
+        id: i,
+        name: `user_${i}` })
+    }
+    return users
   }
 
   // 日本時間で現在時刻を貰う
@@ -124,6 +135,7 @@ export const TestHelper = (wrapper) =>{
             set_form: set_form,
             kifu_data: kifu_data,
             kifus_data: kifus_data,
+            users_data: users_data,
             set_date: set_date}
 
 }

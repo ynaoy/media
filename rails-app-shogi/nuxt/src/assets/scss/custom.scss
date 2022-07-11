@@ -28,6 +28,12 @@ h1{
   text-align: center;
   margin-bottom: 30px;
 }
+#deleteUrl{
+  cursor: pointer;
+}
+#delete{
+  color: red;
+}
 .logo{
   float: left;
   font-size: 1.4em;
@@ -136,7 +142,6 @@ h1{
     margin: 0;
   }
   #delete{
-    color: red;
     font-size: 60%;
     float: right;
     padding-top: 12px;
@@ -219,10 +224,8 @@ h1{
     width: 5%;
     margin-left: 1%;
     text-align: center;
-    cursor: pointer;
   }
   #delete{
-    color: red;
     font-size: 100%;
     line-height: 2.7;
   }
