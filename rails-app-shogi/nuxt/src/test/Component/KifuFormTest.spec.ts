@@ -4,9 +4,9 @@ import KifuForm from "../../components/KifuForm.vue"
 
 describe("KifuForm test", async() => {
 
-  //テストメソッド内で使われるHelperをモック
-  vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "create_kifu": vi.fn()}))
-  vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "force_login": vi.fn()}))
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()

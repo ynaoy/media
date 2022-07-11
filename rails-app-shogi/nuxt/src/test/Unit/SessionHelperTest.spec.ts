@@ -5,7 +5,7 @@ import { SessionHelper } from "../../composables/SessionHelper";
 
 describe("SessionHelper test", async() => {
 
-  //fetchメソッドをモックする。login_checkメソッド内でこれが呼ばれたら成功
+  // fetchメソッドをモックする。login_checkメソッド内でこれが呼ばれたら成功
   const login_check_mock = 
   mockFetch('GET',`${import.meta.env.VITE_API_ORIGIN}/login_check`)
   .withHeaders([['csrf_token', 'this is csrf_token']])

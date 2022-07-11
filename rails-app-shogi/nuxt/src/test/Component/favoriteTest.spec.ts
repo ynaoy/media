@@ -5,7 +5,7 @@ import favorite from "../../components/kifus/favorite.vue"
 
 describe("admin test", async() => {
 
-  //テストメソッド内で使われるHelperをモック、コンポーネントをマウント、テストヘルパーの呼び出し
+  // コンポーネントをマウント、テストヘルパーの呼び出し
   const { Mount } = MountHelper()
   const wrapper = Mount(favorite,{  loginFlg: ref(true),
                                     favorite_flg: ref(false),

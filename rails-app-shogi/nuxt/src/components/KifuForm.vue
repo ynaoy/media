@@ -45,7 +45,9 @@
 </template>
 
 <script setup>
-
+  import { SessionHelper } from '../composables/SessionHelper'
+  import { KifuHelper } from '../composables/KifuHelper'
+  
   // 親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
   const loginFlg = inject('loginFlg')

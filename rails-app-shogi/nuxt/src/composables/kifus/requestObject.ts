@@ -1,5 +1,5 @@
-
 import { reactive } from 'vue'
+import { UrlHelper } from "../UrlHelper"
 
 export const requestObject = (kifu_data, csrf_token)=>{
 

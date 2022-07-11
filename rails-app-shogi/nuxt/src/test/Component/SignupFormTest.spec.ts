@@ -4,9 +4,9 @@ import SignupForm from "../../components/SignupForm.vue"
 
 describe("SignupForm test", async() => {
 
-  //テストメソッド内で使われるHelperをモック、コンポーネントをマウント、テストヘルパーの呼び出し
-  vi.stubGlobal("UserHelper",vi.fn().mockReturnValue({ "create_user":vi.fn()}))
-
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const wrapper = Mount(SignupForm, { csrf_token:"this is csrf_token" })

@@ -4,7 +4,6 @@ import Pagination from "../../components/Pagination.vue"
 
 describe("ProfileForm test", async() => {
 
-
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { kifus_data } = TestHelper("")
   const { Mount } = MountHelper()

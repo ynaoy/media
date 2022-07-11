@@ -4,11 +4,9 @@ import kifu from "../../components/kifus/kifu.vue"
 
 describe("kifu test", async() => {
 
-  //UrlHelperのFetchResponsメソッドをモックする
-  const spy = vi.fn().mockReturnValue( Promise.resolve( { success: "success" } ))
-  vi.stubGlobal("UrlHelper",vi.fn().mockReturnValue( 
-    { FetchResponse: spy }
-  ))
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { kifu_data } = TestHelper("")

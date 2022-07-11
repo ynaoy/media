@@ -4,11 +4,10 @@ import NavBar from "../../components/NavBar.vue"
 
 describe("NavBar test", async() => {
 
-//テストメソッド内で使われるHelperをモック
-  const login_check = vi.fn().mockReturnValue( {'data':{user_id:"1",user_name:"TestUser"},
-                                                'loginFlg':true,
-                                                'csrf_token':"this is csrf token"})
-  vi.stubGlobal("SessionHelper",vi.fn().mockReturnValue({ "login_check":login_check }))
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
+
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const wrapper = Mount(NavBar,{  csrf_token:"this is csrf_token",

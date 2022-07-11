@@ -31,6 +31,8 @@
 </template>
 
 <script setup>
+  import { SessionHelper } from '../composables/SessionHelper'
+
   const { logout } = SessionHelper()
 
   //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意

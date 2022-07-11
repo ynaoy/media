@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-
+  import { KifuHelper } from '../composables/KifuHelper'
   import Kifu from './kifus/kifu.vue'
   import KifuTag from './kifus/kifu-tag.vue'
 

@@ -4,9 +4,9 @@ import KifuUrl from "../../components/kifus/kifu-url.vue"
 
 describe("kifu-url test", async() => {
 
-  //テストメソッド内で使われるHelperをモック
-  const delete_kifu_spy = vi.fn()
-  vi.stubGlobal("KifuHelper",vi.fn().mockReturnValue({ "delete_kifu": delete_kifu_spy }))
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
 
   // テストヘルパーの呼び出し
   const { Mount } = MountHelper()
@@ -36,7 +36,7 @@ describe("kifu-url test", async() => {
     expect(element.exists()).toBeTruthy()
     element.trigger('click')
     await wrapper_with_delete.vm.$nextTick()
-    expect(delete_kifu_spy).toHaveBeenCalled()
+    expect(spy_fetch).toHaveBeenCalled()
   })
 
   it("titleが設定されているときにテキストが正しく表示されているかチェック", () => {

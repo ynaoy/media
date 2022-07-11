@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+  import { KifuHelper } from '../../composables/KifuHelper'
 
   //このコンポーネントで使うヘルパー
   const { delete_kifu } = KifuHelper()

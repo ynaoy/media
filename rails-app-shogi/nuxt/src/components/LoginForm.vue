@@ -23,6 +23,8 @@
 </template>
 
 <script setup>
+  import { SessionHelper } from '../composables/SessionHelper'
+
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
 

@@ -1,3 +1,5 @@
+import { UrlHelper } from "./UrlHelper"
+
 export const KifuHelper = () => {
   //使う関数のインポート
   const { FetchResponse } =UrlHelper()

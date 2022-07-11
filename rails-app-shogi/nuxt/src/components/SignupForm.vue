@@ -30,6 +30,8 @@
 </template>
 
 <script setup>
+  import { UserHelper } from '../composables/UserHelper'  
+  
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
 

@@ -4,9 +4,9 @@ import ProfileForm from "../../components/ProfileForm.vue"
 
 describe("ProfileForm test", async() => {
 
-  //テストメソッド内で使われるHelperをモック
-  vi.stubGlobal("UserHelper",vi.fn().mockReturnValue({ "update_user":vi.fn() }))
-
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const wrapper = Mount(ProfileForm,{ csrf_token:"this is csrf_token",
