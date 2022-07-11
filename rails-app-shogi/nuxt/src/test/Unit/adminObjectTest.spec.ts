@@ -1,6 +1,6 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
-import { ref, defineEmits } from "vue"
-import  adminObject  from "../../composables/kifus/adminObject"
+import { ref } from "vue"
+import { adminObject }  from "../../composables/kifus/adminObject"
 
 describe("adminObject test", () => {
 

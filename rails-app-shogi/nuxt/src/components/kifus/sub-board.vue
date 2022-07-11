@@ -8,7 +8,7 @@
 
 <script setup>
 
-  import  subBoardObject from '../../composables/kifus/subBoardObject'
+  import { subBoardObject } from '../../composables/kifus/subBoardObject'
 
   //リアクティブな変数群とメソッド群
   const sub_board_text = inject('sub_board_text')

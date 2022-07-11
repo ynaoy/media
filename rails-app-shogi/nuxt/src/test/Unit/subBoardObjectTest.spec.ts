@@ -1,6 +1,6 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
 import { mockFetch } from "vi-fetch"
-import  subBoardObject  from "../../composables/kifus/subBoardObject"
+import { subBoardObject }  from "../../composables/kifus/subBoardObject"
 
 describe("subBoardObject test", () => {
 

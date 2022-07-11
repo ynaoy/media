@@ -15,7 +15,7 @@
 <script setup>
 
   import { inject } from 'vue'
-  import  mainBoardObject from '../../composables/kifus/mainBoardObject'
+  import { mainBoardObject } from '../../composables/kifus/mainBoardObject'
   import setIndex from './set-index.vue'
   import setColumns from './set-columns.vue'
 

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-export default function mainBoardObject(board_text, board_flg){
+export const  mainBoardObject = (board_text, board_flg)=>{
 
   //リアクティブな変数群
   const main_board_states =reactive({ })

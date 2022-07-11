@@ -1,6 +1,6 @@
 import { provide } from 'vue'
 
-export default function provideObject(params){
+export const  provideObject = (params)=>{
 
   //paramsのkeyとvalueでprovideして子コンポーネントに渡す
   for (let key in params){

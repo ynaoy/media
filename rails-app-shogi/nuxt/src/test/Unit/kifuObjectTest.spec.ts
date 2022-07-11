@@ -1,6 +1,6 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
 import { TestHelper } from "../TestHelper"
-import  kifuObject  from "../../composables/kifus/kifuObject"
+import { kifuObject }  from "../../composables/kifus/kifuObject"
 
 describe("kifuObject test", () => {
 

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-export default function subBoardObject(sub_board_text, sub_board_num, sub_board_id){
+export const subBoardObject = (sub_board_text, sub_board_num, sub_board_id)=>{
 
   //リアクティブな変数群
   const sub_board_states =reactive({ })

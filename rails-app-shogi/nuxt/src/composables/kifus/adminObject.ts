@@ -1,6 +1,6 @@
 import { reactive, defineEmits } from 'vue'
 
-export default function adminObject(state, max_state, emit){
+export const  adminObject = (state, max_state, emit)=>{
 
   //リアクティブな変数群
   const admin_states =reactive({ })

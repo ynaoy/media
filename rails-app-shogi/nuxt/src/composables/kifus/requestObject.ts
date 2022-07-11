@@ -1,7 +1,7 @@
 
 import { reactive } from 'vue'
 
-export default function requestObject(kifu_data, csrf_token){
+export const requestObject = (kifu_data, csrf_token)=>{
 
   //使う関数のインポート
   const { FetchResponse } = UrlHelper()

@@ -12,7 +12,7 @@
 
 <script setup>
   import { inject } from 'vue'
-  import  adminObject from '../../composables/kifus/adminObject'
+  import { adminObject } from '../../composables/kifus/adminObject'
 
   const emit = defineEmits(['update_state'])
 

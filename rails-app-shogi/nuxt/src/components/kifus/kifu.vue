@@ -8,9 +8,9 @@
 
 <script setup>
   import { ref, provide, toRefs  } from 'vue'
-  import kifuObject from '../../composables/kifus/kifuObject'
-  import requestObject from '../../composables/kifus/requestObject'
-  import provideObject from '../../composables/kifus/provideObject'
+  import { kifuObject } from '../../composables/kifus/kifuObject'
+  import { requestObject } from '../../composables/kifus/requestObject'
+  import { provideObject } from '../../composables/kifus/provideObject'
   import Board from './board.vue'
   import Admin from './admin.vue'
   import Favorite from './favorite.vue'

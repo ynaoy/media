@@ -1,7 +1,7 @@
 
 import { reactive } from 'vue'
 
-export default function kifuObject(kifu_data){
+export const  kifuObject = (kifu_data)=>{
 
     //リアクティブでない変数群
     const sub_board_label = ["飛","角","金","銀","桂","香","歩","玉"]
