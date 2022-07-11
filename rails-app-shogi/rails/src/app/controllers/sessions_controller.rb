@@ -40,7 +40,7 @@ class SessionsController < ApplicationController
     auth =  if(@user.nil?)
               { user_id:nil, user_name:nil, errors: "No user Logged In" }
             else
-              { user_id:@user.id, user_name:@user.name }
+              { user_id: @user.id, user_name: @user.name, admin: @user.admin }
             end
     set_csrf_token
     render json: auth

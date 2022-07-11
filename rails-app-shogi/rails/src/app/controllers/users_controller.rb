@@ -5,7 +5,12 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: %i[history favorite]
 
   def index 
-    @users = User.all.order(id: "desc").page(params[:page]).per(20)
+    @users = User.all.order(id: "desc")
+    respond_to do |format|
+      format.html { @users = @users.page(params[:page]).per(20)
+                    render "index"}
+      format.json { render json: @users.to_json(only: %i[ name ])}
+    end
   end
 
   def show
