@@ -4,6 +4,9 @@ import UserUrl from "../../components/users/user-url.vue"
 
 describe("User-url test", async() => {
 
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
+  vi.stubGlobal("$fetch", spy_fetch)
 
   // テストヘルパーの呼び出し
   const { Mount } = MountHelper()
@@ -37,6 +40,14 @@ describe("User-url test", async() => {
                                                       { user: user })
     expect(wrapper_with_not_admin.text()).toContain(user.name)
     expect(wrapper_with_not_admin.text()).not.toContain("delete")
+  })
+
+  it("ユーザーを削除するボタンが正しく機能しているかチェック", async() => {
+    const element = wrapper.find("#deleteUrl")
+    expect(element.exists()).toBeTruthy()
+    element.trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(spy_fetch).toHaveBeenCalled()
   })
 
 })

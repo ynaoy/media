@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors, debug: !Rails.env.production? do
   allow do
-    origins (ENV['SPA_ORIGIN'])? ENV['SPA_ORIGIN'] : ""
+    origins ENV['SPA_ORIGIN'] || ""
 
     resource '*',
       headers: :any,

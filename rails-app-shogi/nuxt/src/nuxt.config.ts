@@ -1,9 +1,5 @@
 import { defineNuxtConfig } from 'nuxt'
 
-// テスト環境でAPIのオリジンが設定されていなければ適当に設定
-if(import.meta.env.VITE_API_ORIGIN == undefined){
-  import.meta.env.VITE_API_ORIGIN = " "
-}
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   ssr:false,
@@ -13,4 +9,8 @@ export default defineNuxtConfig({
     '@/assets/scss/app.scss',
     '@/assets/scss/custom.scss'
   ],
+  // APIのオリジンが設定されていなければ適当に設定
+  publicRuntimeConfig:{
+    VITE_API_ORIGIN : process.env.VITE_API_ORIGIN || ""
+  }
 })

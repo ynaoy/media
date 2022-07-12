@@ -53,6 +53,26 @@ export const UserHelper = () => {
         })
     }
 
+  //サーバーサイドusersコントローラーにparams付きでDELETEリクエストを送る。
+  //レスポンスには{ success: String }が入ってる
+  const delete_user = async ( params:{ id: number },
+    headers:{} ) =>{
+    params['format'] = 'json'
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params.id}`,
+      { method:'DELETE',
+      params: params,
+      headers: headers,
+      credentials: 'include'
+      })
+      .then((data) => {
+      console.log(data)
+        location.href =  location.href
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   const get_all_user = 
     async function( params = {}, headers = {} ){
 
@@ -77,5 +97,6 @@ export const UserHelper = () => {
 
   return {  create_user: create_user,
             update_user: update_user,
+            delete_user: delete_user,
             get_all_user: get_all_user}
 }

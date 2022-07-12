@@ -117,8 +117,15 @@ RSpec.describe "Users", type: :request do
 
   describe "Delete /destroy" do
     it "returns http redirect" do
+      log_in_as @user
       delete user_path(@user)
       expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
+    end
+
+    it "return json object" do
+      log_in_as @user
+      delete user_path(@user), params: { format: "json" }
+      expect(JSON.parse(response.body)['success'].nil?).to eq false
     end
   end
 

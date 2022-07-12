@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: %i[index edit update history favorite]
+  before_action :logged_in_user, only: %i[index edit update destroy history favorite]
   before_action :admin_user,     only: :index
   before_action :correct_user,   only: %i[history favorite]
 
@@ -78,9 +78,16 @@ class UsersController < ApplicationController
 
   def destroy
     # << Todo current_userかadmin_userのみが使えるようにする >>
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+    end
+
     User.find(params[:id]).destroy
-    flash.now[:success] = "User deleted"
-    redirect_back_or(root_url)
+    respond_to do |format|
+      format.html { flash.now[:success] = "User deleted"
+                    redirect_back_or(root_url)}
+      format.json { render json: { success: "delete User!!" } }
+    end
   end
 
   def history
