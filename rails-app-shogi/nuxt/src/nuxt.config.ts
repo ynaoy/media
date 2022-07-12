@@ -1,6 +1,9 @@
 import { defineNuxtConfig } from 'nuxt'
-//import BootstrapVue3 from 'bootstrap-vue-3'
 
+// テスト環境でAPIのオリジンが設定されていなければ適当に設定
+if(import.meta.env.VITE_API_ORIGIN == undefined){
+  import.meta.env.VITE_API_ORIGIN = " "
+}
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   ssr:false,
