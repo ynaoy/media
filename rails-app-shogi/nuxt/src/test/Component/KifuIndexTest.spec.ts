@@ -19,14 +19,7 @@ describe("KifuIndex test", async() => {
   })
 
   it("子コンポーネントが表示されているかチェック", () => {
-    expect(wrapper.html()).toContain("<pagination")
-    expect(wrapper.html()).toContain("<kifu-items")
-  })
-
-  it("Propsのkifusが空の時、子コンポーネントが表示されていないかチェック", () => {
-    const wrapper_empty = Mount( KifuIndex, { loginFlg: true, user_id: 1 },
-                                            { kifus: []}) 
-    expect(wrapper_empty.html()).not.toContain("<kifu-items")
+    expect(wrapper.html()).toContain("<kifus-items")
   })
 
   it("ログインしていない時、リダイレクトされているかチェック", () => {

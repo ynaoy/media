@@ -123,6 +123,16 @@ export const TestHelper = (wrapper) =>{
     return users
   }
 
+  //APIからもらう適当なuserとそのユーザーの棋譜を返す
+  const user_and_kifus = (user_id = 1,
+                          user_name = "TestUser",
+                          num = 60 )=>{
+    let user = {id: user_id, name: user_name}
+    let kifus = kifus_data(num)
+    return {  user: JSON.stringify(user),
+              kifus: JSON.stringify(kifus)}
+  }
+
   // 日本時間で現在時刻を貰う
   const set_date = ()=>{
     let date = new Date()
@@ -137,6 +147,7 @@ export const TestHelper = (wrapper) =>{
             kifu_data: kifu_data,
             kifus_data: kifus_data,
             users_data: users_data,
+            user_and_kifus: user_and_kifus,
             set_date: set_date}
 
 }
