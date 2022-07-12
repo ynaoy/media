@@ -14,8 +14,17 @@ class UsersController < ApplicationController
   end
 
   def show
+    # << TODO ユーザーが存在しなかったときの処理を追加する >>
     @user = User.find(params[:id])
-    @kifus = Kifu.search_kifu(attribute = "user_id",str = params[:id]).order(id: "desc").page(params[:page]).per(20)
+    @kifus = Kifu.search_kifu(attribute = "user_id",str = params[:id]).order(id: "desc")
+    respond_to do |format|
+      format.html { @kifus = @kifus.page(params[:page]).per(20)
+                    render "show"}
+      format.json { render json:  
+                      { user:  @user.to_json(only: %i[ id name ]),
+                        kifus: @kifus.to_json(only: %i[ id user_id title player1 player2 win created_at ])}
+                  }
+    end
   end
 
   def new

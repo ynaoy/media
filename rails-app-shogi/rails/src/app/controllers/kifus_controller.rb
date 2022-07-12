@@ -44,6 +44,7 @@ class KifusController < ApplicationController
   end
 
   def show
+    # << TODO 棋譜が存在しなかったときの処理を追加する >>
     @kifu = Kifu.find(params[:id])
     @tags = @kifu.get_tags 
 
