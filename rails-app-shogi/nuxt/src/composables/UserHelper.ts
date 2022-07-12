@@ -94,9 +94,31 @@ export const UserHelper = () => {
         })
       return { "users": ret }
     }
+  
+    // ユーザーとその棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
+    const get_user = async (params:{ id:number },headers:{} ) =>{
+
+      let ret = {}
+      params['format'] = 'json'
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params.id}`,
+        { method:'GET',
+          params: params,
+          headers: headers,
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          ret = data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return { "user_data": ret }
+    }
 
   return {  create_user: create_user,
             update_user: update_user,
             delete_user: delete_user,
-            get_all_user: get_all_user}
+            get_all_user: get_all_user,
+            get_user: get_user }
 }

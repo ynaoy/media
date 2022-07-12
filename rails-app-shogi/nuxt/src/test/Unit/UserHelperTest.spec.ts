@@ -8,7 +8,7 @@ describe("UserHelper test", async() => {
   vi.stubGlobal("$fetch", spy_fetch)
     
   //このテストでチェックするやつら
-  const { create_user, update_user, get_all_user, delete_user } = UserHelper()
+  const { create_user, update_user, get_all_user, delete_user, get_user } = UserHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -35,8 +35,13 @@ describe("UserHelper test", async() => {
     expect(spy_fetch).toHaveBeenCalled()
   })
 
-  it("delete_useメソッドが正しく動作するかチェック", async() => {
+  it("delete_userメソッドが正しく動作するかチェック", async() => {
     await delete_user({ id: 1 },{})
+    expect(spy_fetch).toHaveBeenCalled()
+  })
+
+  it("get_userメソッドが正しく動作するかチェック", async() => {
+    await get_user({ id: 1 },{})
     expect(spy_fetch).toHaveBeenCalled()
   })
 })
