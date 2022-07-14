@@ -91,6 +91,11 @@ module SessionsHelper
     end
   end
 
+  # ログインしているユーザーと与えられたユーザーが一致するか返す
+  def session_user?(token, user)
+    session_user(token).id == user.id
+  end
+
   #トークンがnilじゃなければjwtトークンをデコードして返す
   def decoded_token(token)
     if token

@@ -102,6 +102,13 @@ class UsersController < ApplicationController
   def history
     @user = User.find(params[:id])
     @hist_and_kifus = History.hist_and_kifus(@user.id) if @user
+    respond_to do |format|
+      format.html { render "history"}
+      format.json { render json: 
+                    { history:  @hist_and_kifus.to_json(
+                        only: %i[ id user_id title player1 player2 win created_at watch_at ] )}
+                  }
+    end
   end
 
   def favorite
@@ -120,7 +127,15 @@ class UsersController < ApplicationController
     # 正しいユーザーかどうか確認
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      if((ENV["RAILS_ENV"]!="test")&&(params[:format]=="json"))
+        token = request.cookies["jwt"]
+        unless session_user?(token, @user)
+          response_unauthorized
+          return 
+        end
+      else
+        redirect_to(root_url) unless current_user?(@user)
+      end
     end
 
     # 管理者かどうか確認

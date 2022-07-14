@@ -148,6 +148,13 @@ RSpec.describe "Users", type: :request do
       get user_path(@user) + "/history"
       expect(response).to have_http_status(:success)
     end
+
+    it "return json object" do
+      log_in_as @user
+      get user_path(@user) + "/history", params: {  id: @user.id,
+                                                    format: "json" }
+      expect(JSON.parse(response.body)['history'].nil?).to eq false
+    end
   end
 
   describe "GET /:id/favorite" do
