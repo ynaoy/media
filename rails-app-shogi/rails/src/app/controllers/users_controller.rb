@@ -105,8 +105,8 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { render "history"}
       format.json { render json: 
-                    { history:  @hist_and_kifus.to_json(
-                        only: %i[ id user_id title player1 player2 win created_at watch_at ] )}
+                    @hist_and_kifus.to_json(
+                        only: %i[ id user_id title player1 player2 win created_at watch_at ] )
                   }
     end
   end

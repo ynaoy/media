@@ -2,12 +2,6 @@ import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
 import { KifuHelper } from "../../composables/KifuHelper"
 
 describe("KifuHelper test", async() => {
-
-  //UrlHelperのFetchResponseメソッドをモックする。テストメソッド内でこれが呼ばれたら成功
-  //const spy = vi.fn().mockReturnValue( Promise.resolve( { kifu_data:"kifu_data" } ))
-  //vi.stubGlobal("UrlHelper",vi.fn().mockReturnValue( 
-  //  { FetchResponse: spy }
-  //))
   
   // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
   const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })

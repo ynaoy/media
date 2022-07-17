@@ -17,7 +17,7 @@
           </span>
         </span>
         <span id ="created" >
-          {{ timewithzone_to_str(kifu.created_at) }}
+          {{ timewithzone_to_str(kifu.created_at,true) }}
         </span>
       </p>
     </nuxt-link>
@@ -31,8 +31,10 @@
 
 <script setup>
   import { KifuHelper } from '../../composables/KifuHelper'
+  import { AppHelper } from '../../composables/AppHelper'
 
   //このコンポーネントで使うヘルパー
+  const { timewithzone_to_str} = AppHelper()
   const { delete_kifu } = KifuHelper()
 
   // 親コンポーネントから貰う奴ら。
@@ -43,14 +45,6 @@
   // このコンポーネントで使うメソッド
   const win_or_lose =   (win,kifu)=>{
     if(win == kifu.win) return "win"
-  }
-
-  // JST(UTCの日本版)形式の時刻データを、yyyy年MM月dd日hh時mm分に成形する
-  const timewithzone_to_str = (time)=>{
-    time = new Date(time)
-    let year = time.getFullYear(), month = time.getMonth()+1, date = time.getDate()
-    let hour = time.getHours(), minute = time.getMinutes()
-    return `${year}年${month}月${date}日${hour}時${minute}分`
   }
 
   // 棋譜の削除を実行するメソッド

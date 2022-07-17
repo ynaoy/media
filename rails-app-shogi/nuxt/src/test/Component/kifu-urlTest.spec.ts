@@ -46,7 +46,7 @@ describe("kifu-url test", async() => {
                                           { kifu: { title: title,
                                                     user_id: 1,
                                                     created_at: created_at}})
-    expect(wrapper_with_title.text()).toContain(wrapper_with_title.vm.timewithzone_to_str(created_at))
+    expect(wrapper_with_title.text()).toContain(wrapper_with_title.vm.timewithzone_to_str(created_at,false))
     expect(wrapper_with_title.text()).toContain(title)
 
     expect(wrapper_with_title.text()).not.toContain("先手")
@@ -64,7 +64,7 @@ describe("kifu-url test", async() => {
     expect(wrapper.find("#win").exists()).toBeTruthy()
     expect(wrapper.text()).toContain(kifu.player1)
     expect(wrapper.text()).toContain(kifu.player2)
-    expect(wrapper.text()).toContain(wrapper.vm.timewithzone_to_str(kifu.created_at))
+    expect(wrapper.text()).toContain(wrapper.vm.timewithzone_to_str(kifu.created_at,false))
 
   }
 

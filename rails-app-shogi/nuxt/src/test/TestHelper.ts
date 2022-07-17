@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { mount,shallowMount } from "@vue/test-utils"
-
+import { AppHelper } from '../composables/AppHelper'
 export const MountHelper = () =>{
   //shallowMountをラップする
   const Mount = (component, provide = {}, props = {}, shallow = true) =>{
@@ -16,6 +16,8 @@ export const MountHelper = () =>{
 }
 
 export const TestHelper = (wrapper) =>{
+  // 使うメソッドをヘルパーからもらう
+  const { timewithzone_to_str } = AppHelper()
 
   //wrapperにテキストが含まれているかチェックする
   const check_text = async (texts)=>{
@@ -39,7 +41,7 @@ export const TestHelper = (wrapper) =>{
     }
   }
 
-  //APIからもらう適当なkifu_dataを返す
+  //APIからもらう適当な棋譜のデータを返す
   const kifu_data = ()=>{
     return { 
       kifu_id: 1,
@@ -96,7 +98,7 @@ export const TestHelper = (wrapper) =>{
     ]}
   }
 
-  //APIからもらう適当なkifu_dataを返す
+  //APIからもらう適当な棋譜の集まりのデータを返す
   const kifus_data = (num=60)=>{
     let kifus = []
     for (let i=0; i<num; i++){
@@ -112,7 +114,22 @@ export const TestHelper = (wrapper) =>{
     return kifus
   }
 
-  //APIからもらう適当なuser_dataを返す
+  //APIからもらう適当な閲覧履歴のデータを返す
+  const hist_data = (num=60)=>{
+    let hist = kifus_data(num),date = set_date()
+
+    for (let i=0; i<num; i++){
+      hist[i].watch_at = date
+      if(i%2 ==1){ 
+        hist[i].id -= 1 // テスト用にidを重複させる。
+         //60秒×60分×24時間×1000ミリ秒で1日前
+        date = new Date(date.getTime()-(60**2)*24*1000)
+      } 
+    }
+    return hist
+  }
+
+  //APIからもらう適当なユーザーのデータを返す
   const users_data = (num=60)=>{
     let users = []
     for (let i=0; i<num; i++){
@@ -123,7 +140,7 @@ export const TestHelper = (wrapper) =>{
     return users
   }
 
-  //APIからもらう適当なuserとそのユーザーの棋譜を返す
+  //APIからもらう適当なユーザーのデータとそのユーザーの棋譜を返す
   const user_and_kifus = (user_id = 1,
                           user_name = "TestUser",
                           num = 60 )=>{
@@ -148,6 +165,8 @@ export const TestHelper = (wrapper) =>{
             kifus_data: kifus_data,
             users_data: users_data,
             user_and_kifus: user_and_kifus,
-            set_date: set_date}
+            hist_data: hist_data,
+            set_date: set_date,
+            timewithzone_to_str: timewithzone_to_str}
 
 }
