@@ -188,11 +188,21 @@ module KifusHelper
     "win" if win == kifu.win
   end
 
-  #Timewithzoneクラスから" + "までの情報を抜き出して文字列型で返す
-  def timewithzone_to_str(date)
-     date.to_s.match(/[^+]*/)[0]
+  #Timewithzoneクラスのtime_zoneをTokyoに変換して、さらにformat型のstrに変換して返す
+  def timewithzone_to_str(date, format="%Y年%-m月%-d日")
+    date.in_time_zone('Tokyo').strftime(format)
   end
 
+  #history.html.erbでnow_timeごとに返す値を変更。
+  def display_day(now_time)
+    if(now_time== timewithzone_to_str(Time.zone.now))
+      return "今日"
+    elsif(now_time== timewithzone_to_str(Time.zone.now-86400))
+      return "昨日"
+    end
+    return now_time
+  end
+  
   #pagination用のデータから合計サイズを抜き出す
   def get_kifus_size(pagi_data,size=20)
     kifu_size = (pagi_data.length-1)*size + pagi_data[-1].length

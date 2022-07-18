@@ -1,7 +1,7 @@
-<% if @tags.any? %>
+<% if tags.any? %>
 <%= tag.div id:"tags" do %>
-  <% @tags.each do | tag | %>
-    <%= link_to tag.name ,kifus_path, id:"tag" %>
+  <% tags.each do | tag | %>
+    <%= link_to tag.name ,search_path+"?"+japanese_encode(tag.name), id:"tag" %>
   <% end %>
 <% end %>
 <% end %>

@@ -3,8 +3,8 @@
     <setIndex></setIndex>
     <div id="main">
       <div id="inner_board">
-        <div v-for="n in 81" id="cell" :style=setStyle(n)>
-          {{ this.board_text.value[compute_i(n)][compute_j(n)] }}
+        <div v-for="(key,n) in 81" :key="key" :style=setStyle(n) id="cell" >
+          {{  board_text[compute_i(n)][compute_j(n)] }}
         </div>
       </div>
       <setColumns></setColumns>
@@ -13,35 +13,35 @@
 </template>
 
 <script>
+
+import { inject } from 'vue'
+import  mainBoardObject from '../composables/mainBoardObject'
 import setIndex from './set-index.vue'
 import setColumns from './set-columns.vue'
 
 export default {
+
   name: "mainBoard",
+
   components: {
     setIndex,
     setColumns,
   },
 
-  inject: {
-    board_flg:['board_flg'],
-    board_text:['board_text'],
-  },
+  setup(props,context){
 
-  methods:{
-    compute_i(n){
-      return Math.floor((n-1)/9)
-    },
+    //リアクティブな変数群とメソッド群
+    const board_text = inject('board_text')
+    const board_flg  = inject('board_flg')
+    const { main_board_methods } = mainBoardObject(board_text, board_flg)
 
-    compute_j(n){
-      return (n-1)%9
-    },
-    setStyle(n){
-      if(this.board_flg.value[this.compute_i(n)][this.compute_j(n)]==2){
-        return "transform: scale(-1,-1);"
-      }
-    }
-  },
+    //このコンポーネントで使うメソッド
+    const compute_i = main_board_methods['compute_i']
+    const compute_j = main_board_methods['compute_j']
+    const setStyle = main_board_methods['setStyle']
+
+    return { board_text, compute_i, compute_j, setStyle }
+  }
 }
 </script>
 <style lang="scss" scoped>

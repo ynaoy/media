@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'kifus/new'
-  get 'kifus/create'
-  get 'kifus/show'
-  get 'kifus/delete'
+  get 'histories/index'
   get 'sessions/new'
   root 'application#home'
   get  '/signup',  to: 'users#new'
@@ -11,7 +8,15 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
+  get '/login_check', to: 'sessions#login_check'
   get '/search', to: 'searchs#search'
-  resources :users
+  post '/favorites', to:'favorites#create'
+  delete '/favorites', to:'favorites#destroy'
+  resources :users do
+    member do
+      get :history
+      get :favorite #users_controller内のメソッド
+    end
+  end
   resources :kifus, only: %i[new create show index destroy]
 end

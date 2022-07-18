@@ -72,4 +72,12 @@ RSpec.describe User, type: :model do
     @user.password = @user.password_confirmation = "a" * 7
     expect(@user).not_to be_valid
   end
+
+  it "is_favorite_kifu? should work" do
+    @user.save
+    @user.favorites.create!(kifu_id:1)
+
+    expect(@user.is_favorite_kifu?(kufu_id = 1)).to eq true
+    expect(@user.is_favorite_kifu?(kifu_id = 2)).to eq false
+  end
 end

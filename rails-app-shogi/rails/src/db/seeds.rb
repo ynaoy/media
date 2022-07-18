@@ -85,5 +85,25 @@ user = User.find_by(name:"admin_user")
   kifu.save
 end
 
+#タグ
+10.times do |n|
+  history = user.histories.create!(kifu_id: 1)
+end
+10.times do |n|
+  history = user.histories.create!(kifu_id: 1)
+  history.created_at -= 86400 #1日は86400秒
+  history.save
+end
+10.times do |n|
+  history = user.histories.create!(kifu_id: 1)
+  history.created_at -= (86400*2)
+  history.save
+end
+
+#お気に入り(favoriteモデル)
+10.times do |n|
+  favorite = user.favorites.create!(kifu_id: n)
+  favorite.save
+end
 
 

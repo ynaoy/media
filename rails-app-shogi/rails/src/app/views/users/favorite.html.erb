@@ -1,0 +1,6 @@
+<h1> お気に入り </h1>
+<% if @favorite_kifus.any? %>
+  <%= paginate @favorite_kifus %>
+  <%= render "shared/kifus_item", kifus: @favorite_kifus %>
+  <%= paginate @favorite_kifus %>
+<% end %>

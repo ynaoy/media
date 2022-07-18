@@ -5,18 +5,7 @@ RSpec.describe "UsersIndeces", type: :system do
   before do
 
     @admin_user = FactoryBot.create(:user)
-    @users = []
-    60.times do |i|
-      @users.push(FactoryBot.create(:user,
-                                    name: Faker::Name.name.slice(0..9),
-                                    email: Faker::Internet.email,
-                                    password: "password",
-                                    password_confirmation: "password",
-                                    admin: false,
-                                  )
-      )
-    end
-    @users.reverse!
+    @users = make_users()
 
   end
 
@@ -51,7 +40,6 @@ RSpec.describe "UsersIndeces", type: :system do
 
     it "display normaly " do
 
-      #まずはログインする
       log_in_e2e(@admin_user) 
       expect(page).to have_no_link(href:login_path)
       expect(page).to have_link(href:logout_path)
@@ -68,33 +56,33 @@ RSpec.describe "UsersIndeces", type: :system do
 
     it "work paginate " do
 
-      #まずはログインする
       log_in_e2e(@admin_user) 
       expect(page).to have_no_link(href:login_path)
       expect(page).to have_link(href:logout_path)
 
       #users/indexに遷移する
       visit users_path
-      expect(page).to have_selector(".pagination")
-      for i in 0..19 do
-        expect(page).to have_content(@users[i].name)
-        expect(page).to have_content("delete")
-      end
-      #次のページへ遷移する
-      click_on "次", match: :first
-      for i in 20..39 do
-        expect(page).to have_content(@users[i].name)
-        expect(page).to have_content("delete")
-      end
+      
+      work_paginate(users:@users)
 
     end
 
+    it "work jump page", js: true do
 
-    # <<< Todo 正しくユーザーページへ遷移するか　>>>
+      log_in_e2e(@admin_user)
+      #users/indexに遷移する
+      visit users_path
+
+      #users/showに遷移する
+      first("#user_name").click
+      sleep 10
+      expect(page).to have_content(@users[0].name)
+      expect(page).to have_content("0件の棋譜")
+      expect(page).to have_content("このユーザーには棋譜がありません。")
+    end
 
     it "work delete button ", js: true do 
 
-      #まずはログインする
       log_in_e2e(@admin_user) 
       expect(page).to have_no_link(href:login_path)
       #expect(page).to have_link(href:logout_path)
