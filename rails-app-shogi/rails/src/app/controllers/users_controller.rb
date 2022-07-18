@@ -113,7 +113,17 @@ class UsersController < ApplicationController
 
   def favorite
     @user = User.find(params[:id])
-    @favorite_kifus = Favorite.favorite_kifus(@user.id).page(params[:page]).per(20) if @user
+    if @user
+      @favorite_kifus = Favorite.favorite_kifus(@user.id)
+      respond_to do |format|
+        format.html { @favorite_kifus = @favorite_kifus.page(params[:page]).per(20)
+                      render "favorite"}
+        format.json { render json:
+                      @favorite_kifus.to_json(
+                        only: %i[ id user_id title player1 player2 win created_at ] )
+                    }    
+      end  
+    end
   end
 
   private
