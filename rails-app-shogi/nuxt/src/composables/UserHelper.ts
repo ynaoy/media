@@ -116,7 +116,7 @@ export const UserHelper = () => {
       return { "user_data": ret }
     }
 
-    // ユーザーのお気に入りの棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
+    // ユーザーの閲覧履歴の棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
     const get_users_history = async (params:{ id:number },headers:{} ) =>{
 
       let ret = {}
@@ -137,10 +137,32 @@ export const UserHelper = () => {
       return { "hist_data": ret }
     }
 
+    // ユーザーのお気に入りの棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
+    const get_users_favorite = async (params:{ id:number },headers:{} ) =>{
+
+      let ret = {}
+      params['format'] = 'json'
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params.id}/favorite`,
+        { method:'GET',
+          params: params,
+          headers: headers,
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          ret = data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return { "favorite_kifus": ret }
+    }
+
   return {  create_user: create_user,
             update_user: update_user,
             delete_user: delete_user,
             get_all_user: get_all_user,
             get_user: get_user,
-            get_users_history: get_users_history }
+            get_users_history: get_users_history,
+            get_users_favorite: get_users_favorite }
 }

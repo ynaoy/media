@@ -1,16 +1,18 @@
 <template>
-  <paginate
-    v-model= "currentPage"
-    :page-count= "getPageCount"
-    :page-range= "3"
-    :margin-pages= "2"
-    :click-handler= "clickCallback"
-    :hide-prev-next= "true"
-    prev-text= "前へ"
-    next-text= "次へ"
-    container-class= "pagination"
-    page-class= "page-item"
-  />
+  <div v-if = "items.length > parPage">
+    <paginate
+      v-model= "currentPage"
+      :page-count= "getPageCount"
+      :page-range= "3"
+      :margin-pages= "2"
+      :click-handler= "clickCallback"
+      :hide-prev-next= "true"
+      prev-text= "前へ"
+      next-text= "次へ"
+      container-class= "pagination"
+      page-class= "page-item"
+    />
+  </div>
 
 </template>
 
