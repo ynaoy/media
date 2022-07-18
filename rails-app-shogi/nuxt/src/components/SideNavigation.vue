@@ -4,7 +4,7 @@
       マイページ
     </nuxt-link>
 
-    <nuxt-link v-if="loginFlg" to="/" :class="class_name">
+    <nuxt-link v-if="loginFlg" :to = "`/users/${user_id}/favorite`" :class="class_name">
       お気に入り
     </nuxt-link>
     
