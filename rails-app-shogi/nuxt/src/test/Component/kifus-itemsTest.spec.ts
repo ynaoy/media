@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
-import KifusItems from "../../components/kifus/Kifus-items.vue"
+import KifusItems from "../../components/kifus/kifus-items.vue"
 
 describe("Kifus-items test", async() => {
 
