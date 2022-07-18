@@ -12,7 +12,7 @@
       棋譜を追加
     </nuxt-link>
     
-    <nuxt-link v-if="loginFlg" to="/" :class="class_name">
+    <nuxt-link v-if="loginFlg" :to = "`/users/${user_id}/history`" :class="class_name">
       閲覧履歴
     </nuxt-link>
 
