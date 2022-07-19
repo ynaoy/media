@@ -2,9 +2,10 @@ class SearchsController < ApplicationController
 
   def search
     @users = User.search_user("name",search_params[:query])
-    @kifus = Kifu.search_kifu_and_tag("CONCAT(player1 ,player2)",search_params[:query]).order(id: "desc").page(params[:page]).per(20)
+    @kifus = Kifu.search_kifu_and_tag("CONCAT(player1 ,player2)",search_params[:query]).order(id: "desc")
     respond_to do |format|
-      format.html { render "search"}
+      format.html { @kifus = @kifus.page(params[:page]).per(20)
+                    render "search"}
       format.json { render json: {  
                       users: @users.to_json(only: %i[ id name ]),
                       kifus: @kifus.to_json(only: %i[ id user_id title player1 player2 win created_at ]) }

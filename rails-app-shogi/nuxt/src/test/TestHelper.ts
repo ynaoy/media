@@ -99,7 +99,7 @@ export const TestHelper = (wrapper) =>{
   }
 
   //APIからもらう適当な棋譜の集まりのデータを返す
-  const kifus_data = (num=60)=>{
+  const kifus_data = (num=60,)=>{
     let kifus = []
     for (let i=0; i<num; i++){
       kifus.push({
@@ -150,6 +150,14 @@ export const TestHelper = (wrapper) =>{
               kifus: JSON.stringify(kifus)}
   }
 
+  //APIからもらう適当なユーザーと棋譜の集まりを返す
+  const users_and_kifus = ( user_num = 60, kifu_num = 60,user_name = "" )=>{
+    let users = users_data( user_num )
+    let kifus = kifus_data( kifu_num )
+    return {  users: JSON.stringify(users),
+              kifus: JSON.stringify(kifus) }
+  }
+
   // 日本時間で現在時刻を貰う
   const set_date = ()=>{
     let date = new Date()
@@ -165,6 +173,7 @@ export const TestHelper = (wrapper) =>{
             kifus_data: kifus_data,
             users_data: users_data,
             user_and_kifus: user_and_kifus,
+            users_and_kifus: users_and_kifus,
             hist_data: hist_data,
             set_date: set_date,
             timewithzone_to_str: timewithzone_to_str}
