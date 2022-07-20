@@ -1,4 +1,4 @@
-import { describe, it, expect,vi } from 'vitest'
+import { describe, it, expect,vi, afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
 import NavBar from "../../components/NavBar.vue"
 
@@ -14,6 +14,11 @@ describe("NavBar test", async() => {
                                   loginFlg:false,
                                   user_name:"TestUser",  })
   const { check_text, check_form } = TestHelper(wrapper)
+
+  afterAll(()=>{
+    // モックを初期化
+    vi.clearAllMocks
+  })
 
   it("ログインしてない時にテキストが正しく表示されているかチェック", async() => {
     check_text(['将棋のお時間','ログイン','新規登録'])
@@ -33,7 +38,7 @@ describe("NavBar test", async() => {
   })
   it("ログイン時にドロップダウンが正しく動作しているか",async()=>{
     //----------------------------------------------------------------------
-    //bootstrap-vue-3はクライアント上でしか動作しないため、ユニットテストができない
+    //bootstrap-vue-3はクライアント上でしか動作しないため、テストができない
     //解決法思いついたらテスト追加する
     //----------------------------------------------------------------------
 
@@ -45,5 +50,19 @@ describe("NavBar test", async() => {
     //expect(wrapper.find(".dropdown-toggle").aria-expanded).toBeFalsy()
     //wrapper.find(".dropdown-toggle").trigger('click')
     //expect(wrapper.find(".dropdown-toggle").aria-expanded).toBeTruthy()
+  })
+
+  it("検索フォームが正しく機能しているかチェック", async() => {
+    // 検索ボタンクリック後こいつが呼ばれたら成功
+    const spy_submit = await vi.spyOn(wrapper.vm, "submit")
+    await wrapper.vm.$forceUpdate()
+
+    // 値をセットして、検索ボタンをクリック
+    wrapper.find("input[type='text']").setValue("TestUser")
+    wrapper.find("input[type='submit']").trigger("click")
+
+    // 内部の値が変化しているかと、画面遷移するためのメソッドが呼ばれているかチェック
+    expect(wrapper.vm.search_form.text).toBe("TestUser")
+    expect(spy_submit).toHaveBeenCalled()
   })
 })

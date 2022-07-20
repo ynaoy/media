@@ -29,6 +29,10 @@ export const SearchHelper = () => {
       return { "search_data": ret }
     }
 
+    // クエリ付きでsearchページに飛ばす。他にもっといいやり方ありそう
+    const move_search =(query)=>{
+      location.href = `${location.origin}/search?search=${query}`
+    }
 
-  return {  search_user_and_kifu: search_user_and_kifu, }
+  return {  search_user_and_kifu: search_user_and_kifu, move_search: move_search }
 }

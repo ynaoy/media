@@ -32,8 +32,11 @@
 
 <script setup>
   import { SessionHelper } from '../composables/SessionHelper'
+  import { SearchHelper } from '../composables/SearchHelper'
 
+  // このコンポーネントで使うメソッドをヘルパーからもらう
   const { logout } = SessionHelper()
+  const { move_search } = SearchHelper()
 
   //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意
   const csrf_token = inject('csrf_token')
@@ -43,7 +46,7 @@
   //フォームで使うやつら
   const search_form = { text: ""}
 
-  //日本語の変換確定してないときに正しく入力されない問題をクリアする
+  // フォームで日本語の変換確定してないときに正しく入力されない問題をクリアする
   const  bindKeyword = function({ target }){
     search_form.text =  target.value;
   }
@@ -53,9 +56,11 @@
   }
 
   const submit = async function(){
-    //<<Bug inputに日本語と英字両方が混ざっていると
-    //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
+    // <<Bug inputに日本語と英字両方が混ざっていると
+    // Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
     console.log(search_form.text)
+    // searchページに飛ばす
+    move_search(search_form.text)
   }
 
   defineExpose( user_name,
@@ -63,6 +68,7 @@
                 search_form,
                 bindKeyword,
                 session_logout,
+                move_search,
                 submit );
 </script>
 
