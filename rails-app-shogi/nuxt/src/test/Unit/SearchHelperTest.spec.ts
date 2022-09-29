@@ -3,12 +3,13 @@ import { SearchHelper } from "../../composables/SearchHelper";
 
 describe("SearchHelper test", async() => {
 
-  // $fetchメソッドをモックする。login、logoutメソッド内でこれが呼ばれたら成功
+  // $fetchメソッドをモックする。search_user_and_kifuメソッド内でこれが呼ばれたら成功
   const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
   vi.stubGlobal("$fetch", spy_fetch)
-
+  //  "is not defined" エラー回避のためuseRouterメソッドをモックする。
+  vi.stubGlobal("useRouter", vi.fn().mockReturnValue({ push: vi.fn() }))
    //このテストでチェックするやつら
-  const {  search_user_and_kifu } =  SearchHelper()
+  const { search_user_and_kifu } =  SearchHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()

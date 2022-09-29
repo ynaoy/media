@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1> {{ query }}</h1>
     <div v-if="check_is_empty(users)">
       <h1> ユーザー </h1>
       <UserItems :users="users"/>
@@ -27,11 +28,7 @@
   const admin = inject('admin')
   const user_id = inject('user_id')
   const csrf_token = inject('csrf_token')
-  const { search_data, query } = defineProps(['search_data', 'query'])
-
-  // このコンポーネントで使う変数たち
-  const users = JSON.parse(search_data.users)
-  const kifus = JSON.parse(search_data.kifus)
+  let { users, kifus, query} = defineProps(['users', 'kifus', 'query'])
 
   // 子コンポーネントに渡す奴ら。
   provide('user_id',user_id)

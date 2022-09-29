@@ -7,8 +7,9 @@ describe("SearchItems test", async() => {
   // テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const {users_and_kifus } = TestHelper("")
+  let { users, kifus } =  users_and_kifus()
   const wrapper = Mount( Search,  { loginFlg: true, admin:false, user_id: 1, csrf_token:"this is csrf_token" },
-                                  { search_data: users_and_kifus(), query: "TestUser"}) 
+                                  { users: JSON.parse(users), kifus: JSON.parse(kifus), query: "TestUser"}) 
 
   afterAll(()=>{
     vi.clearAllMocks
@@ -25,9 +26,10 @@ describe("SearchItems test", async() => {
   })
 
   it("ユーザーが空の時にテキストと子コーポネントが正しく表示されているかチェック", () => {
+    let { users, kifus } =  users_and_kifus(0,60)
     const wrapper_no_user = Mount( Search,
                                   { loginFlg: true, admin:false, user_id: 1, csrf_token:"this is csrf_token" },
-                                  { search_data: users_and_kifus(0, 60), query: "TestUser"}) 
+                                  { users: JSON.parse(users), kifus: JSON.parse(kifus), query: "TestUser"}) 
 
     expect(wrapper_no_user.text()).not.toContain("ユーザー")
     expect(wrapper_no_user.html()).not.toContain("<user-items")
@@ -37,9 +39,10 @@ describe("SearchItems test", async() => {
   })
 
   it("棋譜が空の時にテキストと子コーポネントが正しく表示されているかチェック", () => {
+    let { users, kifus } =  users_and_kifus(60,0)
     const wrapper_no_kifu = Mount( Search,
                                   { loginFlg: true, admin:false, user_id: 1, csrf_token:"this is csrf_token" },
-                                  { search_data: users_and_kifus(60, 0), query: "TestUser"}) 
+                                  { users: JSON.parse(users), kifus: JSON.parse(kifus), query: "TestUser"}) 
 
     expect(wrapper_no_kifu.text()).toContain("ユーザー")
     expect(wrapper_no_kifu.html()).toContain("<user-items")
@@ -49,9 +52,10 @@ describe("SearchItems test", async() => {
   })
 
   it("ユーザーも棋譜が空の時にテキストと子コーポネントが正しく表示されているかチェック", () => {
+    let { users, kifus } =  users_and_kifus(0,0)
     const wrapper_no_all = Mount( Search,
                                   { loginFlg: true, admin:false, user_id: 1, csrf_token:"this is csrf_token" },
-                                  { search_data: users_and_kifus(0, 0), query: "TestUser"})
+                                  { users: JSON.parse(users), kifus: JSON.parse(kifus), query: "TestUser"})
                                   
     expect(wrapper_no_all.text()).not.toContain("ユーザー")
     expect(wrapper_no_all.html()).not.toContain("<user-items")

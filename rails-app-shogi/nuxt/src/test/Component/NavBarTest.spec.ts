@@ -4,9 +4,11 @@ import NavBar from "../../components/NavBar.vue"
 
 describe("NavBar test", async() => {
 
-  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  // $fetchメソッドをモックする
   const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
   vi.stubGlobal("$fetch", spy_fetch)
+  //  "is not defined" エラー回避のためuseRouterメソッドをモックする。
+  vi.stubGlobal("useRouter", vi.fn().mockReturnValue({ push: vi.fn() }))
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
