@@ -4,16 +4,13 @@ import UserIndex from "../../components/UserIndex.vue"
 
 describe("UserIndex test", async() => {
 
-  // nuxt独自のメソッドnavigateToをモックする。force_login(false)メソッド内でこれが呼ばれたら成功
-  const spy_navigate = vi.fn()
-  vi.stubGlobal("navigateTo", spy_navigate)
-
   // テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
-  const { users_data } = TestHelper("")
+  const { users_data,mock_func } = TestHelper()
   const wrapper = Mount( UserIndex, { loginFlg: true, admin: true, csrf_token:"this is csrf_token" },
                                     { users: users_data()}) 
-
+  // navigateToメソッドをモックする
+  const spy_navigate = mock_func("navigateTo")
   afterAll(()=>{
     vi.clearAllMocks
   })

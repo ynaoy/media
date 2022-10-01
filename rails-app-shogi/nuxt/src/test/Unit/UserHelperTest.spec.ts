@@ -1,11 +1,13 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
+import { TestHelper } from "../TestHelper"
 import { UserHelper } from "../../composables/UserHelper";
 
 describe("UserHelper test", async() => {
-
-  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
+  
+  //テストヘルパーの呼び出し
+  const { mock_func } = TestHelper()
+  // $fetchメソッドをモックする
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
     
   //このテストでチェックするやつら
   const { create_user, update_user, get_all_user, delete_user,

@@ -4,15 +4,10 @@ import { requestObject } from "../../composables/kifus/requestObject"
 
 describe("requestObject test", () => {
 
+  //テストヘルパーの呼び出し
+  const { mock_func } = TestHelper()
   // $fetchメソッドをモックする。テストメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
-
-  //UrlHelperのFetchResponsメソッドをモックする。テストメソッド内でこれが呼ばれたら成功
-  //const FetchResponse_spy = vi.fn().mockReturnValue( Promise.resolve( { sucscess: "success" } ))
-  //vi.stubGlobal("UrlHelper",vi.fn().mockReturnValue( 
-  //  { FetchResponse: FetchResponse_spy }
-  //))
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
 
   //メソッドに渡す変数群
   const { kifu_data } = TestHelper("")

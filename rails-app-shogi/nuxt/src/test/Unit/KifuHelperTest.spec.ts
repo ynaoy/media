@@ -1,11 +1,13 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
+import { TestHelper } from "../TestHelper"
 import { KifuHelper } from "../../composables/KifuHelper"
 
 describe("KifuHelper test", async() => {
   
+  //テストヘルパーの呼び出し
+  const { mock_func } = TestHelper()
   // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
 
   //このテストでチェックするやつら
   const { get_kifu, create_kifu, delete_kifu, get_users_kifu } = KifuHelper()

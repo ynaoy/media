@@ -4,10 +4,6 @@ import UserUrl from "../../components/users/user-url.vue"
 
 describe("User-url test", async() => {
 
-  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
-
   // テストヘルパーの呼び出し
   const { Mount } = MountHelper()
   const { users_data } = TestHelper("")
@@ -18,6 +14,11 @@ describe("User-url test", async() => {
                                     admin: true, 
                                     csrf_token:"this is csrf_token" },
                                     { user: user }) 
+  
+  //テストヘルパーの呼び出し
+  const { mock_func } = TestHelper()
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
 
   it("ログイン時にテキストが正しく表示されているかチェック", () => {
     expect(wrapper.text()).toContain(user.name)

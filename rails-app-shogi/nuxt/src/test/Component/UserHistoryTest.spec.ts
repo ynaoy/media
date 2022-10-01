@@ -3,15 +3,14 @@ import { MountHelper,TestHelper } from "../TestHelper"
 import UserHistory from "../../components/UserHistory.vue"
 
 describe("UserHistory test", async() => {
-
-  // nuxt独自のメソッドnavigateToをモックする。force_login(false)メソッド内でこれが呼ばれたら成功
-  const spy_navigate = vi.fn()
-  vi.stubGlobal("navigateTo", spy_navigate)
   
   // テストヘルパーの呼び出しとコンポーネントのマウント
+  const { mock_func } = TestHelper()
   const { Mount } = MountHelper()
   const wrapper = Mount( UserHistory, { loginFlg: true, user_id: 1, csrf_token:"this is csrf_token" },
                                       { hist_data:"" }) 
+  // navigateToメソッドをモックする
+  const spy_navigate = mock_func("navigateTo")
 
   afterAll(()=>{
     vi.clearAllMocks

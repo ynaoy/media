@@ -5,7 +5,7 @@ import { kifuObject }  from "../../composables/kifus/kifuObject"
 describe("kifuObject test", () => {
 
   //メソッドに渡す変数群
-  const { kifu_data } = TestHelper("")
+  const { kifu_data } = TestHelper()
 
   //このテストでチェックするやつら
   const { kifu_states, kifu_methods } = kifuObject(kifu_data())

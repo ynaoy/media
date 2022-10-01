@@ -4,13 +4,9 @@ import KifuUrl from "../../components/kifus/kifu-url.vue"
 
 describe("kifu-url test", async() => {
 
-  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
-
   // テストヘルパーの呼び出し
   const { Mount } = MountHelper()
-  const { kifus_data, set_date } = TestHelper("")
+  const { kifus_data, set_date,mock_func } = TestHelper()
 
   // コンポーネントのマウント
   const kifus = kifus_data(2)
@@ -18,6 +14,9 @@ describe("kifu-url test", async() => {
                                     { kifu: kifus[0]}) 
   const wrapper_with_not_delete = Mount( KifuUrl, { user_id: 1 },
                                     { kifu: kifus[1]})
+  
+  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
   
   afterAll(()=>{
     vi.clearAllMocks

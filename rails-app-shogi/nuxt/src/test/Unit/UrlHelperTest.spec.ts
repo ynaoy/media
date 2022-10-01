@@ -1,9 +1,14 @@
 import { describe, it, expect,vi, afterAll} from 'vitest'
+import { TestHelper } from "../TestHelper"
 import { UrlHelper } from "../../composables/UrlHelper";
 
 describe("UrlHelper test", async() => {
 
-  vi.stubGlobal("$fetch",vi.fn().mockReturnValue( { data:"data" }))
+  //テストヘルパーの呼び出し
+  const { mock_func } = TestHelper()
+  // $fetchメソッドをモックする
+  const spy_fetch = mock_func("$fetch",{ data:"data" })
+
   //このテストでチェックするやつ
   const { FetchResponse } = UrlHelper()
   

@@ -6,7 +6,7 @@ describe("SearchItems test", async() => {
 
   // テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
-  const {users_and_kifus } = TestHelper("")
+  const {users_and_kifus } = TestHelper()
   let { users, kifus } =  users_and_kifus()
   const wrapper = Mount( Search,  { loginFlg: true, admin:false, user_id: 1, csrf_token:"this is csrf_token" },
                                   { users: JSON.parse(users), kifus: JSON.parse(kifus), query: "TestUser"}) 

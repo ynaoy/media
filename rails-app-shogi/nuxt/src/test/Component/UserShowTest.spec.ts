@@ -4,15 +4,14 @@ import UserShow from "../../components/UserShow.vue"
 
 describe("UserShow test", async() => {
 
-  // nuxt独自のメソッドnavigateToをモックする。force_login(false)メソッド内でこれが呼ばれたら成功
-  const spy_navigate = vi.fn()
-  vi.stubGlobal("navigateTo", spy_navigate)
-
   // テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
-  const { user_and_kifus } = TestHelper("")
+  const { user_and_kifus,mock_func } = TestHelper()
   const wrapper = Mount( UserShow,  { user_id: 1, csrf_token:"this is csrf_token" },
                                     { user_data:  user_and_kifus(1,"TestUser",60)}) 
+
+  // navigateToメソッドをモックする
+  const spy_navigate = mock_func("navigateTo")
 
   afterAll(()=>{
     vi.clearAllMocks

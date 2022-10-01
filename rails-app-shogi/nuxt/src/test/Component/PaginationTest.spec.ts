@@ -5,7 +5,7 @@ import Pagination from "../../components/Pagination.vue"
 describe("ProfileForm test", async() => {
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
-  const { kifus_data } = TestHelper("")
+  const { kifus_data } = TestHelper()
   const { Mount } = MountHelper()
   const wrapper = Mount(Pagination, {}, { items: kifus_data(61), 
                                           parPage:20,

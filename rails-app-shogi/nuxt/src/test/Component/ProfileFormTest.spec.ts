@@ -4,15 +4,15 @@ import ProfileForm from "../../components/ProfileForm.vue"
 
 describe("ProfileForm test", async() => {
 
-  // $fetchメソッドをモックする。APIと通信するメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const wrapper = Mount(ProfileForm,{ csrf_token:"this is csrf_token",
                                       user_id:1,
                                       user_name:"TestUser",  })
-  const { check_text, check_form, set_form } = TestHelper(wrapper)
+  const { check_text, check_form, set_form, mock_func } = TestHelper(wrapper)
+
+  // $fetchメソッドをモックする
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
 
   afterAll(()=>{
     vi.clearAllMocks
