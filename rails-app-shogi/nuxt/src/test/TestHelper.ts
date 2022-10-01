@@ -1,4 +1,4 @@
-import { expect } from 'vitest'
+import { expect,vi } from 'vitest'
 import { mount,shallowMount } from "@vue/test-utils"
 import { AppHelper } from '../composables/AppHelper'
 export const MountHelper = () =>{
@@ -15,7 +15,7 @@ export const MountHelper = () =>{
   return {  Mount: Mount }
 }
 
-export const TestHelper = (wrapper) =>{
+export const TestHelper = (wrapper="") =>{
   // 使うメソッドをヘルパーからもらう
   const { timewithzone_to_str } = AppHelper()
 
@@ -166,6 +166,25 @@ export const TestHelper = (wrapper) =>{
     return date
   }
 
+  // 関数をモックして呼び出されたか確認用のスパイを返す
+  const mock_func = ( name, res={}, isresolve=false ) =>{
+    let spy = vi.fn()
+
+    // resの要素数が0でないならモックした関数呼び出し時にresを返す
+    if(Object.keys(res).length != 0){
+
+      if(isresolve){
+        spy = spy.mockResolvedValue(res)
+      }
+      else{
+        spy = spy.mockReturnValue(res)
+      }
+    }
+
+    vi.stubGlobal(name,spy)
+    return spy
+  }
+
   return {  check_text: check_text, 
             check_form: check_form, 
             set_form: set_form,
@@ -176,6 +195,7 @@ export const TestHelper = (wrapper) =>{
             users_and_kifus: users_and_kifus,
             hist_data: hist_data,
             set_date: set_date,
-            timewithzone_to_str: timewithzone_to_str}
+            timewithzone_to_str: timewithzone_to_str,
+            mock_func: mock_func}
 
 }

@@ -4,18 +4,17 @@ import NavBar from "../../components/NavBar.vue"
 
 describe("NavBar test", async() => {
 
-  // $fetchメソッドをモックする
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
-  //  "is not defined" エラー回避のためuseRouterメソッドをモックする。
-  vi.stubGlobal("useRouter", vi.fn().mockReturnValue({ push: vi.fn() }))
-
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
   const wrapper = Mount(NavBar,{  csrf_token:"this is csrf_token",
                                   loginFlg:false,
                                   user_name:"TestUser",  })
-  const { check_text, check_form } = TestHelper(wrapper)
+  const { check_text, check_form, mock_func } = TestHelper(wrapper)
+
+  // $fetchメソッドをモックする
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
+  //  "is not defined" エラー回避のためuseRouterメソッドをモックする。
+  mock_func("useRouter",{ push: vi.fn() })
 
   afterAll(()=>{
     // モックを初期化

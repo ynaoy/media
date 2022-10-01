@@ -1,14 +1,17 @@
 import { describe, it, expect,vi, afterAll,afterEach} from 'vitest'
+import { TestHelper } from "../TestHelper"
 import { SearchHelper } from "../../composables/SearchHelper";
 
 describe("SearchHelper test", async() => {
+  const { mock_func } = TestHelper()
 
   // $fetchメソッドをモックする。search_user_and_kifuメソッド内でこれが呼ばれたら成功
-  const spy_fetch = vi.fn().mockResolvedValue( { data:"data" })
-  vi.stubGlobal("$fetch", spy_fetch)
+  const spy_fetch = mock_func("$fetch",{ data:"data" },true)
+  
   //  "is not defined" エラー回避のためuseRouterメソッドをモックする。
-  vi.stubGlobal("useRouter", vi.fn().mockReturnValue({ push: vi.fn() }))
-   //このテストでチェックするやつら
+  mock_func("useRouter",{ push: vi.fn() })
+  
+  //このテストでチェックするやつら
   const { search_user_and_kifu } =  SearchHelper()
 
   afterAll(()=>{
