@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM ruby:2.7.6
 
 ENV RAILS_ENV=production
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \

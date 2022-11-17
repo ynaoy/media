@@ -25,6 +25,7 @@ services:
       - JWT_SECRET_KEY=my_secret_key
     depends_on:
       - db
+      - sub_api1
 
   app:
     build: ./nuxt
@@ -40,3 +41,12 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
       - VITE_API_ORIGIN=http://localhost:3000
+
+  sub_api1:
+    build: ./sub_api1
+    command: ruby ./parent.rb
+    ports:
+      - "20000:20000"
+    environment:
+      - CHILD_PROCESS_NAME=Shogi-Soft-by-clang
+
