@@ -33,6 +33,9 @@ class KifusController < ApplicationController
           format.json { render json: { errors: "tag error"}, status:500 }
         end
       end
+      
+      # Jobを実行してバックグラウンドで別APIと通信する
+      # SocketSubApi1Job.perform_later(kifus_params)
 
     #棋譜がエラーだった場合
     else
