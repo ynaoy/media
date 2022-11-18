@@ -16,7 +16,7 @@
           <label for="kifu_player2">後手</label>
           <input class="form-control" maxlength="10" size="10" type="text" name="kifu[player2]" id="kifu_player2"
             v-model="kifu_form.player2"/>
-          
+
           <div class="form_kifu">
             <label for="kifu_content">棋譜</label>
             <p>※必須</p>
@@ -33,6 +33,14 @@
                 {{ value }}
               </label>
             </div>
+          </div>
+
+          <div class="kento_form form-check">
+            <input class="form-check-input" type="checkbox" id="kento_checkbox"
+              v-model="kifu_form.kento">
+            <label class="form-check-label" for="kento_checkbox">
+              この棋譜を自動検討する（数分から数時間かかることがあります）
+            </label>
           </div>
 
           <input type="submit" name="commit" value="作成" class="btn btn-primary" data-disable-with="作成"
@@ -61,7 +69,7 @@
   force_login(loginFlg)
   
   // フォームをバインドする奴ら
-  const kifu_form = { title: "", player1:"", player2:"", content:"",
+  const kifu_form = { title: "", player1:"", player2:"", kento: false, content:"",
                       tag: reactive({ tag_ids:[] })} //tagはリアクティブじゃないと動作しなかった 
 
   const submit = async function(){

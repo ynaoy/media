@@ -25,7 +25,7 @@ describe("KifuHelper test", async() => {
   })
 
   it("create_kifuメソッドが正しく動作するかチェック", async() => {
-    await create_kifu({ kifu:{  title:"",player1:"",player2:"",content:"",
+    await create_kifu({ kifu:{  title:"",player1:"",player2:"",kento:false,content:"",
                                 tag:{ tag_ids:[] }}}, {})
     expect(spy_fetch).toHaveBeenCalled()
   })

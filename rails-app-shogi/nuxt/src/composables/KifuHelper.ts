@@ -28,7 +28,7 @@ export const KifuHelper = () => {
 
   //サーバーサイドkifusコントローラーにparams付きでPostリクエストを送る。
   //レスポンスには{ success: String, kifu_id: Number }が入ってる
-  const create_kifu = async ( params:{ kifu:{ title:"",player1:"",player2:"",content:"",
+  const create_kifu = async ( params:{ kifu:{ title:"",player1:"",player2:"",kento:false,content:"",
                                               tag:{ tag_ids:[] } }},
                               headers:{} ) =>{
     params['format'] = 'json'

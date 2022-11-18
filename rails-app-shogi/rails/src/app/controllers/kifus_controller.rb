@@ -12,7 +12,7 @@ class KifusController < ApplicationController
       return if(!check_csrf_token)
       params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
     end
-
+    p params[:kifu][:kento]
     params[:kifu] = fetch_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
 

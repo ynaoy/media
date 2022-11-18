@@ -31,13 +31,19 @@ describe("KifuForm test", async() => {
     const spy = await vi.spyOn(wrapper.vm,"submit")
     await wrapper.vm.$forceUpdate()
 
-    //チェックボックスをチェックして、かつ値が変わっているか確認
+    //タグのチェックボックスをチェックして、かつ値が変わっているか確認
     for (let key in forms_check){ 
       await wrapper.find(forms_check[key]).setChecked()
       expect(wrapper.find(forms_check[key]).element.checked).toBeTruthy()
     }
     //フォームに値を入力
     await set_form(forms, values)
+
+    //自動検討のチェックボックスをチェックして、かつ値が変わっているか確認
+    console.log(wrapper.find("#kifu_title"))
+    console.log(wrapper.find("#kento_checkbox"))
+    await wrapper.find("#kento_checkbox").setChecked()
+    expect(wrapper.find("#kento_checkbox").element.checked).toBeTruthy()
 
     //submitをクリックして値を更新
     wrapper.find("input[type='submit']").trigger('click')
@@ -49,6 +55,7 @@ describe("KifuForm test", async() => {
     expect(wrapper.vm.kifu_form.player2).toBe(values[2])
     expect(wrapper.vm.kifu_form.content).toBe(values[3])
     expect(wrapper.vm.kifu_form.tag.tag_ids).toStrictEqual([1,2])
+    expect(wrapper.vm.kifu_form.kento).toBeTruthy()
 
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
