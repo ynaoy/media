@@ -68,7 +68,6 @@ def extract_data(str,n)
   return { pv:pv, cp:cp }
 end
 
-
 def extract_kifu(str)
   # ---棋譜から指し手の情報を取り出す---
   reg = /[[１-９]|同][[^[)|打]]]*[)|打]/  #1～9か同から始まって、[)と打]を含まない文字が続き、[)と打]
@@ -132,7 +131,7 @@ def convert_kifu_to_usi(kifus)
 end
 
 # ---子プロセスの開始---
-spawn(`./#{ENV['CHILD_PROCESS_NAME']}`, :in => parent_r, :out => child_w)
+spawn("./" + ENV['CHILD_PROCESS_NAME'], :in => parent_r, :out => child_w)
 
 # ---子プロセスに入力を渡す & 初期化処理---
 parent_w.puts "usi"

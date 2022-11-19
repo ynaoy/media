@@ -12,7 +12,7 @@ class KifusController < ApplicationController
       return if(!check_csrf_token)
       params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
     end
-    p params[:kifu][:kento]
+    
     params[:kifu] = fetch_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
 
@@ -35,7 +35,7 @@ class KifusController < ApplicationController
       end
       
       # Jobを実行してバックグラウンドで別APIと通信する
-      # SocketSubApi1Job.perform_later(kifus_params)
+      SocketSubApi1Job.perform_later(kifus_params) if params[:kifu][:kento]
 
     #棋譜がエラーだった場合
     else
