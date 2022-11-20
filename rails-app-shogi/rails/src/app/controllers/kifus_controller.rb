@@ -14,8 +14,10 @@ class KifusController < ApplicationController
     end
     
     params[:kifu] = fetch_data_from_content(params[:kifu])
+ 
+    # ※params[:kifus][:content]の文字数が長いとエラーが出る。そのうち直す
+    # エラー内容: <Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 11189)>
     @kifu = current_user.kifus.build(kifus_params)
-
     if @kifu.save
 
       @tag = @kifu.save_kifu_tag(tags_params[:tag][:tag_ids])
@@ -35,7 +37,7 @@ class KifusController < ApplicationController
       end
       
       # Jobを実行してバックグラウンドで別APIと通信する
-      SocketSubApi1Job.perform_later(kifus_params) if params[:kifu][:kento]
+      SocketSubApi1Job.perform_later(@kifu) if params[:kifu][:kento]
 
     #棋譜がエラーだった場合
     else
