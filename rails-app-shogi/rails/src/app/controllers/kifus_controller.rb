@@ -63,7 +63,8 @@ class KifusController < ApplicationController
 
     response_json = { kifu_text: @kifu_text, kifu_flg: @kifu_flg,
                       favorite_flg: @favorite_flg, kifu_id: @kifu.id,
-                      player1: @kifu.player1, player2: @kifu.player2, tags: @tags.to_json(only:[:name]) }
+                      player1: @kifu.player1, player2: @kifu.player2, kento: @kifu.kento,
+                      tags: @tags.to_json(only:[:name]) }
 
     respond_to do |format|
       format.html { render "show"}

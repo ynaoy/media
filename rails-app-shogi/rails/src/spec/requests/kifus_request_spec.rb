@@ -36,6 +36,7 @@ RSpec.describe "Kifus", type: :request do
                                           player1:"",
                                           player2:"",
                                           content: content,
+                                          kento: nil,
                                           tag:{ tag_ids:[0,1,2] } } 
                                         }
       expect(response).to redirect_to( kifu_url(id:@kifu.id+1) ) #ページがShowにリダイレクトする
@@ -47,7 +48,8 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: content, 
-                                            tag: { tag_ids:[0,1,2] }
+                                            kento: nil,
+                                            tag: { tag_ids:[0,1,2] },
                                           }).to_json,
                                     format: "json"}
       expect(JSON.parse(response.body)['success'].nil?).to eq false
@@ -59,6 +61,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: "", 
+                                            kento: nil,
                                             tag: { tag_ids:[0,1,2] }
                                           }).to_json,
                                     format: "json"}
@@ -71,6 +74,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: content, 
+                                            kento: nil,
                                             tag: { tag_ids:["errors"] }
                                           }).to_json,
                                     format: "json"}
