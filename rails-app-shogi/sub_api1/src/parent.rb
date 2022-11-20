@@ -55,9 +55,22 @@ def step(kifu,w)
   sleep(1)
 end
 
+def convert_pv_to_pos(pv)
+  # ---usi形式の文字列を棋譜形式のポジションに変換する---
+  #    ※駒の種類の情報は失われている
+  #    例: 1a2b → 1122, 2b5f → 2256
+  reg = /a|b|c|d|e|f|g|h|i/
+  hash = Hash["a",1, "b",2, "c",3, "d",4, "e",5, "f",6, "g",7, "h",8, "i",9 ]
+
+  return (pv == "resign")? pv : pv.gsub(reg,hash)
+end
+
 def extract_data(str,n)
   # ---評価値と候補手を抜き出す---
+
   pv = /pv.*[a-z]/.match(str)[0].slice(3..-1)
+  pv = convert_pv_to_pos(pv)
+
   cp =  /cp .[0-9]*/.match(str)
   cp = if(cp.nil?)
     (n%2==0)? "31111": "-31111"
