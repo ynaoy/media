@@ -34,7 +34,7 @@
   #board{
     display: flex;
     border:  none;
-    width: 47.032vw;
+    width: 49.032vw;
     height: 25.995vw;
     background-color: #DCF0BE;
   }
