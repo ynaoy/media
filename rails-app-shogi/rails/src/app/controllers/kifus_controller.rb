@@ -14,7 +14,7 @@ class KifusController < ApplicationController
     end
     
     params[:kifu] = fetch_data_from_content(params[:kifu])
- 
+
     # ※params[:kifus][:content]の文字数が長いとエラーが出る。そのうち直す
     # エラー内容: <Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 11189)>
     @kifu = current_user.kifus.build(kifus_params)
@@ -55,6 +55,8 @@ class KifusController < ApplicationController
 
     kifu_list = @kifu.extract_kifu
     @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
+    # 自分の棋譜かどうか
+    my_kifu = (params[:format]=="json")? my_kifu_jwt?(request.cookies["jwt"], @kifu) : my_kifu?(@kifu)
 
     if logged_in?
       current_user.histories.create!(kifu_id: @kifu.id)
@@ -62,7 +64,7 @@ class KifusController < ApplicationController
     end
 
     response_json = { kifu_text: @kifu_text, kifu_flg: @kifu_flg,
-                      favorite_flg: @favorite_flg, kifu_id: @kifu.id,
+                      favorite_flg: @favorite_flg, kifu_id: @kifu.id, my_kifu: my_kifu,
                       player1: @kifu.player1, player2: @kifu.player2, kento: @kifu.kento,
                       tags: @tags.to_json(only:[:name]) }
 

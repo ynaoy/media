@@ -30,6 +30,8 @@
   provide('loginFlg', loginFlg)
   provide('player1',  kifu_data.player1)
   provide('player2',  kifu_data.player2)
+  provide('my_kifu',  kifu_data.my_kifu)  
+  provide('kento',  kifu_data.kento)
 
   //このコンポーネントで使うメソッド
   const update_board = kifu_methods['update_board']

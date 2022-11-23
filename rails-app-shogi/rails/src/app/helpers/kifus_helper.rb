@@ -5,6 +5,10 @@ module KifusHelper
     current_user.nil? ? false : current_user.id == kifu.user_id
   end
 
+  def my_kifu_jwt?(token,kifu)
+    session_user(token).nil? ? false : session_user(token).id == kifu.user_id
+  end
+
   def kifu_to_board(kifu_list)
 
     # 指し手の集まりをviewに渡す形式に変換する

@@ -9,7 +9,9 @@ describe("right-board test", async() => {
   const wrapper = Mount(rightBoard,{  sub_board_text:"", 
                                       sub_board_num:"", 
                                       player1: "player1",
-                                      player2: "player2" })
+                                      player2: "player2",
+                                      my_kifu: true,
+                                      kento:"Test kento" })
 
   it("コンポーネントが表示されているかチェック", () => {
     expect(wrapper.text()).contain("先手:")

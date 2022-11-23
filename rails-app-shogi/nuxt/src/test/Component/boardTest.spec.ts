@@ -8,7 +8,8 @@ describe("board test", async() => {
   const { Mount } = MountHelper()
   const wrapper = Mount(board,{ board_flg:"", board_text:"",
                                 sub_board_text:"", sub_board_num:"",
-                                player1:"", player2:""})
+                                player1:"", player2:"",
+                                my_kifu: true, kento:"Test kento" })
 
   it("子コンポーネントが表示されているかチェック", () => {
     expect(wrapper.html()).contain("<left-board")

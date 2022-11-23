@@ -19,6 +19,8 @@
   const sub_board_num  = inject('sub_board_num')
   const player1        = inject('player1')
   const player2        = inject('player2')
+  const my_kifu        = inject('my_kifu')
+  const kento          = inject('kento')
 
   //子コンポーネントに渡す変数群
   provide('board_text',     board_text)
@@ -27,6 +29,8 @@
   provide('sub_board_num',  sub_board_num)
   provide('player1',        player1)
   provide('player2',        player2)
+  provide('my_kifu',        my_kifu)  
+  provide('kento',          kento)
   
 </script>
 

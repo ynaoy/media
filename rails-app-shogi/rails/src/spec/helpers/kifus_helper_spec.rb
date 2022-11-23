@@ -11,7 +11,7 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe KifusHelper, type: :helper do
-  describe "my_kifu?" do
+  describe "my_kifu? and my_kifu_jwt?" do
 
     before do
       @user = FactoryBot.create(:user)
@@ -21,16 +21,37 @@ RSpec.describe KifusHelper, type: :helper do
       @kifu2 = FactoryBot.create(:kifu, user_id: @user2.id)
     end
 
-    it "should work" do
+    it "my_kifu? should work" do
+      # 未ログイン時
       flg = helper.my_kifu?(@kifu1)
       expect(flg).to eq false
+      # ログイン時
       session[:user_id] = @user.id
       flg = helper.my_kifu?(@kifu1)
       expect(flg).to eq true
+      # ログイン時かつ他人の棋譜
       flg = helper.my_kifu?(@kifu2)
       expect(flg).to eq false
     end
+
+    it "my_kifu_jwt? should work" do
+      # 未ログイン時
+      flg = helper.my_kifu_jwt?(nil, @kifu1)
+      expect(flg).to eq false
+
+      # ログイン時
+      payload =  { user_id: @user.id }
+      token = encode_token(payload)
+      session[:user_id] = @user.id
+      flg = helper.my_kifu_jwt?(token, @kifu1)
+      expect(flg).to eq true
+
+      # ログイン時かつ他人の棋譜
+      flg = helper.my_kifu_jwt?(token, @kifu2)
+      expect(flg).to eq false
+    end
   end
+
 
   describe "kifu_to_board" do
     it "should work" do

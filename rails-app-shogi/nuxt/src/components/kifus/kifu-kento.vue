@@ -1,12 +1,13 @@
 <template>
   <div>
-    <button v-if= "kento_clicked == false"> 
-      <span v-if= "is_kento(kento)" v-on:click="show_kento()" id="kento_button">
+    <div v-if= "kento_clicked == false" >
+      <button v-if= "is_kento(kento)" v-on:click="show_kento()" id="kento_button"> 
         ソフトの読み筋を表示 
-      </span>
-      <span v-else> ソフトに自動検討させる </span>
-    </button> 
-    
+      </button>
+      <button v-else-if= "my_kifu"> 
+        ソフトに自動検討させる
+      </button>
+    </div>
     <div v-else id="kento_result"> ソフトの読み筋表示してます </div>
   </div>
 </template>
@@ -14,18 +15,20 @@
 <script setup>
 
   //親コンポーネントから貰う変数群
-  const kento =  inject('kento')
-  
+  const my_kifu   = inject('my_kifu')
+  const kento     = inject('kento')
+  console.log(my_kifu)
+  console.log(kento)
   //このコンポーネントで使う変数群
   const kento_clicked = ref(false)
   
   //子コンポーネントに渡す変数群
-  provide('kento', "")
+  provide('kento', kento)
 
   //このコンポーネントで使うメソッド群
 
-  //kento変数がundefindかならfalse、そうでないならtrueを返す
-  const is_kento = (item)=>{ return typeof item != "undefined" }
+  //kento変数がnullならfalse、そうでないならtrueを返す
+  const is_kento = (item)=>{ return item != null }
   
   //kentoボタンがクリックされたらフラグを更新する
   const show_kento = ()=>{ kento_clicked.value = !kento_clicked.value }
