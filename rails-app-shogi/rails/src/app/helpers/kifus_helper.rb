@@ -1,11 +1,14 @@
 module KifusHelper
+  # １から９までの漢字と数字の変換。１一や２四などの表記に使う
+  $kanji_to_integer = {"一"=> 1, "二"=> 2, "三"=> 3, "四"=> 4, "五"=> 5, "六"=> 6, "七"=> 7, "八"=> 8, "九"=> 9}
 
-  # loginしているuserのidとKifuモデルのuser_idが一致するかどうかを調べる
   def my_kifu?(kifu)
+    # loginしているuserのidとKifuモデルのuser_idが一致するかどうかを調べる
     current_user.nil? ? false : current_user.id == kifu.user_id
   end
 
   def my_kifu_jwt?(token,kifu)
+    # jwt認証形式の時のloginしているuserのidとKifuモデルのuser_idが一致するかどうかを調べる
     session_user(token).nil? ? false : session_user(token).id == kifu.user_id
   end
 
@@ -13,8 +16,8 @@ module KifusHelper
 
     # 指し手の集まりをviewに渡す形式に変換する
 
-    old_pos = [0,0]
-    turn = 1
+    old_pos = [0,0] # 移動前のポジション
+    turn = 1 # 先手なら1、後手なら2
 
     return_text_lists = 
     [
@@ -159,16 +162,18 @@ module KifusHelper
     end
   end
 
-  #kifu_strの３四や２五等を半角数字に変換する
   def convert_xy(kifu)
-    kanji_to_integer = {"一"=> 1, "二"=> 2, "三"=> 3, "四"=> 4, "五"=> 5, "六"=> 6, "七"=> 7, "八"=> 8, "九"=> 9}
+
+    # kifuの３四や２五等を半角数字に変換する
+    
     x = 8-(kifu[0].tr('０-９','0-9').to_i-1)
-    y = kanji_to_integer[kifu[1]]-1
+    y = $kanji_to_integer[kifu[1]]-1
     return x,y
   end
 
-  #params[:content]からplayer1、player2、winを取り出してparamに含める
   def fetch_data_from_content(params)
+
+    #params[:content]からplayer1、player2、winを取り出してparamに含める
 
     reg = /[先|後]手：.{,10}/
     reg_win = /[先|後]手の勝ち/
@@ -187,18 +192,20 @@ module KifusHelper
     return params
   end
 
-  #棋譜一覧表示時に勝った方にidを付与する
   def win_or_lose(win,kifu)
+    # 棋譜一覧表示時に勝った方にidを付与する
     "win" if win == kifu.win
   end
 
-  #Timewithzoneクラスのtime_zoneをTokyoに変換して、さらにformat型のstrに変換して返す
   def timewithzone_to_str(date, format="%Y年%-m月%-d日")
+    # Timewithzoneクラスのtime_zoneをTokyoに変換して、さらにformat型のstrに変換して返す
     date.in_time_zone('Tokyo').strftime(format)
   end
 
-  #history.html.erbでnow_timeごとに返す値を変更。
   def display_day(now_time)
+
+    #history.html.erbでnow_timeごとに返す値を変更。
+
     if(now_time== timewithzone_to_str(Time.zone.now))
       return "今日"
     elsif(now_time== timewithzone_to_str(Time.zone.now-86400))
@@ -207,9 +214,110 @@ module KifusHelper
     return now_time
   end
   
-  #pagination用のデータから合計サイズを抜き出す
   def get_kifus_size(pagi_data,size=20)
+
+    # pagination用のデータから合計サイズを抜き出す
+
     kifu_size = (pagi_data.length-1)*size + pagi_data[-1].length
     "#{kifu_size}件の棋譜"
   end
+
+  def convert_usi_to_kifu(kifu_text, usi) 
+    
+    # -- usi形式の棋譜データをkifu型式の棋譜データに変換する --
+    # kifu_text[n][i][j], usi[n][Hash{ pv=>, cp=> }]
+
+    eng_to_koma = { "K"=> "王", "R"=> "飛", "B"=> "角", "G"=> "金", "S"=> "銀",
+                    "N"=> "桂", "L"=> "香", "P"=> "歩"}
+    # usiの回数分ループを回す
+    for i in (0..(usi.length-1)) do
+      board = kifu_text[i]
+      pv = usi[i.to_s]["pv"].split
+      new_pv = ""
+      # itemの回数分ループを回す
+      for j in (0..(pv.length-1)) do
+        # pv[j] =  "G*33 1911 7722+" のような文字から
+        # new_pv = "▲３三銀打 △１一飛(19) ▲２二角成(77) △投了" のような文字を作る
+
+        item = pv[j]
+        # 手番によって、itemの最初に▲か△をつける
+        turn = ((i+j)%2 == 0 )? "▲": "△"
+        
+        if item == "resign"
+          item = "投了" 
+
+        # 持ち駒を使うとき
+        elsif ( eng_to_koma.key?(item[0]) )
+          koma = eng_to_koma[item[0]]
+
+          # 盤面の情報だけ更新（持ち駒やどちらの駒かの更新は必要ない）
+          board[item[3].to_i-1][9-item[2].to_i] = koma
+
+          # 棋譜情報に追加する文字を作る
+          item = convert_uppercase_and_kanji( transpose(item,[2,3]) )+ koma + "打"
+        
+        # 持ち駒を使わないとき
+        else 
+          koma = board[item[1].to_i-1][9-item[0].to_i]
+          temp = (item[-1] == "+" && !flg_narigoma(koma) )? "成": ""
+          # 成駒の表記を棋譜形式に変換する 
+          koma = to_kifu_prot(koma)
+
+          # 盤面の情報だけ更新（持ち駒やどちらの駒かの更新は必要ない）
+          board[item[1].to_i-1][9-item[0].to_i] = ""
+          board[item[3].to_i-1][9-item[2].to_i] = (temp =="成")? convert_nari(koma) :koma
+
+          # 棋譜情報に追加する文字を作る
+          item  = convert_uppercase_and_kanji( transpose(item,[2,3]) ) + 
+                  koma + temp + 
+                  "(" + transpose(item,[0,1]) + ")" 
+        end
+
+        new_pv += turn + item + " "
+      end
+      usi[i.to_s]["pv"] = new_pv
+    end
+    return usi
+  end
+
+  def transpose(str, list)
+
+    # --文字列をlistの中の数字の順番に並び替える --
+      
+    ret = ""
+    list.each do |i|
+      ret += str[i] if(i < str.length)
+    end
+    return ret
+  end
+
+  def convert_uppercase_and_kanji(str)
+    # -- "11" → "１一", "24" → "２四" のように、二桁の数字(String型)を大文字と漢字に変換する --
+    str[0].upcase + $kanji_to_integer.key(str[1].to_i)
+  end
+
+  def flg_narigoma(str)
+    # -- 成駒かどうかを判定する --
+    ["龍", "馬", "全", "圭", "杏", "と"].include?(str)
+  end
+
+  def to_kifu_prot(str)
+
+    # -- 条件に合うように変換する。合わなければそのまま返す --
+    
+    case str
+
+    when "全"
+      return "成銀"
+
+    when "圭"
+      return "成桂"
+
+    when "杏"
+      return "成香"
+
+    end
+    return str
+  end
+
 end

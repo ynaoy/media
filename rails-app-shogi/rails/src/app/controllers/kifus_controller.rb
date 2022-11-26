@@ -17,6 +17,7 @@ class KifusController < ApplicationController
 
     # ※params[:kifus][:content]の文字数が長いとエラーが出る。そのうち直す
     # エラー内容: <Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 11189)>
+    
     @kifu = current_user.kifus.build(kifus_params)
     if @kifu.save
 

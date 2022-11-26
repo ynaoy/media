@@ -34,8 +34,8 @@ def output_child(r,items)
       out = r.gets
       # bestmoveが出ていたら最善手を受け取る
       if reg.match(out)
-        n += 1
         ret[n] = extract_data(before_out,n)
+        n += 1
       end
       break if n == items.length + 1 # 投了の局面まで含めるため+１
       before_out = out

@@ -9,7 +9,7 @@ class SocketSubApi1Job < ApplicationJob
       # ソケットに入力文字列を渡す
       sock.sendmsg  kifu.content
       
-      # sub_api1から返却された文字列を出力
+      # sub_api1から返却された文字列
       msg = sock.recvmsg[0]
       # ソケット CLOSE
       sock.close
