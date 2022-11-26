@@ -36,7 +36,7 @@ RSpec.describe "Kifus", type: :request do
                                           player1:"",
                                           player2:"",
                                           content: content,
-                                          kento: nil,
+                                          kento: false,
                                           tag:{ tag_ids:[0,1,2] } } 
                                         }
       expect(response).to redirect_to( kifu_url(id:@kifu.id+1) ) #ページがShowにリダイレクトする
@@ -48,7 +48,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: content, 
-                                            kento: nil,
+                                            kento: false,
                                             tag: { tag_ids:[0,1,2] },
                                           }).to_json,
                                     format: "json"}
@@ -61,7 +61,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: "", 
-                                            kento: nil,
+                                            kento: false,
                                             tag: { tag_ids:[0,1,2] }
                                           }).to_json,
                                     format: "json"}
@@ -74,7 +74,7 @@ RSpec.describe "Kifus", type: :request do
                                             player1:"",
                                             player2:"",
                                             content: content, 
-                                            kento: nil,
+                                            kento: false,
                                             tag: { tag_ids:["errors"] }
                                           }).to_json,
                                     format: "json"}
@@ -95,6 +95,27 @@ RSpec.describe "Kifus", type: :request do
     it "return json object" do
       get kifu_path(@kifu), params: { format: "json" }
       expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
+    end
+
+    it "kento is nil" do
+      kifu = FactoryBot.create(:kifu, user_id: @user.id, kento: nil )
+      get kifu_path(kifu), params: { format: "json" }
+      expect(JSON.parse(response.body)['kento'].nil?).to be true
+    end
+
+    it "kento is processing_now" do
+      kifu = FactoryBot.create(:kifu, user_id: @user.id, kento: "processing_now")
+      get kifu_path(kifu), params: { format: "json" }
+      expect(JSON.parse(response.body)['kento']).to eq "processing_now"
+    end
+
+    it "kento is not processing_now" do
+      kifu = FactoryBot.create(:kifu, 
+                                user_id: @user.id, 
+                                kento: {"0"=> {"cp"=>"0" ,"pv"=>"2726 3334"}}.to_json )
+      get kifu_path(kifu), params: { format: "json" }
+      expect(JSON.parse(response.body)['kento'].nil?).to be false
+      expect(JSON.parse(response.body)['kento']).not_to eq "processing_now"
     end
   end
 

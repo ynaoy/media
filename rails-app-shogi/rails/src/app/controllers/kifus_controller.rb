@@ -17,12 +17,18 @@ class KifusController < ApplicationController
 
     # ※params[:kifus][:content]の文字数が長いとエラーが出る。そのうち直す
     # エラー内容: <Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 11189)>
-    
     @kifu = current_user.kifus.build(kifus_params)
     if @kifu.save
 
       @tag = @kifu.save_kifu_tag(tags_params[:tag][:tag_ids])
       if @tag
+
+        if params[:kifu][:kento]
+          # Jobを実行してバックグラウンドで別APIと通信する
+          SocketSubApi1Job.perform_later(@kifu)
+          @kifu.update({kento: "processing_now"})
+        end
+
         respond_to do |format|
           format.html { flash.now[:success] = "Kifu created!"
                         redirect_to kifu_path(id:@kifu.id) }
@@ -36,9 +42,6 @@ class KifusController < ApplicationController
           format.json { render json: { errors: "tag error"}, status:500 }
         end
       end
-      
-      # Jobを実行してバックグラウンドで別APIと通信する
-      SocketSubApi1Job.perform_later(@kifu) if params[:kifu][:kento]
 
     #棋譜がエラーだった場合
     else
@@ -56,6 +59,12 @@ class KifusController < ApplicationController
 
     kifu_list = @kifu.extract_kifu
     @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
+
+    @kento = if (@kifu.kento.nil?)
+        nil 
+      else 
+        (@kifu.kento =="processing_now")? @kifu.kento : convert_usi_to_kifu(@kifu_text, JSON.parse(@kifu.kento)) 
+      end 
     # 自分の棋譜かどうか
     my_kifu = (params[:format]=="json")? my_kifu_jwt?(request.cookies["jwt"], @kifu) : my_kifu?(@kifu)
 
@@ -66,7 +75,7 @@ class KifusController < ApplicationController
 
     response_json = { kifu_text: @kifu_text, kifu_flg: @kifu_flg,
                       favorite_flg: @favorite_flg, kifu_id: @kifu.id, my_kifu: my_kifu,
-                      player1: @kifu.player1, player2: @kifu.player2, kento: @kifu.kento,
+                      player1: @kifu.player1, player2: @kifu.player2, kento: @kento,
                       tags: @tags.to_json(only:[:name]) }
 
     respond_to do |format|
@@ -105,7 +114,7 @@ class KifusController < ApplicationController
   private
 
     def kifus_params
-      params.require(:kifu).permit(:title, :player1, :player2, :content, :win )
+      params.require(:kifu).permit(:title, :player1, :player2, :content, :win, )
     end
 
     def tags_params
@@ -124,4 +133,5 @@ class KifusController < ApplicationController
         redirect_to root_url if @kifus.nil?
       end
     end
+
 end
