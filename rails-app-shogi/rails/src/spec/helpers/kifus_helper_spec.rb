@@ -116,4 +116,41 @@ RSpec.describe KifusHelper, type: :helper do
     end
   end
 
+  
+  describe "convert_usi_to_kifu" do
+    it "should work" do
+
+      #それぞれpvの値がtest_retの値に変換されていれば成功
+      usi = { "0"=> { "cp"=> "0", "pv"=> "7776 3334 7675" } ,
+              "1"=> { "cp"=> "1", "pv"=> "3334 2726" } ,
+              "2"=> { "cp"=> "2", "pv"=> "8822+ 3122" } ,
+              "3"=> { "cp"=> "3", "pv"=> "3122" } ,
+              "4"=> { "cp"=> "4", "pv"=> "B*88" } ,
+            }
+      test_ret = [  "▲７六歩(77) △３四歩(33) ▲７五歩(76)",
+                    "△３四歩(33) ▲２六歩(27)",
+                    "▲２二角成(88) △２二銀(31)",
+                    "△２二銀(31)",
+                    "▲８八角打",               
+                  ]
+      kifu = %w[７六歩(77) ３四歩(33) ２二角成(88) ２二銀(31) ８八角打]
+      kifu_text, kifu_flg = helper.kifu_to_board(kifu)
+      expect(kifu_text).not_to be_empty
+
+      ret = helper.convert_usi_to_kifu(kifu_text, usi)
+
+      expect(ret.nil?).to eq false
+      for n in 0..(ret.length-1) do
+        expect(ret[n.to_s]["cp"].nil?).to eq false
+        expect(ret[n.to_s]["pv"]).to eq test_ret[n]
+      end
+    end
+  end
+
+  describe "convert_uppercase_and_kanji" do
+    it "should work" do
+      ret = helper.convert_uppercase_and_kanji("11")
+      expect(ret).to eq "１一"
+    end
+  end
 end

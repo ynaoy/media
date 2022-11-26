@@ -225,7 +225,7 @@ module KifusHelper
   def convert_usi_to_kifu(kifu_text, usi) 
     
     # -- usi形式の棋譜データをkifu型式の棋譜データに変換する --
-    # kifu_text[n][i][j], usi[n][Hash{ pv=>, cp=> }]
+    # kifu_text: List[n][i][j], usi: Hash{ n=> { pv=>, cp=> } }
 
     eng_to_koma = { "K"=> "王", "R"=> "飛", "B"=> "角", "G"=> "金", "S"=> "銀",
                     "N"=> "桂", "L"=> "香", "P"=> "歩"}
@@ -273,7 +273,8 @@ module KifusHelper
                   "(" + transpose(item,[0,1]) + ")" 
         end
 
-        new_pv += turn + item + " "
+        new_pv += turn + item
+        new_pv += " " if(j < (pv.length-1))
       end
       usi[i.to_s]["pv"] = new_pv
     end
@@ -293,7 +294,7 @@ module KifusHelper
 
   def convert_uppercase_and_kanji(str)
     # -- "11" → "１一", "24" → "２四" のように、二桁の数字(String型)を大文字と漢字に変換する --
-    str[0].upcase + $kanji_to_integer.key(str[1].to_i)
+    str[0].tr('0-9','０-９') + $kanji_to_integer.key(str[1].to_i) 
   end
 
   def flg_narigoma(str)
