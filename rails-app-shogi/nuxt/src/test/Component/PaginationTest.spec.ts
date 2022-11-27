@@ -7,7 +7,8 @@ describe("ProfileForm test", async() => {
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { kifus_data } = TestHelper()
   const { Mount } = MountHelper()
-  const wrapper = Mount(Pagination, {}, { items: kifus_data(61), 
+  const items = kifus_data(61)
+  const wrapper = Mount(Pagination, {}, { items: items, 
                                           parPage:20,
                                           currentPage:1 },false)
 
@@ -31,6 +32,6 @@ describe("ProfileForm test", async() => {
   })
 
   it("getPageCountkメソッドが正しく実行されているかチェック", async() => {
-    expect(wrapper.vm.getPageCount).toBe(4)
+    expect(wrapper.vm.getPageCount(items)).toBe(4)
   })
 })

@@ -4,7 +4,7 @@
     <Pagination @pageNum = "set_pageNum"
                 :items="kifus" :parPage="parPage" :currentPage="currentPage" />
 
-    <KifuItems :kifus="get_items"/>
+    <KifuItems :kifus="get_items(kifus)"/>
 
     <Pagination @pageNum = "set_pageNum"
                 :items="kifus" :parPage="parPage" :currentPage="currentPage" />
@@ -33,10 +33,8 @@
 
   // 使うメソッドをヘルパーからもらう
   const { check_is_empty } = AppHelper()
-  const { currentPage, set_pageNum, get_items} = PaginationObject(kifus, parPage)
-
+  const { currentPage, set_pageNum, get_items} = PaginationObject(parPage)
   //このコンポーネントで使うメソッド
-
   defineExpose( { kifus ,check_is_empty } )
 
 </script>

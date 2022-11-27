@@ -4,7 +4,7 @@
     <Pagination @pageNum = "set_pageNum"
                 :items="users" :parPage="parPage" :currentPage="currentPage" />
 
-    <UserItems :users="get_items"/>
+    <UserItems :users="get_items(users)"/>
 
     <Pagination @pageNum = "set_pageNum"
                 :items="users" :parPage="parPage" :currentPage="currentPage" />
@@ -35,7 +35,7 @@
   // 使うメソッドをヘルパーからもらう
   const { force_login } = SessionHelper()
   const { check_is_empty } = AppHelper()
-  const { currentPage, set_pageNum, get_items} = PaginationObject(users, parPage)
+  const { currentPage, set_pageNum, get_items} = PaginationObject(parPage)
 
   // ログインしていなかったらログインページに飛ばす
   force_login(loginFlg)

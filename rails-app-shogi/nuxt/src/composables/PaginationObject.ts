@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-export const PaginationObject = (items, parPage=20)=>{
+export const PaginationObject = (parPage=20)=>{
 
   //リアクティブな変数群
   const currentPage = ref(1)
@@ -13,11 +13,11 @@ export const PaginationObject = (items, parPage=20)=>{
   }
 
   // paginateされたデータを返す
-  const get_items = computed(()=>{
+  const get_items = (items)=>{
     let current = currentPage.value * parPage
     let start = current - parPage
     return items.slice(start, current)
-  })
+  }
 
   return { 'currentPage': currentPage,
             'set_pageNum': set_pageNum,

@@ -8,7 +8,7 @@ describe("PaginationObject test", () => {
   const { kifus_data } = TestHelper("")
 
   //このテストでチェックするやつら
-  const { currentPage, set_pageNum, get_items } = PaginationObject(kifus_data(),20)
+  const { currentPage, set_pageNum, get_items } = PaginationObject(20)
   
   it("set_pageNumが正しく動作しているかチェック", () => {
       expect(currentPage.value).toBe(1)
@@ -17,13 +17,14 @@ describe("PaginationObject test", () => {
   })
 
   it("get_itemsが正しく動作しているかチェック", () => {
+    const kifus = kifus_data()
     currentPage.value = 1
-    let items = get_items
-    expect(items.value[0].id).toBe(0)
+    let items = get_items(kifus)
+    expect(items[0].id).toBe(0)
 
     currentPage.value = 2
-    items = get_items 
-    expect(items.value[0].id).toBe(20)
+    items = get_items(kifus)
+    expect(items[0].id).toBe(20)
   })
 
 })

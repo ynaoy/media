@@ -2,7 +2,7 @@
   <div v-if = "items.length > parPage">
     <paginate
       v-model= "currentPage"
-      :page-count= "getPageCount"
+      :page-count= "getPageCount(items)"
       :page-range= "3"
       :margin-pages= "2"
       :click-handler= "clickCallback"
@@ -26,9 +26,9 @@
     emit('pageNum', Number(pageNum))
   }
 
-  const getPageCount = computed(()=>{
+  const getPageCount = (items)=>{
     return Math.ceil(items.length/parPage)
-  })
+  }
 
   defineExpose( { items } )
 
