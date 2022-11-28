@@ -14,7 +14,7 @@ orbs:
 jobs:
   rails-build:
     docker:
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:2.7.6-browsers
     working_directory: ~/media/rails-app-shogi/rails/src
     steps:
       - checkout:
@@ -27,7 +27,7 @@ jobs:
 
   rails-test:
     docker:
-      - image: cimg/ruby:2.7.4-browsers
+      - image: cimg/ruby:2.7.6-browsers
       - image: circleci/mysql:5.5
         environment:
           MYSQL_ROOT_PASSWORD: password
