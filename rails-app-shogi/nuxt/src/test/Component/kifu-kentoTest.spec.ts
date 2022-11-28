@@ -5,30 +5,30 @@ import KifuKento from "../../components/kifus/kifu-kento.vue"
 describe("kifu-kento test", async() => {
 
   // コンポーネントをマウント、テストヘルパーの呼び出し
-  const { Mount } = MountHelper()
-  const wrapper = Mount(KifuKento,{ kento:"Test kento", my_kifu:true })
+  const { Mount } = MountHelper()              
+  const wrapper = Mount(KifuKento,{ kento:"Test kento", my_kifu:true, state: ref(1) })
 
 
   describe("my_kifu == trueの時", async() => {
     it("kento == processing_nowの時、「検討中...」が表示されている", async() => {
       // このテスト用のコンポーネントをマウント
-      const wrapper_pnow = Mount(KifuKento,{ kento: "processing_now", my_kifu:true })
+      const wrapper_pnow = Mount(KifuKento,{ kento: "processing_now", my_kifu:true, state: ref(1) })
       expect(wrapper_pnow.text()).toContain("検討中...")
       expect(wrapper_pnow.text()).not.toContain("ソフトに自動検討させる")
-      expect(wrapper_pnow.text()).not.toContain("ソフトの読み筋表示してます")
+      expect(wrapper_pnow.html()).not.toContain("<kifu-kento-items")
     })
 
     it("kento == nullの時、「ソフトに自動検討させる」が表示されている", async() => {
       // このテスト用のコンポーネントをマウント
-      const wrapper_null = Mount(KifuKento,{ kento: null, my_kifu:true })
+      const wrapper_null = Mount(KifuKento,{ kento: null, my_kifu:true, state: ref(1) })
 
       expect(wrapper_null.text()).toContain("ソフトに自動検討させる")
       expect(wrapper_null.text()).not.toContain("検討中...")
-      expect(wrapper_null.text()).not.toContain("ソフトの読み筋表示してます")
+      expect(wrapper_null.html()).not.toContain("<kifu-kento-items")
     })
 
-    it("それ以外の時、「ソフトの読み筋を表示」が表示されている", async() => {
-      expect(wrapper.text()).toContain("ソフトの読み筋表示してます")
+    it("それ以外の時、「<kifu-kento-items」が表示されている", async() => {
+      expect(wrapper.html()).toContain("<kifu-kento-items")
       expect(wrapper.text()).not.toContain("ソフトに自動検討させる")
       expect(wrapper.text()).not.toContain("検討中...")
     })
@@ -37,24 +37,24 @@ describe("kifu-kento test", async() => {
   describe("my_kifu == falseの時", async() => {
     it("kento == processing_nowの時、すべて表示されていない", async() => {
       // このテスト用のコンポーネントをマウント
-      const wrapper_pnow = Mount(KifuKento,{ kento: "processing_now", my_kifu:false })
-      expect(wrapper_pnow.text()).not.toContain("ソフトの読み筋表示してます")
+      const wrapper_pnow = Mount(KifuKento,{ kento: "processing_now", my_kifu:false, state: ref(1) })
+      expect(wrapper_pnow.html()).not.toContain("<kifu-kento-items")
       expect(wrapper_pnow.text()).not.toContain("ソフトに自動検討させる")
       expect(wrapper_pnow.text()).not.toContain("検討中...")
     })
 
     it("kento == nullの時、すべて表示されていない", async() => {
       // このテスト用のコンポーネントをマウント
-      const wrapper_null = Mount(KifuKento,{ kento: null, my_kifu:false })
-      expect(wrapper_null.text()).not.toContain("ソフトの読み筋表示してます")
+      const wrapper_null = Mount(KifuKento,{ kento: null, my_kifu:false, state: ref(1) })
+      expect(wrapper_null.html()).not.toContain("<kifu-kento-items")
       expect(wrapper_null.text()).not.toContain("ソフトに自動検討させる")
       expect(wrapper_null.text()).not.toContain("検討中...")
     })
 
-    it("それ以外の時、「ソフトの読み筋を表示」が表示されている", async() => {
+    it("それ以外の時、「<kifu-kento-items」が表示されている", async() => {
       // このテスト用のコンポーネントをマウント
-      const wrapper_disp = Mount(KifuKento,{ kento: "Test kento", my_kifu:false })
-      expect(wrapper_disp.text()).toContain("ソフトの読み筋表示してます")
+      const wrapper_disp = Mount(KifuKento,{ kento: "Test kento", my_kifu:false, state: ref(1) })
+      expect(wrapper_disp.html()).toContain("<kifu-kento-items")
       expect(wrapper_disp.text()).not.toContain("ソフトに自動検討させる")
       expect(wrapper_disp.text()).not.toContain("検討中...")
     })

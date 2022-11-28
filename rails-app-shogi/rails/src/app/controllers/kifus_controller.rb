@@ -63,7 +63,11 @@ class KifusController < ApplicationController
     @kento = if (@kifu.kento.nil?)
         nil 
       else 
-        (@kifu.kento =="processing_now")? @kifu.kento : convert_usi_to_kifu(@kifu_text, JSON.parse(@kifu.kento)) 
+        if (@kifu.kento =="processing_now") 
+          "processing_now"
+        else 
+          convert_usi_to_kifu(@kifu_text.deep_dup, JSON.parse(@kifu.kento)) 
+        end
       end 
     # 自分の棋譜かどうか
     my_kifu = (params[:format]=="json")? my_kifu_jwt?(request.cookies["jwt"], @kifu) : my_kifu?(@kifu)

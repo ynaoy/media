@@ -276,7 +276,7 @@ module KifusHelper
         new_pv += turn + item
         new_pv += " " if(j < (pv.length-1))
       end
-      usi[i.to_s]["pv"] = new_pv
+      usi[i.to_s]["pv"] = new_pv.split
     end
     return usi
   end

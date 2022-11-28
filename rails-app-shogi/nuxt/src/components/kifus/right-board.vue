@@ -19,6 +19,7 @@
   const player2 =         inject('player2')
   const my_kifu        = inject('my_kifu')
   const kento          = inject('kento')
+  const state          = inject('state')
 
   //子コンポーネントに渡す変数群
   provide('sub_board_text', sub_board_text)
@@ -26,6 +27,7 @@
   provide('sub_board_id',   0)
   provide('my_kifu',        my_kifu)  
   provide('kento',          kento)
+  provide('state',          state)
   
 </script>
 
@@ -37,6 +39,6 @@
   }
   #player{
     font-size: 0.826vw;
-    margin: 0.751vw;
+    margin: 1.3vh 0.751vw;
   }
 </style>

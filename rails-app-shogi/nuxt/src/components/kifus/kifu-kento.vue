@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="is_kento(kento)" id="kento_result"> ソフトの読み筋表示してます </div>
+    <kifuKentoItems v-if="is_kento(kento)" id="kento_result"/>
     <div v-else-if="my_kifu">
       <div v-if="kento=='processing_now'">  検討中... </div>
       <button v-else > ソフトに自動検討させる </button>
@@ -9,16 +9,19 @@
 </template>
 
 <script setup>
+  import kifuKentoItems from './kifu-kento-items.vue'
 
   //親コンポーネントから貰う変数群
   const my_kifu   = inject('my_kifu')
   const kento     = inject('kento')
+  const state     = inject('state')
   console.log(my_kifu)
   console.log(kento)
+  console.log(state.value)
   
   //子コンポーネントに渡す変数群
   provide('kento', kento)
-
+  provide('state', state)
   //このコンポーネントで使うメソッド群
 
   //kento変数がnullかprocessing_nowならfalse、そうでないならtrueを返す

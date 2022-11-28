@@ -77,7 +77,7 @@ def extract_data(str,n)
   else
     cp[0].slice(3..-1)
   end
-  cp = (cp.to_i * -1).to_s if(n%2==0)
+  cp = (cp.to_i * -1).to_s if(n%2!=0)
   return { pv:pv, cp:cp }
 end
 

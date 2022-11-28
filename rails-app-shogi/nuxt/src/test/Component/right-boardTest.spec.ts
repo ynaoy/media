@@ -11,7 +11,8 @@ describe("right-board test", async() => {
                                       player1: "player1",
                                       player2: "player2",
                                       my_kifu: true,
-                                      kento:"Test kento" })
+                                      kento:"Test kento",
+                                      state: ref(1) })
 
   it("コンポーネントが表示されているかチェック", () => {
     expect(wrapper.text()).contain("先手:")
