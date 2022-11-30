@@ -1,0 +1,2 @@
+module KentosHelper
+end

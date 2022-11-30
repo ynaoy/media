@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'kentos/create'
   get 'histories/index'
   get 'sessions/new'
   root 'application#home'
@@ -19,4 +20,5 @@ Rails.application.routes.draw do
     end
   end
   resources :kifus, only: %i[new create show index destroy]
+  resources :kentos, only: %i[create]
 end
