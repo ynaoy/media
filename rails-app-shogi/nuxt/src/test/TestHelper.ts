@@ -48,6 +48,8 @@ export const TestHelper = (wrapper="") =>{
       favorite_flg: false,
       player1:"player1",
       player2:"player2",
+      kento: null,
+      my_kifu: true,
       tags: JSON.stringify([{ name:"角換わり" }, { name:"相掛かり" }]),
       kifu_text:  [
         [["香","桂","銀","金","王","金","銀","桂","香"],

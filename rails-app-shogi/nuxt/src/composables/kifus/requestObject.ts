@@ -9,6 +9,7 @@ export const requestObject = (kifu_data, csrf_token)=>{
   //リアクティブな変数群
   const request_states =reactive({
     favorite_flg: kifu_data.favorite_flg,
+    kento: kifu_data.kento,
     processing: false
   })
 
@@ -47,14 +48,35 @@ export const requestObject = (kifu_data, csrf_token)=>{
             })
   }
 
-  //コントローラーにpostメソッドを飛ばしてDBと通信
-  const send_post = function(controller, params, headers){
+  //kentosコントローラーに対して、postメソッドを飛ばして、kento変数を更新する
+  const send_kentos = async function(){
+    
+      let request = send_post('kentos',
+                          {}, 
+                          { 'Content-Type': 'application/json',
+                            'Authorization': csrf_token },
+                          JSON.stringify({'id': kifu_data.kifu_id}),
+                          )
+    return  request
+            .then((res: { kento: String }) => {
+              console.log(res)
+              request_states.kento = res.kento
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+  }
+
+  //コントローラーにpostメソッドを飛ばしてDBと通信 
+  //※paramsがクエリとして渡されてしまっているのでセキュアではない。後々治す
+  const send_post = function(controller, params, headers, body=''){
     params['format'] = 'json'
     return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}`,
     { method:'POST',
       params: params,
       headers: headers,
-      credentials: 'include'
+      credentials: 'include',
+      body:body
     })
   }
 
@@ -69,6 +91,7 @@ export const requestObject = (kifu_data, csrf_token)=>{
     })
   }
 
-  const request_methods = { 'change_button': change_button,}
-  return { request_states, request_methods }
+  const request_methods = { 'change_button': change_button,
+                            'send_kentos'  : send_kentos}
+  return { request_states, request_methods,}
 }

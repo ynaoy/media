@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect,vi } from 'vitest'
 import { MountHelper } from "../TestHelper"
 import rightBoard from "../../components/kifus/right-board.vue"
 
@@ -12,7 +12,8 @@ describe("right-board test", async() => {
                                       player2: "player2",
                                       my_kifu: true,
                                       kento:"Test kento",
-                                      state: ref(1) })
+                                      state: ref(1),
+                                      send_kentos: vi.fn(), })
 
   it("コンポーネントが表示されているかチェック", () => {
     expect(wrapper.text()).contain("先手:")
