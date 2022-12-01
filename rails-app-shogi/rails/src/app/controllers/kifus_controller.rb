@@ -10,16 +10,11 @@ class KifusController < ApplicationController
   def create
     if(params[:format]=="json")
       return if(!check_csrf_token)
-      params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
+      params[:kifu][:tag] = params[:tag]
     end
-    
     params[:kifu] = fetch_data_from_content(params[:kifu])
-
-    # ※params[:kifus][:content]の文字数が長いとエラーが出る。そのうち直す
-    # エラー内容: <Puma::HttpParserError: HTTP element QUERY_STRING is longer than the (1024 * 10) allowed length (was 11189)>
     @kifu = current_user.kifus.build(kifus_params)
     if @kifu.save
-
       @tag = @kifu.save_kifu_tag(tags_params[:tag][:tag_ids])
       if @tag
 

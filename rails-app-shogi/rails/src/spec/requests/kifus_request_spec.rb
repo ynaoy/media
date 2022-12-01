@@ -43,41 +43,38 @@ RSpec.describe "Kifus", type: :request do
     end
 
     it "return json object" do
-      #ネストした部分がjson形式で送られてくるので注意
-      post kifus_path, params: {  kifu: ({  title:"",
-                                            player1:"",
-                                            player2:"",
-                                            content: content, 
-                                            kento: false,
-                                            tag: { tag_ids:[0,1,2] },
-                                          }).to_json,
-                                    format: "json"}
+      post kifus_path, params: {  kifu: { title:"",
+                                          player1:"",
+                                          player2:"",
+                                          content: content, 
+                                          kento: false,
+                                        },
+                                  tag:  { tag_ids:[0,1,2] },
+                                  format: "json"}
       expect(JSON.parse(response.body)['success'].nil?).to eq false
     end
 
     it "return json object kifu errors" do
-      #ネストした部分がjson形式で送られてくるので注意
-      post kifus_path, params: {  kifu: ({  title:"",
-                                            player1:"",
-                                            player2:"",
-                                            content: "", 
-                                            kento: false,
-                                            tag: { tag_ids:[0,1,2] }
-                                          }).to_json,
-                                    format: "json"}
+      post kifus_path, params: {  kifu: { title:"",
+                                          player1:"",
+                                          player2:"",
+                                          content: "", 
+                                          kento: false,
+                                        },
+                                  tag:  { tag_ids:[0,1,2] },
+                                  format: "json"}
       expect(JSON.parse(response.body)['errors'].nil?).to eq false
     end
 
     it "return json object tag errors" do
-      #ネストした部分がjson形式で送られてくるので注意
-      post kifus_path, params: {  kifu: ({  title:"",
-                                            player1:"",
-                                            player2:"",
-                                            content: content, 
-                                            kento: false,
-                                            tag: { tag_ids:["errors"] }
-                                          }).to_json,
-                                    format: "json"}
+      post kifus_path, params: {  kifu: { title:"",
+                                          player1:"",
+                                          player2:"",
+                                          content: content, 
+                                          kento: false,
+                                        },
+                                  tag:  { tag_ids:["errors"] },
+                                  format: "json"}
       expect(JSON.parse(response.body)['errors'].nil?).to eq false
     end
 

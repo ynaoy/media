@@ -30,7 +30,6 @@ class KentosController < ApplicationController
     end
 
     def correct_user
-      p params
       if((ENV["RAILS_ENV"]!="test")&&(params[:format]=="json"))
         @kifu = session_user(request.cookies["jwt"]).kifus.find_by(id: kento_params[:id])
         if @kifu.nil?

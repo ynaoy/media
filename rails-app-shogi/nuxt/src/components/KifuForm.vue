@@ -75,7 +75,7 @@
   const submit = async function(){
     //<<バグ inputに日本語と英字両方が混ざっていると>>
     //<<Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    create_kifu({ kifu:  JSON.stringify(kifu_form)}, { "Authorization" : csrf_token })
+    create_kifu(JSON.stringify(kifu_form), { "Authorization" : csrf_token })
   }
 
   defineExpose( { kifu_form, tags, create_kifu, submit } );
