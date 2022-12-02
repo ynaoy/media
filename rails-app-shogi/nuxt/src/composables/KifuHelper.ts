@@ -28,8 +28,8 @@ export const KifuHelper = () => {
 
   //サーバーサイドkifusコントローラーにparams付きでPostリクエストを送る。
   //レスポンスには{ success: String, kifu_id: Number }が入ってる
-  const create_kifu = async ( body:{  title:"",player1:"",player2:"",kento:false,content:"",
-                                      tag:{ tag_ids:[] } },
+  const create_kifu = async ( body:{ kifu:{ title:"",player1:"",player2:"",kento:false,content:"",
+                                            tag:{ tag_ids:[] } }},
                               headers:{} ) =>{
     headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus`,

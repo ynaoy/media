@@ -10,7 +10,7 @@ class KifusController < ApplicationController
   def create
     if(params[:format]=="json")
       return if(!check_csrf_token)
-      params[:kifu][:tag] = params[:tag]
+      params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
     end
     params[:kifu] = fetch_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
