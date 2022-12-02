@@ -6,13 +6,14 @@ export const SessionHelper = () => {
 
   //サーバーサイドのログインURLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
-  const login = async (params:{ session:{ email:string, password:string}},headers:{} ) =>{
-    params['format'] = 'json'
+  const login = async (body: { session:{ email:string, password:string}},headers:{} ) =>{
+    headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/login`,
       { method:'POST',
-        params: params,
+        params: { format: 'json' },
         headers: headers,
-        credentials: 'include'
+        credentials: 'include',
+        body: body
       })
       .then((data) => {
         console.log(data)
