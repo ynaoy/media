@@ -7,20 +7,21 @@ export const UserHelper = () => {
   //サーバーサイドのログインURLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   const create_user = 
-    async function( params:{  user: {
-                                name:string,
-                                email:string, 
-                                password:string,
-                                password_confirmation:string }
-                              },
+    async function( body: { user: {
+                              name:string,
+                              email:string, 
+                              password:string,
+                              password_confirmation:string },
+                          },
                     headers:{},                      
                   ){
-      params['format'] = 'json'
+      headers['Content-Type'] = 'application/json',
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/signup`,
         { method:'POST',
-          params: params,
+          params: { format: 'json' },
           headers: headers,
-          credentials: 'include'
+          credentials: 'include',
+          body: body
         })
         .then((data) => {
           console.log(data)
