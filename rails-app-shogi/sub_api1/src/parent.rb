@@ -70,13 +70,15 @@ def extract_data(str,n)
 
   pv = /pv.*[a-z]/.match(str)[0].slice(3..-1)
   pv = convert_pv_to_pos(pv)
-
   cp =  /cp .[0-9]*/.match(str)
-  cp = if(cp.nil?)
-    (n%2==0)? "31111": "-31111"
-  else
+  mate = /mate .[0-9]*/.match(str) # 詰み判定時の評価値の符号の判別に必要
+  cp = if(!(mate.nil?))
+    (mate[0].slice(5) == "-")? "-31111": "31111"
+
+  elsif(!(cp.nil?))
     cp[0].slice(3..-1)
   end
+
   cp = (cp.to_i * -1).to_s if(n%2!=0)
   return { pv:pv, cp:cp }
 end
