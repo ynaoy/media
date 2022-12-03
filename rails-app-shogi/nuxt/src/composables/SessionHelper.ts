@@ -17,7 +17,8 @@ export const SessionHelper = () => {
       })
       .then((data) => {
         console.log(data)
-        location.href = "/"
+        redirect_back_or_home()
+        //location.href = "/"
       })
       .catch((error) => {
         console.log(error)
@@ -67,11 +68,29 @@ export const SessionHelper = () => {
   //ログインしていなかったらログインページに飛ばす
   const force_login= (loginFlg)=>{
     if (!loginFlg) {
+      store_location()
       return navigateTo('/login') 
     }
   }
+
+  //sessionに今いるページのurlを保持する
+  const store_location = ()=>{
+    sessionStorage.setItem('store_location', location.href)
+  }
+
+  //sessionに'store_location'キーがあればそのページに、なければホームにリダイレクトする
+  const redirect_back_or_home = ()=>{
+    let sess = sessionStorage.getItem('store_location');
+    console.log(sess)
+    location.href = (sess == null) ? '/' : sess;
+    sessionStorage.removeItem('store_location');
+  }
+
   return {  login: login,
             login_check: login_check,
             logout: logout,
-            force_login: force_login}
+            force_login: force_login,
+            store_location: store_location,
+            redirect_back_or_home: redirect_back_or_home,
+          }
 }

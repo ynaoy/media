@@ -21,8 +21,13 @@ describe("SessionHelper test", async() => {
   const spy_navigate = vi.fn()
   vi.stubGlobal("navigateTo", spy_navigate)
 
+  // sessionStrageをモックする。store_location, redirect_back_or_homeメソッド内で呼び出されたら成功
+  const spy_sess_setItem =    vi.spyOn(sessionStorage.__proto__,'setItem')
+  const spy_sess_getItem =    vi.spyOn(sessionStorage.__proto__,'getItem')
+  const spy_sess_removeItem = vi.spyOn(sessionStorage.__proto__,'removeItem')
+
    //このテストでチェックするやつら
-  const {  login, login_check, logout, force_login } =  SessionHelper()
+  const { login, login_check, logout, force_login, store_location, redirect_back_or_home }= SessionHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -31,6 +36,9 @@ describe("SessionHelper test", async() => {
   afterEach(()=>{
     spy_fetch.mockClear()
     spy_navigate.mockClear()
+    spy_sess_setItem.mockClear()
+    spy_sess_getItem.mockClear()
+    spy_sess_removeItem.mockClear()
   })
 
   it("loginメソッドが正しく動作するかチェック", async() => {
@@ -59,5 +67,16 @@ describe("SessionHelper test", async() => {
       force_login(false)
       expect(spy_navigate).toHaveBeenCalled();
     })
+  })
+
+  it("store_locationメソッドが正しく動作するかチェック", async() => {
+    await store_location()
+    expect(spy_sess_setItem).toHaveBeenCalled()
+  })
+
+  it("redirect_back_or_homeメソッドが正しく動作するかチェック", async() => {
+    redirect_back_or_home()
+    expect(spy_sess_getItem).toHaveBeenCalled()
+    expect(spy_sess_removeItem).toHaveBeenCalled()
   })
 })
