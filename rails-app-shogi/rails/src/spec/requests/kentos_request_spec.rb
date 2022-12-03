@@ -19,21 +19,21 @@ RSpec.describe "Kentos", type: :request do
     end
 
     it "return json object" do
-      post kentos_path, params: { format: "json", kento: {id: @kifu.id} }
+      post kentos_path, params: { format: "json", kento: ({id: @kifu.id}).to_json }
       expect(JSON.parse(response.body)['kento'].nil?).to eq false
     end
 
     it "return errors object processing_now" do
       @kifu.kento = "processing_now"
       @kifu.save
-      post kentos_path, params: { format: "json", kento: {id: @kifu.id} }
+      post kentos_path, params: { format: "json", kento: ({id: @kifu.id}).to_json }
       expect(JSON.parse(response.body)['errors']=="processing_now").to eq true
     end
 
     it "return errors object already_processed" do
       @kifu.kento = "already"
       @kifu.save
-      post kentos_path, params: { format: "json", kento: {id: @kifu.id} }
+      post kentos_path, params: { format: "json", kento: ({id: @kifu.id}).to_json }
       expect(JSON.parse(response.body)['errors']=="already_processed").to eq true
     end
   end

@@ -52,10 +52,8 @@ export const requestObject = (kifu_data, csrf_token)=>{
   const send_kentos = async function(){
     
       let request = send_post('kentos',
-                          {}, 
-                          { 'Content-Type': 'application/json',
-                            'Authorization': csrf_token },
-                          JSON.stringify({'id': kifu_data.kifu_id}),
+                          { 'kento': JSON.stringify({'id': kifu_data.kifu_id }) }, 
+                          { 'Authorization': csrf_token },
                           )
     return  request
             .then((res: { kento: String }) => {
@@ -69,11 +67,11 @@ export const requestObject = (kifu_data, csrf_token)=>{
 
   //コントローラーにpostメソッドを飛ばしてDBと通信 
   //※paramsがクエリとして渡されてしまっているのでセキュアではない。後々治す
-  const send_post = function(controller, params, headers, body=''){
-    params['format'] = 'json'
+  const send_post = function(controller, body, headers, ){
+    headers['Content-Type'] = 'application/json'
     return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}`,
     { method:'POST',
-      params: params,
+      params: { format: 'json' },
       headers: headers,
       credentials: 'include',
       body:body

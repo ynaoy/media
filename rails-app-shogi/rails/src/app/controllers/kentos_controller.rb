@@ -1,6 +1,6 @@
 class KentosController < ApplicationController
-  before_action :correct_user
   before_action :check_json_request
+  before_action :correct_user
 
   def create
     @kifu = Kifu.find(kento_params[:id])
@@ -45,6 +45,7 @@ class KentosController < ApplicationController
     def check_json_request
       if(params[:format]=="json")
         return if(!check_csrf_token)
+        params[:kento] = JSON.parse(params[:kento],symbolize_names: true)
       end
     end
 end
