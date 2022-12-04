@@ -20,5 +20,5 @@ Rails.application.routes.draw do
     end
   end
   resources :kifus, only: %i[new create show index destroy]
-  resources :kentos, only: %i[create]
+  resources :kentos, only: %i[create show]
 end

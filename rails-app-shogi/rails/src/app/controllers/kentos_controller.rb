@@ -1,6 +1,6 @@
 class KentosController < ApplicationController
-  before_action :check_json_request
-  before_action :correct_user
+  before_action :check_json_request, only: :create
+  before_action :correct_user , only: :create
 
   def create
     @kifu = Kifu.find(kento_params[:id])
@@ -19,6 +19,20 @@ class KentosController < ApplicationController
           format.html { redirect_to kifu_path(id:@kifu.id) }
           format.json { render json: { errors: errors}, status:500 }
         end
+      end
+    end
+  end
+
+  def show
+    @kifu = Kifu.find(params[:id])
+    if(@kifu)
+      respond_to do |format|
+        # @kifu.kentoがnilだとしても、フロント側でnull用の処理があるのでOK
+        format.json { render json: { kento: @kifu.kento } }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: { errors: "not found kifu"}, status:404 }
       end
     end
   end

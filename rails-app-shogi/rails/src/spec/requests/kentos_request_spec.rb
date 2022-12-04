@@ -38,4 +38,15 @@ RSpec.describe "Kentos", type: :request do
     end
   end
 
+  describe "GET /show" do
+
+    it "return json object" do
+      @kifu.kento = "processing_now"
+      @kifu.save
+      get kento_path(@kifu.id), params: { format: "json" }
+      expect(JSON.parse(response.body)['kento'].nil?).to eq false
+    end
+
+  end
+
 end
