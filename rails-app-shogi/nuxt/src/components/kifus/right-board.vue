@@ -20,7 +20,8 @@
   const my_kifu        = inject('my_kifu')
   const kento          = inject('kento')
   const state          = inject('state')
-  const send_kentos    = inject('send_kentos')
+  const post_kentos    = inject('post_kentos')
+  const fetch_kentos_interval= inject('fetch_kentos_interval')
 
   //子コンポーネントに渡す変数群
   provide('sub_board_text', sub_board_text)
@@ -29,7 +30,8 @@
   provide('my_kifu',        my_kifu)  
   provide('kento',          kento)
   provide('state',          state)
-  provide('send_kentos',    send_kentos )  
+  provide('post_kentos',    post_kentos )  
+  provide('fetch_kentos_interval', fetch_kentos_interval)
   
 </script>
 

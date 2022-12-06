@@ -48,12 +48,43 @@ export const requestObject = (kifu_data, csrf_token)=>{
             })
   }
 
+  //kentosコントローラーに対して、getメソッドを飛ばして、kento変数を更新する
+  const fetch_kentos = async function(){
+    
+    let request = fetch_data('kentos',
+                            { 'id': kifu_data.kifu_id  }, 
+                            {},
+                        )
+  return  request
+          .then((res: { kento: String }) => {
+            console.log(res)
+            request_states.kento = res.kento
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+  }
+
+  //kento変数の値に応じて、定期的にapiのkentosと通信する、timerを指定すると共通のtimerを使いまわせる
+  const fetch_kentos_interval = async function(interval_ms:number, timer=null) {
+    timer = setInterval(()=>{
+      console.log(request_states.kento)
+      if(request_states.kento=='processing_now'){
+        fetch_kentos()
+      }
+      else{
+        clearInterval(timer)
+      }
+    }, interval_ms)
+    return timer
+  }
+
   //kentosコントローラーに対して、postメソッドを飛ばして、kento変数を更新する
-  const send_kentos = async function(){
+  const post_kentos = async function(){
     
       let request = send_post('kentos',
-                          { 'kento': JSON.stringify({'id': kifu_data.kifu_id }) }, 
-                          { 'Authorization': csrf_token },
+                              { 'kento': JSON.stringify({'id': kifu_data.kifu_id }) }, 
+                              { 'Authorization': csrf_token },
                           )
     return  request
             .then((res: { kento: String }) => {
@@ -65,9 +96,19 @@ export const requestObject = (kifu_data, csrf_token)=>{
             })
   }
 
+  //コントローラーにgetメソッドを飛ばしてDBと通信 
+  const fetch_data = function(controller:String, params:{}, headers:{}, ){
+    params['format'] = 'json'
+    return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}/${params.id}`,
+    { method:'GET',
+      params: params,
+      headers: headers,
+      credentials: 'include'
+    })
+  }
+
   //コントローラーにpostメソッドを飛ばしてDBと通信 
-  //※paramsがクエリとして渡されてしまっているのでセキュアではない。後々治す
-  const send_post = function(controller, body, headers, ){
+  const send_post = function(controller:String, body:{}, headers:{}, ){
     headers['Content-Type'] = 'application/json'
     return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}`,
     { method:'POST',
@@ -89,7 +130,9 @@ export const requestObject = (kifu_data, csrf_token)=>{
     })
   }
 
-  const request_methods = { 'change_button': change_button,
-                            'send_kentos'  : send_kentos}
+  const request_methods = { 'change_button':          change_button,
+                            'fetch_kentos' :          fetch_kentos,
+                            'post_kentos'  :          post_kentos,
+                            'fetch_kentos_interval':  fetch_kentos_interval,}
   return { request_states, request_methods,}
 }

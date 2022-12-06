@@ -27,11 +27,12 @@
   //子コンポーネントに渡す変数群
   provideObject(toRefs(kifu_states))
   provideObject(toRefs(request_states))
-  provide('loginFlg',     loginFlg)
-  provide('player1',      kifu_data.player1)
-  provide('player2',      kifu_data.player2)
-  provide('my_kifu',      kifu_data.my_kifu)
-  provide('send_kentos',  request_methods['send_kentos'] )  
+  provide('loginFlg', loginFlg)
+  provide('player1',  kifu_data.player1)
+  provide('player2',  kifu_data.player2)
+  provide('my_kifu',  kifu_data.my_kifu)
+  provide('post_kentos',           request_methods['post_kentos'] ) 
+  provide('fetch_kentos_interval', request_methods['fetch_kentos_interval']) 
 
   //このコンポーネントで使うメソッド
   const update_board = kifu_methods['update_board']

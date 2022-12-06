@@ -26,9 +26,23 @@ class KentosController < ApplicationController
   def show
     @kifu = Kifu.find(params[:id])
     if(@kifu)
+      kifu_list = @kifu.extract_kifu
+      @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
+
+      # @kento = "processing_now" or nil or @kifu.kentoが棋譜形式に変換されたもの
+      @kento = if (@kifu.kento.nil?)
+        nil 
+      else 
+        if (@kifu.kento =="processing_now") 
+          "processing_now"
+        else 
+          convert_usi_to_kifu(@kifu_text.deep_dup, JSON.parse(@kifu.kento))
+        end
+      end
+      
       respond_to do |format|
         # @kifu.kentoがnilだとしても、フロント側でnull用の処理があるのでOK
-        format.json { render json: { kento: @kifu.kento } }
+        format.json { render json: { kento: @kento } }
       end
     else
       respond_to do |format|

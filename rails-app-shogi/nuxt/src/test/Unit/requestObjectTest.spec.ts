@@ -14,7 +14,10 @@ describe("requestObject test", () => {
 
   //このテストでチェックするやつら
   const { request_states,request_methods } = requestObject( kifu_data(),"this is csrf_token")
-  const { change_button, send_kentos } = request_methods
+  const { change_button, 
+          fetch_kentos, 
+          post_kentos, 
+          fetch_kentos_interval } = request_methods
   
   afterAll(()=>{
     vi.clearAllMocks()
@@ -38,9 +41,28 @@ describe("requestObject test", () => {
 
   it("send_kentosメソッドが呼び出された時、apiと通信できているか、request_statesの値が更新されているかチェック",
     async() => {
-      await send_kentos()
+      await post_kentos()
       expect(spy_fetch).toHaveBeenCalled()
       expect(request_states.kento).toBe("processing_now")
+    }
+  )
+
+  it("fetch_kentosメソッドが呼び出された時、apiと通信できているか",
+    async() => {
+      await fetch_kentos()
+      expect(spy_fetch).toHaveBeenCalled()
+    }
+  )
+
+  it("fetch_kentos_intervalメソッドが呼び出された時、apiと通信できているかチェック",
+    async() => {
+      //request_states.kento = "processing_now"
+      await fetch_kentos()
+      await fetch_kentos_interval(60000)
+      expect(spy_fetch).toHaveBeenCalledTimes(1)
+      setTimeout(()=>{
+        expect(spy_fetch).toHaveBeenCalledTimes(2)
+      },70000)
     }
   )
 })

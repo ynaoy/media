@@ -10,7 +10,8 @@ describe("board test", async() => {
                                 sub_board_text:"", sub_board_num:"",
                                 player1:"", player2:"",
                                 my_kifu: true, kento:"Test kento",state: ref(1),
-                                send_kentos: vi.fn(), })
+                                post_kentos: vi.fn(),
+                                fetch_kentos_interval: vi.fn()})
 
   it("子コンポーネントが表示されているかチェック", () => {
     expect(wrapper.html()).contain("<left-board")

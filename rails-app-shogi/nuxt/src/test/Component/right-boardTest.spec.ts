@@ -13,7 +13,8 @@ describe("right-board test", async() => {
                                       my_kifu: true,
                                       kento:"Test kento",
                                       state: ref(1),
-                                      send_kentos: vi.fn(), })
+                                      post_kentos: vi.fn(),
+                                      fetch_kentos_interval: vi.fn() })
 
   it("コンポーネントが表示されているかチェック", () => {
     expect(wrapper.text()).contain("先手:")
