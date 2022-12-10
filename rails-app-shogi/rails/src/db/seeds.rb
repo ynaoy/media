@@ -39,6 +39,8 @@ User.create!(name:  "admin_user",
               password:              password,
               password_confirmation: password,
               admin: true,
+              activated: true,
+              activated_at: Time.zone.now
               )
 99.times do |n|
   name = Faker::Name.name.slice(0..9)
@@ -47,6 +49,8 @@ User.create!(name:  "admin_user",
               email: email,
               password:              password,
               password_confirmation: password,
+              activated: true,
+              activated_at: Time.zone.now
               )
 end
 

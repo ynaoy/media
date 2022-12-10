@@ -32,7 +32,6 @@
   const timer = ref(fetch_kentos_interval(60000))
 
   //このコンポーネントで使うメソッド群
-
   //kento変数がnullかprocessing_nowならfalse、そうでないならtrueを返す
   const is_kento = (item)=>{ 
     return !((item == null)||(item=='processing_now'))}
