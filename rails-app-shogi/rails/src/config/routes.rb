@@ -21,4 +21,5 @@ Rails.application.routes.draw do
   end
   resources :kifus, only: %i[new create show index destroy]
   resources :kentos, only: %i[create show]
+  resources :account_activations, only: %i[edit]
 end
