@@ -11,6 +11,12 @@ RSpec.describe User, type: :model do
     expect(@user).to be_valid
   end
 
+  it "should create activation_token and activation_digest before created" do
+    @user.save
+    expect(@user.activation_token.nil?).to eq false
+    expect(@user.activation_digest.nil?).to eq false
+  end
+  
   it "name should be present" do
     @user.name = "     "
     expect(@user).not_to be_valid
