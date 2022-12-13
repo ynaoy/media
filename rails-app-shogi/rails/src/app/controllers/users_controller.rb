@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: %i[history favorite]
 
   def index 
-    @users = User.all.order(id: "desc")
+    @users = User.all.order(id: "desc") #<< Todo activatedカラムがtrueなユーザーだけ取り出す>>
     respond_to do |format|
       format.html { @users = @users.page(params[:page]).per(20)
                     render "index"}
@@ -16,6 +16,9 @@ class UsersController < ApplicationController
   def show
     # << TODO ユーザーが存在しなかったときの処理を追加する >>
     @user = User.find(params[:id])
+    
+    # << Todo Userモデルのactivatedカラムがfalseならエラーを吐き出す >>
+
     @kifus = Kifu.search_kifu(attribute = "user_id",str = params[:id]).order(id: "desc")
     respond_to do |format|
       format.html { @kifus = @kifus.page(params[:page]).per(20)

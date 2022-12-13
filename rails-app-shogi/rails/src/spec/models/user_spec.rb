@@ -86,4 +86,34 @@ RSpec.describe User, type: :model do
     expect(@user.is_favorite_kifu?(kufu_id = 1)).to eq true
     expect(@user.is_favorite_kifu?(kifu_id = 2)).to eq false
   end
+
+  describe "authenticated?" do
+
+    it "if token is wrong, authenticated? return false" do
+      token = User.new_token
+      @user.activation_digest = User.digest(token)
+  
+      expect(@user.authenticated?(:activation, "wrong_token")).to eq false
+    end
+
+    it "authenticated? should work" do
+      token = User.new_token
+      @user.activation_digest = User.digest(token)
+
+      expect(@user.authenticated?(:activation, token)).to eq true
+    end
+
+  end
+
+  it "activate should work" do
+    @user.save
+    expect(@user.activated).to eq false
+    expect(@user.activated_at).to be nil
+
+    @user.activate
+    expect(@user.activated).to eq true
+    expect(@user.activated_at).not_to be nil
+
+  end
+
 end
