@@ -14,7 +14,6 @@ RSpec.describe User, type: :model do
   it "should create activation_token and activation_digest before created" do
     @user.save
     expect(@user.activation_token.nil?).to eq false
-    expect(@user.activation_digest.nil?).to eq false
   end
   
   it "name should be present" do
@@ -91,16 +90,16 @@ RSpec.describe User, type: :model do
 
     it "if token is wrong, authenticated? return false" do
       token = User.new_token
-      @user.activation_digest = User.digest(token)
+      @user.remember_digest = User.digest(token)
   
-      expect(@user.authenticated?(:activation, "wrong_token")).to eq false
+      expect(@user.authenticated?(:remember, "wrong_token")).to eq false
     end
 
     it "authenticated? should work" do
       token = User.new_token
-      @user.activation_digest = User.digest(token)
+      @user.remember_digest = User.digest(token)
 
-      expect(@user.authenticated?(:activation, token)).to eq true
+      expect(@user.authenticated?(:remember, token)).to eq true
     end
 
   end

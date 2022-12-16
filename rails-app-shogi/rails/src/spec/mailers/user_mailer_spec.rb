@@ -12,8 +12,8 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(edit_account_activation_url(user.activation_token,
-                                                                      email: @user.email))
+      expect(mail.body.encoded).to have_content(edit_account_activation_url(user.activation_token,
+                                                                            email: user.email))
     end
   end
 

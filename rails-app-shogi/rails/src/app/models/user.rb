@@ -26,6 +26,11 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
+  # ランダムな8桁の数字を返す
+  def User.new_Integer
+    SecureRandom.random_number(99999999)
+  end
+
   # 永続セッションのためにユーザーをデータベースに記憶する
   def remember
     self.remember_token = User.new_token
@@ -81,7 +86,6 @@ class User < ApplicationRecord
 
     # 有効化トークンとダイジェストを作成および代入する
     def create_activation_digest
-      self.activation_token  = User.new_token
-      self.activation_digest = User.digest(activation_token)
+      self.activation_token  = User.new_Integer
     end
 end
