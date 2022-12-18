@@ -1,8 +1,10 @@
 class AccountActivationsController < ApplicationController
+  before_action :check_json_request, only: :create
 
-  def edit
-    user = User.find_by(email: params[:email])
-    if user && !user.activated? && user.authenticated?(:activation, params[:id])
+  def create
+    user = User.find_by(id: account_activations_params[:id])
+    if user && !user.activated? && user.correct_token?( :activation,
+                                                        account_activations_params[:activation_token])
       user.activate
 
       #sessionで管理する用。いずれ削除する
@@ -25,5 +27,18 @@ class AccountActivationsController < ApplicationController
 
     end
   end
+
+  private
+
+    def account_activations_params
+      params.require(:account_activation).permit(:id, :activation_token)
+    end
+
+    def check_json_request
+      if(params[:format]=="json")
+        return if(!check_csrf_token)
+        params[:account_activation] = JSON.parse(params[:account_activation],symbolize_names: true)
+      end
+    end
 
 end

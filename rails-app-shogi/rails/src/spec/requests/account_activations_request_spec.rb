@@ -1,19 +1,28 @@
 require 'rails_helper'
 
 # 破壊的な変更をしたので一旦ペンディング
-RSpec.xdescribe "AccountActivations", type: :request do
-  
-  let(:user) { FactoryBot.create(:user,activated:false) }
-  
+RSpec.describe "AccountActivations", type: :request do
+
+  let(:user) { FactoryBot.create(:user, activated:false, activated_at:nil) }
+
   describe "http" do
+
     it "redirect user_url" do
-      get edit_account_activation_url(user.activation_token, email: user.email)
+      post account_activations_path, params: { account_activation:{
+                                                  id: user.id, 
+                                                  activation_token: user.activation_token 
+                                                }
+                                              }
       expect(response).to redirect_to(user_url(user)) #ページがusers/[id]にリダイレクトする
       expect(is_logged_in?).to be_truthy
     end
 
-    it "if email is wrong, redirect root_url" do
-      get edit_account_activation_url(user.activation_token, email: "wrong_email")
+    it "if id is nil, redirect root_url" do
+      post account_activations_url, params: { account_activation:{
+                                                id: nil, 
+                                                activation_token: user.activation_token
+                                              }
+                                            }
       expect(response).to redirect_to(root_url) #ページがroot_urlにリダイレクトする
       expect(is_logged_in?).not_to be_truthy
     end
@@ -21,20 +30,32 @@ RSpec.xdescribe "AccountActivations", type: :request do
 
   describe "json" do
     it "return json object" do
-      get edit_account_activation_url(user.activation_token, email: user.email, format: "json")
+      post account_activations_url, params: { account_activation:{
+                                                id: user.id, 
+                                                activation_token: user.activation_token
+                                              }.to_json,
+                                              format: "json" }
       expect(JSON.parse(response.body)['success'].nil?).to eq false
       expect(is_logged_in?).to be_truthy
     end
 
-    it "if email is wrong, unauthorized error" do
-      get edit_account_activation_url(user.activation_token, email: "wrong_email", format: "json")
+    it "if id is wrong, unauthorized error" do
+      post account_activations_url, params: { account_activation:{
+                                                id:nil,
+                                                activation_token: user.activation_token
+                                              }.to_json,
+                                              format: "json" }
       expect(response).to have_http_status(401)
       expect(JSON.parse(response.body)['status']).to eq 401
       expect(is_logged_in?).not_to be_truthy
     end
 
     it "if activation_token is wrong, unauthorized error" do
-      get edit_account_activation_url("wrong_token", email: user.email, format: "json")
+      post account_activations_url, params: { account_activation:{ 
+                                                id: user.id, 
+                                                activation_token: "wrong_token"
+                                              }.to_json,
+                                              format: "json" }
       expect(response).to have_http_status(401)
       expect(JSON.parse(response.body)['status']).to eq 401
       expect(is_logged_in?).not_to be_truthy
@@ -44,7 +65,11 @@ RSpec.xdescribe "AccountActivations", type: :request do
       user.activated = true
       user.save
 
-      get edit_account_activation_url(user.activation_token, email: user.email, format: "json")
+      post account_activations_url, params: { account_activation:{
+                                                id: user.id, 
+                                                activation_token: user.activation_token
+                                              }.to_json,
+                                              format: "json" }
       expect(response).to have_http_status(401)
       expect(JSON.parse(response.body)['status']).to eq 401
       expect(is_logged_in?).not_to be_truthy

@@ -11,7 +11,7 @@ RSpec.describe User, type: :model do
     expect(@user).to be_valid
   end
 
-  it "should create activation_token and activation_digest before created" do
+  it "should create activation_token before created" do
     @user.save
     expect(@user.activation_token.nil?).to eq false
   end
@@ -100,6 +100,21 @@ RSpec.describe User, type: :model do
       @user.remember_digest = User.digest(token)
 
       expect(@user.authenticated?(:remember, token)).to eq true
+    end
+
+  end
+
+  describe "correct_token?" do
+    before do
+      @user.save
+    end
+
+    it "if token is wrong, correct_token? return false" do
+      expect(@user.correct_token?(:activation, "wrong_token")).to eq false
+    end
+
+    it "correct_token? should work" do
+      expect(@user.correct_token?(:activation, @user.activation_token)).to eq true
     end
 
   end
