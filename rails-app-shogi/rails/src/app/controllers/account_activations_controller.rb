@@ -2,7 +2,7 @@ class AccountActivationsController < ApplicationController
   before_action :check_json_request, only: :create
 
   def create
-    user = User.find_by(id: account_activations_params[:id])
+    user = User.find_by(email: account_activations_params[:email])
     if user && !user.activated? && user.correct_token?( :activation,
                                                         account_activations_params[:activation_token])
       user.activate
@@ -31,7 +31,7 @@ class AccountActivationsController < ApplicationController
   private
 
     def account_activations_params
-      params.require(:account_activation).permit(:id, :activation_token)
+      params.require(:account_activation).permit(:email, :activation_token)
     end
 
     def check_json_request

@@ -9,7 +9,7 @@ RSpec.describe "AccountActivations", type: :request do
 
     it "redirect user_url" do
       post account_activations_path, params: { account_activation:{
-                                                  id: user.id, 
+                                                  email: user.email, 
                                                   activation_token: user.activation_token 
                                                 }
                                               }
@@ -19,7 +19,7 @@ RSpec.describe "AccountActivations", type: :request do
 
     it "if id is nil, redirect root_url" do
       post account_activations_url, params: { account_activation:{
-                                                id: nil, 
+                                                email: nil, 
                                                 activation_token: user.activation_token
                                               }
                                             }
@@ -31,7 +31,7 @@ RSpec.describe "AccountActivations", type: :request do
   describe "json" do
     it "return json object" do
       post account_activations_url, params: { account_activation:{
-                                                id: user.id, 
+                                                email: user.email, 
                                                 activation_token: user.activation_token
                                               }.to_json,
                                               format: "json" }
@@ -41,7 +41,7 @@ RSpec.describe "AccountActivations", type: :request do
 
     it "if id is wrong, unauthorized error" do
       post account_activations_url, params: { account_activation:{
-                                                id:nil,
+                                                email:nil,
                                                 activation_token: user.activation_token
                                               }.to_json,
                                               format: "json" }
@@ -52,7 +52,7 @@ RSpec.describe "AccountActivations", type: :request do
 
     it "if activation_token is wrong, unauthorized error" do
       post account_activations_url, params: { account_activation:{ 
-                                                id: user.id, 
+                                                email: user.email, 
                                                 activation_token: "wrong_token"
                                               }.to_json,
                                               format: "json" }
@@ -66,7 +66,7 @@ RSpec.describe "AccountActivations", type: :request do
       user.save
 
       post account_activations_url, params: { account_activation:{
-                                                id: user.id, 
+                                                email: user.email, 
                                                 activation_token: user.activation_token
                                               }.to_json,
                                               format: "json" }
