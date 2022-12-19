@@ -22,25 +22,34 @@
             v-model="signup_form.password_confirmation">
 
           <input type="submit" name="commit" value="作成" class="btn btn-primary" data-disable-with="作成"
+            data-bs-toggle="modal" data-bs-target="#sigupModal"
             @click.prevent="submit">
         </form>
       </div>
     </div>
+    <SignupModal></SignupModal>
   </div>
 </template>
 
 <script setup>
   import { UserHelper } from '../composables/UserHelper'  
-  
+  import SignupModal from './SignupModal.vue'
+
+  //このコンポーネントで使う変数群
+  const signup_form = reactive({
+                        name:"",
+                        email: "", 
+                        password:"",
+                        password_confirmation:"" })
+
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
 
-  const { create_user } = UserHelper()
+  //子コンポーネントに渡す奴ら
+  provide('csrf_token', csrf_token)
+  provide('email', toRef(signup_form,'email') )
 
-  const signup_form = { name:"",
-                        email: "", 
-                        password:"",
-                        password_confirmation:"" }
+  const { create_user } = UserHelper()
 
   //日本語を扱う際に変換確定前の文字がformに反映されない問題を解決
   const  bindKeyword = function({ target }){
