@@ -10,7 +10,7 @@ describe("UserHelper test", async() => {
   const spy_fetch = mock_func("$fetch",{ data:"data" },true)
     
   //このテストでチェックするやつら
-  const { create_user, update_user, get_all_user, delete_user,
+  const { create_user, update_user, get_all_user, delete_user, post_account_activations,
           get_user, get_users_history, get_users_favorite } = UserHelper()
 
   afterAll(()=>{
@@ -40,6 +40,14 @@ describe("UserHelper test", async() => {
 
   it("delete_userメソッドが正しく動作するかチェック", async() => {
     await delete_user({ id: 1 },{})
+    expect(spy_fetch).toHaveBeenCalled()
+  })
+
+  it("post_account_activations メソッドが正しく動作するかチェック", async() => {
+    await post_account_activations ({ account_activation :{
+                                        email:"testuser@example.com",
+                                        activation_token:"12345678",
+                                    }},{})
     expect(spy_fetch).toHaveBeenCalled()
   })
 

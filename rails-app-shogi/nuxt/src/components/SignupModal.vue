@@ -32,29 +32,32 @@
 </template>
 
 <script setup>
-  
+  import { UserHelper } from '../composables/UserHelper'  
+
   //親コンポーネントから貰う奴ら。
   const { is_test } = defineProps(['is_test'])
   const csrf_token = inject('csrf_token')
   const email = inject('email')
+
+  const { post_account_activations } = UserHelper()
 
   //このコンポーネントで使う変数群
   const activation_token = ref("")
 
   //このコンポーネントで使うメソッド群
 
-  // APIと通信するメソッド(仮)
-  const post_account_activation = function(){
-    console.log(email.value)
-    console.log(activation_token.value)
-  }
-
   const submit = async function(){
-    post_account_activation()
+    post_account_activations( { account_activation: JSON.stringify(
+                                { email:email.value,
+                                  activation_token: activation_token.value, 
+                                }
+                              )},
+                              { "Authorization" : csrf_token }
+                            )
   }
 
   defineExpose( { is_test, csrf_token, email, activation_token, 
-                  post_account_activation, submit } );
+                  post_account_activations, submit } );
 </script>
 
 <style scoped>

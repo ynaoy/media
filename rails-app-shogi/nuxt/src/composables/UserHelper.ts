@@ -4,7 +4,7 @@ export const UserHelper = () => {
   //使う関数のインポート
   const { FetchResponse } =UrlHelper()
 
-  //サーバーサイドのログインURLにparams付きでPostリクエストを送る。
+  //サーバーサイドのnew_users_URLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   const create_user = 
     async function( body: { user: {
@@ -25,7 +25,7 @@ export const UserHelper = () => {
         })
         .then((data) => {
           console.log(data)
-          location.href = "/"
+          //location.href = "/"
         })
         .catch((error) => {
           console.log(error)
@@ -73,6 +73,33 @@ export const UserHelper = () => {
         console.log(error)
       })
   }
+
+  //サーバーサイドのaccount_activations_URLにparams付きでPostリクエストを送る。
+  //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
+  const post_account_activations = 
+    async function( body: { account_activation: {
+                              email:string,
+                              activation_token:string,
+                              },
+                          },
+                    headers:{},                      
+                  ){
+      headers['Content-Type'] = 'application/json',
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/account_activations`,
+        { method:'POST',
+          params: { format: 'json' },
+          headers: headers,
+          credentials: 'include',
+          body: body
+        })
+        .then((data) => {
+          console.log(data)
+          location.href = "/"
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
 
   const get_all_user = 
     async function( params = {}, headers = {} ){
@@ -162,8 +189,10 @@ export const UserHelper = () => {
   return {  create_user: create_user,
             update_user: update_user,
             delete_user: delete_user,
+            post_account_activations: post_account_activations,
             get_all_user: get_all_user,
             get_user: get_user,
             get_users_history: get_users_history,
-            get_users_favorite: get_users_favorite }
+            get_users_favorite: get_users_favorite,
+          }
 }
