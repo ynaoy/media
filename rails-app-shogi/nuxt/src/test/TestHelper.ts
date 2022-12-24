@@ -3,9 +3,10 @@ import { mount,shallowMount } from "@vue/test-utils"
 import { AppHelper } from '../composables/AppHelper'
 export const MountHelper = () =>{
   //shallowMountをラップする
-  const Mount = (component, provide = {}, props = {}, shallow = true) =>{
+  const Mount = (component, provide = {}, props = {}, stubs = {}, shallow = true) =>{
     const wrapper = mount(component, { 
-      global:{ provide: provide },
+      global:{  provide: provide,
+                stubs:stubs},
       propsData: props,
       shallow:shallow
     })

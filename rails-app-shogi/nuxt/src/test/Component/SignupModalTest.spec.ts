@@ -1,16 +1,30 @@
 import { describe, it, expect,vi,afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
+import { mount,shallowMount } from "@vue/test-utils"
 import SignupModal from "../../components/SignupModal.vue"
 
 describe("SignupModal test", async() => {
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
-  const wrapper = Mount(SignupModal,  { csrf_token:"this is csrf_token", email: ref("test@example.com")},
-                                      { is_test:true })
+
+  let stub_template = { template:  `<div>
+                                      <slot name="title"> </slot>
+                                      <slot> </slot>
+                                      <slot name="footer"> </slot>
+                                    </div>`
+                      }
+  const wrapper = Mount(SignupModal,  { csrf_token:"this is csrf_token", 
+                                        email: ref("test@example.com"),
+                                        user_created_flg: ref(true)},
+                                      { is_test:true },
+                                      { "b-modal": stub_template },
+                                      false
+                                      )
+
   const { check_text, mock_func} = TestHelper(wrapper)
 
-  // $fetchメソッドをモックする。まだ未実装
+  // $fetchメソッドをモックする。
   const spy_fetch = mock_func("$fetch",{ data:"data" },true)
 
   afterAll(()=>{
@@ -21,8 +35,11 @@ describe("SignupModal test", async() => {
 
     it("Test時以外は'demo modal'ボタンが表示されない", async() => {
       const wrapper_not_test = Mount(SignupModal,{  csrf_token:"this is csrf_token",
-                                                    email: ref("test@example.com")},
-                                                  { is_test:null } )
+                                                    email: ref("test@example.com"),
+                                                    user_created_flg: ref(true)},
+                                                  { is_test:null },
+                                                  { "b-modal": stub_template},
+                                                  false )
       expect(wrapper_not_test.text()).not.toContain("demo modal")
     })
 
@@ -36,21 +53,20 @@ describe("SignupModal test", async() => {
   })
 
   it("フォームが正しく動作しているかチェック", async() => {
-
     //submit関数が呼び出されているかのチェック用
     const spy = await vi.spyOn(wrapper.vm,"submit")
-    await wrapper.vm.$forceUpdate()
+    wrapper.vm.$forceUpdate()
 
     //まずはModalを表示させる
-    //wrapper.find("button[type='button']").trigger('click')
+    wrapper.find("button[type='button']").trigger('click')
 
     //フォームが存在するかチェック
     expect(wrapper.find("input[type='text']").exists()).toBeTruthy()
-    
+
     //フォームに値を入力してsubmitをクリック
-    await wrapper.find("input[type='text']").setValue("12345678")
+    wrapper.find("input[type='text']").setValue("12345678")
     wrapper.find("button[type='submit']").trigger('click')
-    await wrapper.vm.$nextTick()
+    wrapper.vm.$nextTick()
 
     //フォームに正しく反映されているかチェック
     expect(wrapper.vm.activation_token).toBe("12345678")

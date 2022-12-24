@@ -6,6 +6,7 @@ export const UserHelper = () => {
 
   //サーバーサイドのnew_users_URLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
+  // <<Todo succes_flgがダサい。そのうち改善する >>
   const create_user = 
     async function( body: { user: {
                               name:string,
@@ -13,7 +14,8 @@ export const UserHelper = () => {
                               password:string,
                               password_confirmation:string },
                           },
-                    headers:{},                      
+                    headers:{},
+                    success_flg= null           
                   ){
       headers['Content-Type'] = 'application/json',
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/signup`,
@@ -25,11 +27,14 @@ export const UserHelper = () => {
         })
         .then((data) => {
           console.log(data)
+          if(success_flg) success_flg.value= true
           //location.href = "/"
         })
         .catch((error) => {
           console.log(error)
+          if(success_flg) success_flg.value= false
         })
+      return success_flg
     }
 
   const update_user = 

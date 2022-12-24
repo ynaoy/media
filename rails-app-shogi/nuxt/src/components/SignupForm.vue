@@ -22,8 +22,7 @@
             v-model="signup_form.password_confirmation">
 
           <input type="submit" name="commit" value="作成" class="btn btn-primary" data-disable-with="作成"
-            data-bs-toggle="modal" data-bs-target="#sigupModal"
-            @click.prevent="submit">
+            @click.prevent="submit()">
         </form>
       </div>
     </div>
@@ -45,12 +44,18 @@
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
 
+  // このコンポーネントで使う変数群
+  const user_created_flg = ref(false)
+
   //子コンポーネントに渡す奴ら
   provide('csrf_token', csrf_token)
   provide('email', toRef(signup_form,'email') )
-
+  provide('user_created_flg',  user_created_flg )
+  
+  // submit時にapiと通信する
   const { create_user } = UserHelper()
 
+  // このコンポーネントで使うメソッド群
   //日本語を扱う際に変換確定前の文字がformに反映されない問題を解決
   const  bindKeyword = function({ target }){
     signup_form.name =  target.value;
@@ -59,7 +64,11 @@
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    create_user({ user: JSON.stringify(signup_form)}, { "Authorization" : csrf_token })
+    create_user(  { user: JSON.stringify(signup_form)},
+                  { "Authorization" : csrf_token },
+                  user_created_flg
+                                        )
+    console.log(user_created_flg.value)
   }
   defineExpose( { signup_form, submit } );
 </script>
