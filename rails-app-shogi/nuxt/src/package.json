@@ -5,7 +5,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "test": "nuxi test"
+    "test": "nuxi test",
+    "vitest": "vitest"
   },
   "devDependencies": {
     "@nuxt/test-utils-edge": "^3.0.0-rc.4-27585508.c9d4b2e",
