@@ -30,6 +30,17 @@ RSpec.describe "Sessions", type: :request do
       expect(JSON.parse(response.body)['status']).to eq 401
     end
 
+    it "if user not activated, return json error " do
+      @user.activated = false
+      @user.save
+      #ネストした部分がjson形式で送られてくるので注意
+      post login_path, params: {  session: ({  email: @user.email,
+                                              password: "password" }).to_json,
+                                  format: "json" }
+      expect(response).to have_http_status(401)
+      expect(JSON.parse(response.body)['status']).to eq 401
+    end
+
     it "returns http object" do
       #ネストした部分がjson形式で送られてくるので注意
       post login_path, params: { session: ({ email: @user.email,

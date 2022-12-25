@@ -11,9 +11,7 @@ class SessionsController < ApplicationController
     end
 
     @user = User.find_by(email: params[:session][:email].downcase)
-    if @user && @user.authenticate(params[:session][:password])
-
-      #<<TODO Userモデルにactivatedカラム(bool値)を追加したのでそれによって処理を分岐させる >>
+    if @user && @user.authenticate(params[:session][:password]) &&  @user.activated?
 
       #sessionで管理する用。いずれ削除する
       log_in(@user) #sessionに@user.idを追加
