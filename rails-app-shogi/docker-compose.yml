@@ -26,6 +26,8 @@ services:
       - RAILS_ENV=development
       - SPA_ORIGIN=http://localhost:3001
       - JWT_SECRET_KEY=my_secret_key
+    env_file:
+      - ./rails/src/.env
     depends_on:
       - db
       - sub_api1
