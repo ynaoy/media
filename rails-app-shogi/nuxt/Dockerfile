@@ -1,11 +1,11 @@
-FROM node:lts-alpine
+FROM node:16-alpine
 
 RUN mkdir src
 
 RUN apk update && \
     apk upgrade && \
     apk add git && \
-    npm install -g npm@latest nuxi nuxt3
+    npm install -g npm@9.1.3 nuxi nuxt3
 
 WORKDIR /nuxt
 COPY ./src /nuxt
