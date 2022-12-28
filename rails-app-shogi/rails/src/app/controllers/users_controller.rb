@@ -42,15 +42,10 @@ class UsersController < ApplicationController
 
     @user = User.new(user_params)
     if @user.save
-      
-    # ※login処理はメール送信後account_activationsコントローラーでやるのでいったんコメントアウト
-      #sessionで管理する用。いずれ削除する
-      #log_in(@user) #sessionに@user.idを追加
-      #remember(@user) #cookieに@user.idを追加
 
-      #user_idをjwtトークンにencodeしてcookieにセットする
-      #jwt_token(@user)
-      p @user.activation_token #一時的にデバック用
+      # userのメールアドレスに認証コード付きのメールを送信する
+      UserMailer.account_activation(@user).deliver_now
+      # p @user.activation_token #一時的にデバック用
 
       respond_to do |format|
         format.html { redirect_to root_url }
