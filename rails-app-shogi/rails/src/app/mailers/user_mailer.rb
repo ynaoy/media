@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
   #
   def account_activation(user)
     @user = user
-    mail to: user.email, subject: "Account activation"
+    mail to: user.email, subject: "将棋のお時間の認証コードは#{@user.activation_token}です"
   end
 
 end
