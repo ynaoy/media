@@ -84,6 +84,13 @@ class User < ApplicationRecord
     !self.favorites.where(kifu_id: kifu_id).empty?
   end
 
+  # UserモデルのDateTime型を取り出して、2時間以上経過していたらfalseを返す。
+  def expired?(attribute)
+    time = send("#{attribute}_at")
+    return true if time.nil?
+    time < 2.hours.ago
+  end
+
   private
 
     # メールアドレスをすべて小文字にする

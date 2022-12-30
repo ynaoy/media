@@ -61,6 +61,20 @@ RSpec.describe "AccountActivations", type: :request do
       expect(is_logged_in?).not_to be_truthy
     end
 
+    it "if users activated_at is expired, unauthorized error" do
+      user.created_at = 2.hours.ago
+      user.save
+
+      post account_activations_url, params: { account_activation:{
+                                                email: user.email, 
+                                                activation_token: user.activation_token
+                                              }.to_json,
+                                              format: "json" }
+      expect(response).to have_http_status(401)
+      expect(JSON.parse(response.body)['status']).to eq 401
+      expect(is_logged_in?).not_to be_truthy
+    end
+
     it "if user is activate, unauthorized error" do
       user.activated = true
       user.save

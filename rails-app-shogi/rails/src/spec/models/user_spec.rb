@@ -130,4 +130,21 @@ RSpec.describe User, type: :model do
 
   end
 
+  describe "expired?" do
+    before do
+      @user.save
+    end
+
+    it "if created_at is expired, expired? return true" do
+      @user.created_at = 2.hours.ago
+      @user.save
+      expect(@user.expired?(:created)).to eq true
+    end
+
+    it "if created_at is not expired, expired? return false" do
+      expect(@user.expired?(:created)).to eq false
+    end
+
+  end
+
 end

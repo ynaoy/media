@@ -3,8 +3,9 @@ class AccountActivationsController < ApplicationController
 
   def create
     user = User.find_by(email: account_activations_params[:email])
-    if user && !user.activated? && user.correct_token?( :activation,
-                                                        account_activations_params[:activation_token])
+    if user && !user.activated? && !user.expired?(:created) && user.correct_token?( :activation,
+                                                                account_activations_params[:activation_token])
+
       user.activate
 
       #sessionで管理する用。いずれ削除する

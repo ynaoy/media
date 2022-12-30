@@ -5,11 +5,13 @@
         demo modal
     </button>
     <b-modal  v-model="user_created_flg"
-              @shown= "focus_my_element" 
+              @shown = "focus_my_element" 
               centered
-              class="modal fade" 
-              id="sigupModal" 
-              aria-labelledby="sigupModalLabel" 
+              hide-header-close
+              no-close-on-backdrop
+              no-close-on-esc
+              id = "sigupModal" 
+              aria-labelledby = "sigupModalLabel" 
               >
 
       <template v-slot:title>

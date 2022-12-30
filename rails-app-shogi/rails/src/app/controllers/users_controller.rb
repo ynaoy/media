@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     if @user.save
 
       # userのメールアドレスに認証コード付きのメールを送信する
-      UserMailer.account_activation(@user).deliver_now
+      @user.send_activation_email
       # p @user.activation_token #一時的にデバック用
 
       respond_to do |format|
