@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'password_resets/create'
   get 'kentos/create'
   get 'histories/index'
   get 'sessions/new'
@@ -22,4 +23,5 @@ Rails.application.routes.draw do
   resources :kifus, only: %i[new create show index destroy]
   resources :kentos, only: %i[create show]
   resources :account_activations, only: %i[create]
+  resources :password_resets, only: %i[create]
 end
