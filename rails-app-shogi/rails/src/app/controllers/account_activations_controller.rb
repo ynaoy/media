@@ -8,11 +8,11 @@ class AccountActivationsController < ApplicationController
 
       user.activate
 
-      #sessionで管理する用。いずれ削除する
+      #sessionで管理する用。いずれ削除する(ログイン処理)
       log_in(user) #sessionに@user.idを追加
       remember(user) #cookieに@user.idを追加
 
-      #user_idをjwtトークンにencodeしてcookieにjwtトークンをセットする
+      #user_idをjwtトークンにencodeしてcookieにjwtトークンをセットする(ログイン処理)
       jwt_token(user)
 
       respond_to do |format|
