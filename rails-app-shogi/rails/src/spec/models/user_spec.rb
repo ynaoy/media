@@ -130,6 +130,16 @@ RSpec.describe User, type: :model do
 
   end
 
+  it "create_reset_digest" do
+    @user.save
+    expect(@user.reset_digest).to be nil 
+    expect(@user.reset_sent_at).to be nil 
+
+    @user.create_reset_digest
+    expect(@user.reset_digest).not_to be nil 
+    expect(@user.reset_sent_at).not_to be nil 
+  end
+
   describe "expired?" do
     before do
       @user.save

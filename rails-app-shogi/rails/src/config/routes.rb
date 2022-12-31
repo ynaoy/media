@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'password_resets/create'
   get 'kentos/create'
   get 'histories/index'
   get 'sessions/new'

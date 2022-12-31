@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :reset_token
   has_many :kifus, dependent: :destroy
   has_many :histories, dependent: :destroy
   has_many :favorites, dependent: :destroy
@@ -59,6 +59,17 @@ class User < ApplicationRecord
   # 有効化用のメールを送信する
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+
+  # 8文字のパスワード再設定の属性を設定する
+  def create_reset_digest
+    self.reset_token = SecureRandom.urlsafe_base64(6) #urlsafe_base64は引数nの4/3倍の長さの文字列が生成
+    update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
+  end
+  
+  # パスワード再設定のメールを送信する
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
   end
 
   # ユーザーのログイン情報を破棄する
