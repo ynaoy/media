@@ -26,4 +26,33 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
+  describe "password_reset" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:mail) { UserMailer.password_reset(user) }
+    let(:mail_html_body) { mail.html_part.body.encoded }
+    let(:mail_text_body) { mail.text_part.body.encoded }
+
+    before do
+      user.create_reset_digest
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to have_content("パスワードのリセットがリクエストされました")
+      expect(mail.to).to eq([user.email])
+      expect(mail.from).to eq([ENV['MAIL_USER_NAME']])
+    end
+
+    it "renders the html body" do
+      expect(mail_html_body).to have_content("パスワードの変更をリクエストしましたか？")
+      expect(mail_html_body).to have_content("パスワードを変更する場合、以下のコードをご入力くださいませ")
+      expect(mail_html_body).to have_content(user.reset_token)
+    end
+
+    it "renders the text body" do
+      expect(mail_text_body).to have_content("パスワードの変更をリクエストしましたか？")
+      expect(mail_text_body).to have_content("パスワードを変更する場合、以下のコードをご入力くださいませ")
+      expect(mail_text_body).to have_content(user.reset_token)
+    end
+  end
+
 end

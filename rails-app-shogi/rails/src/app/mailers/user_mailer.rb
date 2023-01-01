@@ -10,4 +10,9 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "将棋のお時間の認証コードは#{@user.activation_token}です"
   end
 
+  def password_reset(user)
+    @user = user
+    mail to: user.email, subject: "パスワードのリセットがリクエストされました"
+  end
+
 end
