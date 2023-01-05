@@ -1,23 +1,10 @@
 <template>
-  <div>
-    <button v-if="is_test" type="button" class="btn btn-primary" 
-            @click="user_created_flg= !user_created_flg">
-        demo modal
-    </button>
-    <b-modal  v-model="user_created_flg"
-              @shown = "focus_my_element" 
-              centered
-              hide-header-close
-              no-close-on-backdrop
-              no-close-on-esc
-              id = "sigupModal" 
-              aria-labelledby = "sigupModalLabel" 
-              >
+  <Modal  v-bind = "modal_props" >
+    <template v-slot:title>
+      <h5 class="modal-title" id="sigupModalLabel"> ご入力されたメールアドレスに認証コードが送信されました。ご確認ください </h5>
+    </template>
 
-      <template v-slot:title>
-        <h5 class="modal-title" id="sigupModalLabel"> ご入力されたメールアドレスに認証コードが送信されました。ご確認ください </h5>
-      </template>
-
+    <template v-slot:content>
       <form>
         <div class="mb-3">
           <label for="activation_token" class="col-form-label"> 認証コード: </label>
@@ -26,20 +13,21 @@
             v-model="activation_token">
         </div>
       </form>
+    </template>
 
-      <template v-slot:footer>
-        <button type="submit" class="btn btn-primary"
-          @click.prevent="submit()">
-          送信
-        </button>
-      </template>
+    <template v-slot:footer>
+      <button type="submit" class="btn btn-primary"
+        @click.prevent="submit()">
+        送信
+      </button>
+    </template>
         
-    </b-modal>
-  </div>
+    </Modal>
 </template>
 
 <script setup>
   import { UserHelper } from '../composables/UserHelper'  
+  import Modal  from './Modal.vue'
 
   //親コンポーネントから貰う奴ら。
   const { is_test } = defineProps(['is_test'])
@@ -52,7 +40,6 @@
   //このコンポーネントで使う変数群
   const activation_token = ref("")
   const focus_this = ref(null)
-
   //このコンポーネントで使うメソッド群
 
   //描写されたと同時にinputにfocusする
@@ -70,7 +57,19 @@
                             )
   }
 
-  defineExpose( { is_test, csrf_token, email, user_created_flg, activation_token, focus_this,
+  // 子コンポーネントに送るやつら
+  const modal_props = { centered: true,
+                        hideHeaderClose: true,
+                        noCloseOnBackdrop: true,
+                        noCloseOnEsc: true,
+                        id: "sigupModal",
+                        ariaLabelledby: "sigupModalLabel" }
+
+  provide('is_test',is_test)
+  provide('reactive_model',user_created_flg)
+  provide('shown_fnc',focus_my_element)
+
+  defineExpose( { is_test, csrf_token, email, user_created_flg, activation_token, focus_this, modal_props,
                   post_account_activations, submit, focus_my_element,submit } );
 </script>
 

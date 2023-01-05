@@ -67,7 +67,7 @@
     create_user(  { user: JSON.stringify(signup_form)},
                   { "Authorization" : csrf_token },
                   user_created_flg
-                                        )
+                                      )
     console.log(user_created_flg.value)
   }
   defineExpose( { signup_form, submit } );

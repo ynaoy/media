@@ -10,7 +10,7 @@ describe("SignupModal test", async() => {
 
   let stub_template = { template:  `<div>
                                       <slot name="title"> </slot>
-                                      <slot> </slot>
+                                      <slot name="content"> </slot>
                                       <slot name="footer"> </slot>
                                     </div>`
                       }
@@ -18,7 +18,8 @@ describe("SignupModal test", async() => {
                                         email: ref("test@example.com"),
                                         user_created_flg: ref(true)},
                                       { is_test:true },
-                                      { "b-modal": stub_template },
+                                      { "Modal": stub_template },
+                                      {},
                                       false
                                       )
 
@@ -31,34 +32,11 @@ describe("SignupModal test", async() => {
     vi.clearAllMocks
   })
 
-  describe("Modal show",async()=> {
-
-    it("Test時以外は'demo modal'ボタンが表示されない", async() => {
-      const wrapper_not_test = Mount(SignupModal,{  csrf_token:"this is csrf_token",
-                                                    email: ref("test@example.com"),
-                                                    user_created_flg: ref(true)},
-                                                  { is_test:null },
-                                                  { "b-modal": stub_template},
-                                                  false )
-      expect(wrapper_not_test.text()).not.toContain("demo modal")
-    })
-
-    it("テキストが正しく表示されているかチェック", async() => {
-      check_text(["demo modal",
-                  "ご入力されたメールアドレスに認証コードが送信されました。ご確認ください",
-                  "認証コード",
-                  "送信"])
-    })
-
-  })
-
   it("フォームが正しく動作しているかチェック", async() => {
+    console.log(wrapper.html())
     //submit関数が呼び出されているかのチェック用
     const spy = await vi.spyOn(wrapper.vm,"submit")
     wrapper.vm.$forceUpdate()
-
-    //まずはModalを表示させる
-    wrapper.find("button[type='button']").trigger('click')
 
     //フォームが存在するかチェック
     expect(wrapper.find("input[type='text']").exists()).toBeTruthy()
