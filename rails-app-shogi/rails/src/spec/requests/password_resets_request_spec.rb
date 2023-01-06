@@ -77,13 +77,13 @@ RSpec.describe "PasswordResets", type: :request do
 
     describe "http" do
       it "returns http success" do
-        patch password_reset_path(user), params: {  password_reset:{
-                                                      email: user.email, 
-                                                    },
-                                                    user:{
-                                                      password: "new_password",
-                                                      password_confirmation: "new_password",
-                                                    },
+        patch "/password_resets/update_password", params: { password_reset:{
+                                                            email: user.email, 
+                                                          },
+                                                        user:{
+                                                          password: "new_password",
+                                                          password_confirmation: "new_password",
+                                                        },
                                                     reset_token: user.reset_token
                                                   }
         expect(response).to redirect_to(user_url(user))
@@ -91,7 +91,7 @@ RSpec.describe "PasswordResets", type: :request do
       end
 
       it "if password is blank, unauthorized error" do
-        patch password_reset_path(user), params: {  password_reset:{
+        patch "/password_resets/update_password", params: {  password_reset:{
                                                       email: user.email, 
                                                     },
                                                     user:{
@@ -106,7 +106,7 @@ RSpec.describe "PasswordResets", type: :request do
 
     describe "json" do
       it "return json object" do
-        patch password_reset_path(user),  params: { password_reset:{
+        patch "/password_resets/update_password",  params: { password_reset:{
                                                       email: user.email, 
                                                     }.to_json,
                                                     user:{
@@ -120,7 +120,7 @@ RSpec.describe "PasswordResets", type: :request do
       end
 
       it "if user is not exist, unauthorized error" do
-        patch password_reset_path(user),  params: {  password_reset:{
+        patch "/password_resets/update_password",  params: {  password_reset:{
                                                       email: user.email, 
                                                     }.to_json,
                                                     user:{
@@ -137,7 +137,7 @@ RSpec.describe "PasswordResets", type: :request do
       it "if reset_sent_at exipired, unauthorized error" do
         user.reset_sent_at = 2.hours.ago
         user.save
-        patch password_reset_path(user),  params: {  password_reset:{
+        patch "/password_resets/update_password",  params: {  password_reset:{
                                                       email: user.email, 
                                                     }.to_json,
                                                     user:{
@@ -155,7 +155,7 @@ RSpec.describe "PasswordResets", type: :request do
         it "if activated is false, unauthorized error" do
           user.activated = false
           user.save
-          patch password_reset_path(user),  params: {  password_reset:{
+          patch "/password_resets/update_password",  params: {  password_reset:{
                                                         email: user.email, 
                                                       }.to_json,
                                                       user:{
@@ -170,7 +170,7 @@ RSpec.describe "PasswordResets", type: :request do
         end
 
         it "if reset_token is wrong, unauthorized error" do
-          patch password_reset_path(user),  params: {  password_reset:{
+          patch "/password_resets/update_password",  params: {  password_reset:{
                                                         email: user.email, 
                                                       }.to_json,
                                                       user:{

@@ -15,7 +15,7 @@ export const PasswordResetHelper = () =>{
                     headers:{}         
                   ){
       headers['Content-Type'] = 'application/json',
-      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_reset/check_email`,
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets/check_email`,
         { method:'POST',
           params: { format: 'json' },
           headers: headers,
@@ -41,7 +41,7 @@ export const PasswordResetHelper = () =>{
                     headers:{},          
                 ){
     headers['Content-Type'] = 'application/json',
-    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_reset`,
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets`,
       { method:'POST',
         params: { format: 'json' },
         headers: headers,
@@ -73,7 +73,7 @@ export const PasswordResetHelper = () =>{
                     headers:{},         
                 ){
     headers['Content-Type'] = 'application/json',
-    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_reset/update_password`,
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets/update_password`,
       { method:'PATCH',
         params: { format: 'json' },
         headers: headers,

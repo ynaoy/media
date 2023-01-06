@@ -1,9 +1,9 @@
 class PasswordResetsController < ApplicationController
   before_action :check_json_request 
   before_action :get_user
-  before_action :parse_user_params, only: [:update]
-  before_action :valid_user, only: [:update]
-  before_action :check_expiration, only: [:update]
+  before_action :parse_user_params, only: [:update_password]
+  before_action :valid_user, only: [:update_password]
+  before_action :check_expiration, only: [:update_password]
 
   def check_email
     if @user
@@ -33,7 +33,7 @@ class PasswordResetsController < ApplicationController
     end
   end
 
-  def update
+  def update_password
     if params[:user][:password].nil?
       #リクエストのパラメータにpasswordがない場合
       render_errors
