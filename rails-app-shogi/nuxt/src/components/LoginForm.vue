@@ -12,7 +12,9 @@
           <label for="session_password">パスワード</label>
           <input class="form-control" type="password" name="session[password]" id="session_password"
             v-model="session_form.password">
-
+          <PasswordReset>
+            <p> パスワードを忘れた？ </p>
+          </PasswordReset>
           <input type="submit" name="commit" value="ログインする" class="btn btn-primary" data-disable-with="ログインする"
             @click.prevent="submit">
         </form>
@@ -24,11 +26,13 @@
 
 <script setup>
   import { SessionHelper } from '../composables/SessionHelper'
+  import PasswordReset from './PasswordReset.vue'
 
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
 
   const { login, login_check } = SessionHelper()
+  //このコンポーネントで使う変数群
   const session_form = { email: "", password:"" }
 
   const submit = async function(){

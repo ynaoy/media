@@ -3,7 +3,7 @@ import { UrlHelper } from "./UrlHelper"
 export const PasswordResetHelper = () =>{
   //使う関数のインポート
   const { FetchResponse } =UrlHelper()
-  const reset_status = ref("check_email")
+  const reset_status = ref("ready")
 
   //サーバーサイドのpassword_reset/check_emailに、ユーザー検索用のemailのparams付きでPostリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
@@ -82,7 +82,7 @@ export const PasswordResetHelper = () =>{
       })
       .then((data) => {
         console.log(data)
-        reset_status.value= "finish_password_reset"
+        reset_status.value= "ready"
       })
       .catch((error) => {
         console.log(error)

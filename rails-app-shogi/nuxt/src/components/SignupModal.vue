@@ -22,7 +22,7 @@
       </button>
     </template>
         
-    </Modal>
+  </Modal>
 </template>
 
 <script setup>

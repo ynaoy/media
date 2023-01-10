@@ -41,7 +41,7 @@ describe("PasswordReset test", async() => {
                                         }
                                 },{})
     expect(spy_fetch).toHaveBeenCalled()
-    expect(reset_status.value).toBe("finish_password_reset")
+    expect(reset_status.value).toBe("ready")
   })
 
 })

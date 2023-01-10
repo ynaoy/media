@@ -3,7 +3,7 @@ import { MountHelper,TestHelper } from "../TestHelper"
 import { mount,shallowMount } from "@vue/test-utils"
 import Modal from "../../components/Modal.vue"
 
-describe("SModal test", async() => {
+describe("Modal test", async() => {
 
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
