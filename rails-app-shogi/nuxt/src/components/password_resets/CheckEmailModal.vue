@@ -35,16 +35,24 @@
   const check_email_to_post = inject('check_email_to_post')
   const create_password_reset = inject('create_password_reset')
   const update_password_reset = inject('update_password_reset')
+  const set_reset_status = inject('set_reset_status')
 
   //このコンポーネントで使う変数群
   const check_email_flg = ref(false)
   const email = ref("")
   const focus_this = ref(null)
-  //このコンポーネントで使うメソッド群
+
+  //--このコンポーネントで使うメソッド群--
 
   //描写されたと同時にinputにfocusする
   const focus_my_element = function(){
     focus_this.value.focus()
+  }
+
+  //子コンポーネントでModalが非表示になった際にreset_statusの値を戻す
+  const hidden_modal = function(){
+    //非表示になった時に次のステータスだったら戻さない
+    if(reset_status.value != "create_password_reset") set_reset_status("ready")
   }
 
   const submit = async function(){
@@ -62,19 +70,18 @@
                         id: "CheckEmailModal",
                         ariaLabelledby: "CheckEmailModalLabel" }
 
-  //子コンポーネントに渡す変数群
   provide('reactive_model', check_email_flg)
   provide('shown_fnc', focus_my_element)
+  provide('hidden_fnc', hidden_modal)
   provide('is_test', false)
-  
   provide('csrf_token', csrf_token)
   provide('reset_status', reset_status)
   provide('create_password_reset', create_password_reset)
   provide('update_password_reset',  update_password_reset)
+  provide('set_reset_status',  set_reset_status)
 
   //reset_status.valueの値が"check_email"だったらモダルを表示する
   watch(reset_status,()=>{ 
-    console.log(reset_status.value)
     if(reset_status.value == "check_email"){ 
       check_email_flg.value = true 
     }
@@ -83,5 +90,6 @@
     }
   })
 
-  defineExpose({ csrf_token, reset_status, create_password_reset, update_password_reset })
+  defineExpose({  csrf_token, reset_status, create_password_reset,
+                  update_password_reset, set_reset_status, hidden_modal })
 </script>

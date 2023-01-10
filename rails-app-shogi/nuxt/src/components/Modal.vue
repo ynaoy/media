@@ -7,7 +7,8 @@
 
     <b-modal  v-bind ="bModalProps"
               v-model ="reactive_model"
-              @shown = "shown_fnc">
+              @shown = "shown_fnc"
+              @hidden ="hidden_fnc">
 
       <template v-slot:title>
         <slot name="title"> </slot>
@@ -36,6 +37,7 @@
   const is_test  = inject('is_test')
   const reactive_model = inject('reactive_model')
   const shown_fnc = inject('shown_fnc')
+  const hidden_fnc = inject('hidden_fnc')
 
   defineExpose( { bModalProps } )
 </script>

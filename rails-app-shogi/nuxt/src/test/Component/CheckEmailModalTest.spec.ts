@@ -1,9 +1,14 @@
 import { describe, it, expect,vi,afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
-import SignupModal from "../../components/SignupModal.vue"
+import CheckEmailModal from "../../components/password_resets/CheckEmailModal.vue"
+import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 
-describe("SignupModal test", async() => {
+describe("CheckEmailModal test", async() => {
 
+  //コンポーネントにprovideするメソッドたち
+  const { reset_status, check_email_to_post, create_password_reset, update_password_reset, set_reset_status }
+      = PasswordResetHelper()
+  
   //テストヘルパーの呼び出しとコンポーネントのマウント
   const { Mount } = MountHelper()
 
@@ -13,13 +18,16 @@ describe("SignupModal test", async() => {
                                       <slot name="footer"> </slot>
                                     </div>`
                       }
-  const wrapper = Mount(SignupModal,  { csrf_token:"this is csrf_token", 
-                                        email: ref("test@example.com"),
-                                        user_created_flg: ref(true)},
-                                      { is_test:true },
-                                      { "Modal": stub_template },
-                                      {},
-                                      false
+  const wrapper = Mount(CheckEmailModal,  { csrf_token:"this is csrf_token", 
+                                            reset_status: reset_status,
+                                            check_email_to_post: check_email_to_post,
+                                            create_password_reset: create_password_reset,
+                                            update_password_reset: update_password_reset, 
+                                            set_reset_status: set_reset_status },
+                                          { is_test:true },
+                                          { "Modal": stub_template },
+                                          {},
+                                          false
                                       )
 
   const { check_text, mock_func} = TestHelper(wrapper)
@@ -41,12 +49,12 @@ describe("SignupModal test", async() => {
     expect(wrapper.find("input[type='text']").exists()).toBeTruthy()
 
     //フォームに値を入力してsubmitをクリック
-    wrapper.find("input[type='text']").setValue("12345678")
+    wrapper.find("input[type='text']").setValue("test@example.com")
     wrapper.find("button[type='submit']").trigger('click')
     wrapper.vm.$nextTick()
 
     //フォームに正しく反映されているかチェック
-    expect(wrapper.vm.activation_token).toBe("12345678")
+    expect(wrapper.vm.email).toBe("test@example.com")
 
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()

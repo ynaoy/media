@@ -89,10 +89,15 @@ export const PasswordResetHelper = () =>{
       })
   }
 
+  const set_reset_status = function(status){
+    reset_status.value=status
+  }
+
 
   return {  reset_status: reset_status,
             check_email_to_post: check_email_to_post,
             create_password_reset: create_password_reset,
             update_password_reset: update_password_reset,
+            set_reset_status: set_reset_status,
           }
 }
