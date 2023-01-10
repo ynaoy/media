@@ -15,10 +15,11 @@ describe("LoginForm test", async() => {
     vi.clearAllMocks
   })
 
-  it("テキストが正しく表示されているかチェック", async() => {
+  it("テキストと子コンポーネントが正しく表示されているかチェック", async() => {
     const texts = ["ログイン", "メールアドレス", "パスワード"]
     check_text(texts)
     expect(wrapper.find("input[type='submit']").element.value).toBe("ログインする")
+    expect(wrapper.html()).contain("<password-reset")
   })
 
   it("フォームが正しく動作しているかチェック", async() => {

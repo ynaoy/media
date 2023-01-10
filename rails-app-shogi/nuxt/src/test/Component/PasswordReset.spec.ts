@@ -10,7 +10,6 @@ describe("PasswordReset test", async() => {
                                       { default: "<p> this is slot </p>"})
 
   it("子コンポーネントが表示されているかチェック", () => {
-    console.log(wrapper.html())
     expect(wrapper.html()).contain("<check-email")
   })
 
