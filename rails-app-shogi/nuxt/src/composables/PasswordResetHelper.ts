@@ -31,7 +31,7 @@ export const PasswordResetHelper = () =>{
         })
   }
 
-  //サーバーサイドのpassword_resetに、ユーザー検索用のemailのparams付きでPostリクエストを送る。
+  //サーバーサイドのpassword_resetに、ユーザー検索用に使うemailのparams付きでPostリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
   const  create_password_reset = 
     async function( body: { password_reset: {

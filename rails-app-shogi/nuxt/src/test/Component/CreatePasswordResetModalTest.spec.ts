@@ -1,12 +1,12 @@
 import { describe, it, expect,vi,afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
-import CheckEmailModal from "../../components/password_resets/CheckEmailModal.vue"
+import CreatePasswordResetModal from "../../components/password_resets/CreatePasswordResetModal.vue"
 import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 
-describe("CheckEmailModal test", async() => {
+describe("CreatePasswordResetModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, check_email_to_post, create_password_reset, update_password_reset, set_reset_status }
+  const { reset_status, create_password_reset, update_password_reset, set_reset_status }
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
@@ -18,13 +18,13 @@ describe("CheckEmailModal test", async() => {
                                       <slot name="footer"> </slot>
                                     </div>`
                       }
-  const wrapper = Mount(CheckEmailModal,  { csrf_token:"this is csrf_token", 
-                                            email: ref(""),
+  const wrapper = Mount(CreatePasswordResetModal,  
+                                          { csrf_token:"this is csrf_token", 
                                             reset_status: reset_status,
-                                            check_email_to_post: check_email_to_post,
                                             create_password_reset: create_password_reset,
                                             update_password_reset: update_password_reset, 
-                                            set_reset_status: set_reset_status },
+                                            set_reset_status: set_reset_status,
+                                            email: ref("test@example.com") },
                                           { is_test:true },
                                           { "Modal": stub_template },
                                           {},
@@ -40,21 +40,14 @@ describe("CheckEmailModal test", async() => {
     vi.clearAllMocks
   })
 
-  it("フォームが正しく動作しているかチェック", async() => {
+  it("サブミットボタンが正しく動作しているかチェック", async() => {
     //submit関数が呼び出されているかのチェック用
     const spy = await vi.spyOn(wrapper.vm,"submit")
     wrapper.vm.$forceUpdate()
 
-    //フォームが存在するかチェック
-    expect(wrapper.find("input[type='text']").exists()).toBeTruthy()
-
-    //フォームに値を入力してsubmitをクリック
-    wrapper.find("input[type='text']").setValue("test@example.com")
+    //submitをクリック
     wrapper.find("button[type='submit']").trigger('click')
     wrapper.vm.$nextTick()
-
-    //フォームに正しく反映されているかチェック
-    expect(wrapper.vm.email).toBe("test@example.com")
 
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
@@ -63,16 +56,17 @@ describe("CheckEmailModal test", async() => {
 
   describe("watchが正しく動作しているかチェック",()=>{
 
-    it("check_email_flgがtrueになるとき", async() => {
-      reset_status.value = "check_email"
+    it("password_reset_flg_flgがtrueになるとき", async() => {
+      wrapper.vm.reset_status = "create_password_reset"
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.check_email_flg).toBeTruthy()
+      expect(wrapper.vm.password_reset_flg).toBeTruthy()
     })
 
-    it("check_email_flgがfalseになるとき", async() => {
-      reset_status.value = "falthy_flg"
+    it("password_reset_flg_flgがfalseになるとき", async() => {
+      wrapper.vm.reset_status = "falthy_flg"
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.check_email_flg).toBeFalsy()
+      expect(wrapper.vm.password_reset_flg).toBeFalsy()
     })
   })
+  
 })

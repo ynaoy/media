@@ -1,18 +1,14 @@
 <template>
   <Modal  v-bind = "modal_props" >
     <template v-slot:title>
-      <h5 class="modal-title" id="ChekEmailModalLabel"> アカウントを探す </h5>
+      <h5 class="modal-title" id="CreatePasswordResetModalLabel"> 認証コードの送信先を確認してください </h5>
     </template>
 
     <template v-slot:content>
-      <form>
-        <div class="mb-3">
-          <label for="ChekEmail" class="col-form-label"> メールアドレス: </label>
-          <input type="text" class="form-control" id="ChekEmail"
-            ref ="focus_this"
-            v-model="email">
-        </div>
-      </form>
+      <div class="mb-3">
+        <p> パスワードを変更する前にご本人確認が必要です。以下のメールアドレスに本人確認の認証コードを送信します </p>
+        <h5> {{ email }} </h5>
+      </div>
     </template>
 
     <template v-slot:footer>
@@ -32,22 +28,15 @@
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
   const reset_status = inject('reset_status')
-  const check_email_to_post = inject('check_email_to_post')
   const create_password_reset = inject('create_password_reset')
   const update_password_reset = inject('update_password_reset')
   const set_reset_status = inject('set_reset_status')
   const email = inject('email')
 
   //このコンポーネントで使う変数群
-  const check_email_flg = ref(false)
-  const focus_this = ref(null)
+  const password_reset_flg = ref(false)
 
   //--このコンポーネントで使うメソッド群--
-
-  //描写されたと同時にinputにfocusする
-  const focus_my_element = function(){
-    focus_this.value.focus()
-  }
 
   //子コンポーネントでModalが非表示になった際にreset_statusの値を戻す
   const hidden_modal = function(){
@@ -56,7 +45,7 @@
   }
 
   const submit = async function(){
-    check_email_to_post( { password_reset: JSON.stringify(
+    create_password_reset({ password_reset: JSON.stringify(
                             { email:email.value,}
                           )},
                           { "Authorization" : csrf_token }
@@ -67,29 +56,27 @@
   const modal_props = { centered: true,
                         noCloseOnBackdrop: true,
                         noCloseOnEsc: true,
-                        id: "CheckEmailModal",
-                        ariaLabelledby: "CheckEmailModalLabel" }
+                        id: "CreatePasswordResetModal",
+                        ariaLabelledby: "CreatePasswordResetModal" }
 
-  provide('reactive_model', check_email_flg)
-  provide('shown_fnc', focus_my_element)
+  provide('reactive_model', password_reset_flg)
   provide('hidden_fnc', hidden_modal)
   provide('is_test', false)
   provide('csrf_token', csrf_token)
   provide('reset_status', reset_status)
-  provide('create_password_reset', create_password_reset)
   provide('update_password_reset',  update_password_reset)
   provide('set_reset_status',  set_reset_status)
 
   //reset_status.valueの値が"check_email"だったらモダルを表示する
   watch(reset_status,()=>{ 
-    if(reset_status.value == "check_email"){ 
-      check_email_flg.value = true 
+    if(reset_status.value == "create_password_reset"){ 
+      password_reset_flg.value = true 
     }
     else{
-      check_email_flg.value = false
+      password_reset_flg.value = false
     }
   })
 
-  defineExpose({  csrf_token, reset_status, create_password_reset,
+  defineExpose({  csrf_token, reset_status, create_password_reset, 
                   update_password_reset, set_reset_status, hidden_modal })
 </script>
