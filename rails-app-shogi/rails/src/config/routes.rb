@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'histories/index'
   get 'sessions/new'
   post 'password_resets/check_email'
+  post 'password_resets/check_token'
   patch 'password_resets/update_password'
   
   get  '/signup',  to: 'users#new'

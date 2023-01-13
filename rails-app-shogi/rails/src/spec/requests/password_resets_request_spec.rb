@@ -69,7 +69,34 @@ RSpec.describe "PasswordResets", type: :request do
     end
   end
 
-  describe "PATCH /update" do
+  describe "POST /check_token" do
+    
+    before do
+      user.create_reset_digest
+    end
+
+    # before_actionのテストはupdate_passwordメソッドの方でやる
+    describe "http" do
+      it "returns http success" do
+        post "/password_resets/check_token", params: {  password_reset:{ email: user.email, },
+                                                        reset_token: user.reset_token
+                                                      }
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    describe "json" do
+      it "return json object" do
+        post "/password_resets/check_token",  params: { password_reset:{ email: user.email, }.to_json,
+                                                        reset_token: user.reset_token,
+                                                        format: "json"
+                                                      }
+        expect(JSON.parse(response.body)['success'].nil?).to eq false
+      end
+    end
+  end
+
+  describe "PATCH /update_password" do
     
     before do
       user.create_reset_digest
@@ -78,58 +105,58 @@ RSpec.describe "PasswordResets", type: :request do
     describe "http" do
       it "returns http success" do
         patch "/password_resets/update_password", params: { password_reset:{
-                                                            email: user.email, 
-                                                          },
-                                                        user:{
-                                                          password: "new_password",
-                                                          password_confirmation: "new_password",
-                                                        },
-                                                    reset_token: user.reset_token
-                                                  }
+                                                              email: user.email, 
+                                                            },
+                                                            user:{
+                                                              password: "new_password",
+                                                              password_confirmation: "new_password",
+                                                            },
+                                                            reset_token: user.reset_token
+                                                          }
         expect(response).to redirect_to(user_url(user))
         expect(is_logged_in?).to be_truthy
       end
 
       it "if password is blank, unauthorized error" do
-        patch "/password_resets/update_password", params: {  password_reset:{
-                                                      email: user.email, 
-                                                    },
-                                                    user:{
-                                                      password: nil,
-                                                      password_confirmation: nil,
-                                                    },
-                                                    reset_token: user.reset_token
-                                                  }
+        patch "/password_resets/update_password", params: { password_reset:{
+                                                              email: user.email, 
+                                                            },
+                                                            user:{
+                                                              password: nil,
+                                                              password_confirmation: nil,
+                                                            },
+                                                            reset_token: user.reset_token
+                                                          }
         expect(response).to redirect_to(login_url)
       end
     end
 
     describe "json" do
       it "return json object" do
-        patch "/password_resets/update_password",  params: { password_reset:{
-                                                      email: user.email, 
-                                                    }.to_json,
-                                                    user:{
-                                                      password: "new_password",
-                                                      password_confirmation: "new_password",
-                                                    }.to_json,
-                                                    reset_token: user.reset_token,
-                                                    format: "json"
-                                                  }
+        patch "/password_resets/update_password",  params: {  password_reset:{
+                                                                email: user.email, 
+                                                              }.to_json,
+                                                              user:{
+                                                                password: "new_password",
+                                                                password_confirmation: "new_password",
+                                                              }.to_json,
+                                                              reset_token: user.reset_token,
+                                                              format: "json"
+                                                            }
         expect(JSON.parse(response.body)['success'].nil?).to eq false
       end
 
       it "if user is not exist, unauthorized error" do
         patch "/password_resets/update_password",  params: {  password_reset:{
-                                                      email: user.email, 
-                                                    }.to_json,
-                                                    user:{
-                                                      password: nil,
-                                                      password_confirmation: nil,
-                                                    }.to_json,
-                                                    reset_token: user.reset_token,
-                                                    format: "json"
-        }
+                                                                email: user.email, 
+                                                              }.to_json,
+                                                              user:{
+                                                                password: nil,
+                                                                password_confirmation: nil,
+                                                              }.to_json,
+                                                              reset_token: user.reset_token,
+                                                              format: "json"
+                                                            }
         expect(response).to have_http_status(401)
         expect(JSON.parse(response.body)['status']).to eq 401
       end
@@ -138,15 +165,15 @@ RSpec.describe "PasswordResets", type: :request do
         user.reset_sent_at = 2.hours.ago
         user.save
         patch "/password_resets/update_password",  params: {  password_reset:{
-                                                      email: user.email, 
-                                                    }.to_json,
-                                                    user:{
-                                                      password: "new_password",
-                                                      password_confirmation: "new_password",
-                                                    }.to_json,
-                                                    reset_token: user.reset_token,
-                                                    format: "json"
-        }
+                                                                email: user.email, 
+                                                              }.to_json,
+                                                              user:{
+                                                                password: "new_password",
+                                                                password_confirmation: "new_password",
+                                                              }.to_json,
+                                                              reset_token: user.reset_token,
+                                                              format: "json"
+                                                            }
         expect(response).to have_http_status(401)
         expect(JSON.parse(response.body)['status']).to eq 401
       end
@@ -156,30 +183,30 @@ RSpec.describe "PasswordResets", type: :request do
           user.activated = false
           user.save
           patch "/password_resets/update_password",  params: {  password_reset:{
-                                                        email: user.email, 
-                                                      }.to_json,
-                                                      user:{
-                                                        password: "new_password",
-                                                        password_confirmation: "new_password",
-                                                      }.to_json,
-                                                      reset_token: user.reset_token,
-                                                      format: "json"
-          }
+                                                                  email: user.email, 
+                                                                }.to_json,
+                                                                user:{
+                                                                  password: "new_password",
+                                                                  password_confirmation: "new_password",
+                                                                }.to_json,
+                                                                reset_token: user.reset_token,
+                                                                format: "json"
+                                                              }
           expect(response).to have_http_status(401)
           expect(JSON.parse(response.body)['status']).to eq 401
         end
 
         it "if reset_token is wrong, unauthorized error" do
           patch "/password_resets/update_password",  params: {  password_reset:{
-                                                        email: user.email, 
-                                                      }.to_json,
-                                                      user:{
-                                                        password: "new_password",
-                                                        password_confirmation: "new_password",
-                                                      }.to_json,
-                                                      reset_token: nil,
-                                                      format: "json"
-          }
+                                                                  email: user.email, 
+                                                                }.to_json,
+                                                                user:{
+                                                                  password: "new_password",
+                                                                  password_confirmation: "new_password",
+                                                                }.to_json,
+                                                                reset_token: nil,
+                                                                format: "json"
+                                                              }
           expect(response).to have_http_status(401)
           expect(JSON.parse(response.body)['status']).to eq 401
         end

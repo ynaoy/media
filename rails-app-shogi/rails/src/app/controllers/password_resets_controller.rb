@@ -2,8 +2,8 @@ class PasswordResetsController < ApplicationController
   before_action :check_json_request 
   before_action :get_user
   before_action :parse_user_params, only: [:update_password]
-  before_action :valid_user, only: [:update_password]
-  before_action :check_expiration, only: [:update_password]
+  before_action :valid_user, only: %i[update_password check_token ]
+  before_action :check_expiration, only: %i[update_password check_token]
 
   def check_email
     if @user
@@ -31,6 +31,13 @@ class PasswordResetsController < ApplicationController
     else
       render_errors
     end
+  end
+
+  def check_token
+    respond_to do |format|
+      format.html { redirect_to root_url }
+      format.json { render json: { success: "auth token is valid" } }
+    end 
   end
 
   def update_password
