@@ -10,7 +10,7 @@ describe("PasswordReset test", async() => {
   const spy_fetch = mock_func("$fetch",{ data:"data" },true)
     
   //このテストでチェックするやつら
-  const { reset_status, check_email_to_post, create_password_reset, update_password_reset }
+  const { reset_status, check_email_to_post, create_password_reset, check_token, update_password_reset }
     = PasswordResetHelper()
 
   afterAll(()=>{
@@ -31,6 +31,14 @@ describe("PasswordReset test", async() => {
     await create_password_reset({ password_reset:{ email:"testuser@example.com",} },
                                 {})
     expect(spy_fetch).toHaveBeenCalled()
+    expect(reset_status.value).toBe("check_token")
+  })
+
+  it("check_tokenメソッドが正しく動作するかチェック", async() => {
+    await check_token({ password_reset:{ email:"testuser@example.com",},
+                        reset_token: "this is reset_token" },
+                                {})
+    expect(spy_fetch).toHaveBeenCalled()
     expect(reset_status.value).toBe("update_password_reset")
   })
 
@@ -38,7 +46,8 @@ describe("PasswordReset test", async() => {
     await update_password_reset({ password_reset:{ email:"testuser@example.com",},
                                   user:{  password:"password",
                                           password_confirmation:"password",
-                                        }
+                                        },
+                                  reset_token: "this is reset_token"
                                 },{})
     expect(spy_fetch).toHaveBeenCalled()
     expect(reset_status.value).toBe("ready")

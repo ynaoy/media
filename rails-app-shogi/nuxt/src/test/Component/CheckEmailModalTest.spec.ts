@@ -22,8 +22,6 @@ describe("CheckEmailModal test", async() => {
                                             email: ref(""),
                                             reset_status: reset_status,
                                             check_email_to_post: check_email_to_post,
-                                            create_password_reset: create_password_reset,
-                                            update_password_reset: update_password_reset, 
                                             set_reset_status: set_reset_status },
                                           { is_test:true },
                                           { "Modal": stub_template },

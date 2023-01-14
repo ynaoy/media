@@ -50,6 +50,34 @@ export const PasswordResetHelper = () =>{
       })
       .then((data) => {
         console.log(data)
+        reset_status.value= "check_token"
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  //サーバーサイドのpassword_reset/check_tokenに、ユーザー検索用に使うemailと、
+  //認証用のreset_tokenのparams付きでPostリクエストを送る。
+  //Responseにsuccessキーがあればreset_statusを更新
+  const  check_token = 
+    async function( body: { password_reset: {
+                              email:string, 
+                            },
+                            reset_token: String,
+                          },
+                    headers:{},          
+                ){
+    headers['Content-Type'] = 'application/json',
+    await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets/check_token`,
+      { method:'POST',
+        params: { format: 'json' },
+        headers: headers,
+        credentials: 'include',
+        body: body
+      })
+      .then((data) => {
+        console.log(data)
         reset_status.value= "update_password_reset"
       })
       .catch((error) => {
@@ -58,17 +86,17 @@ export const PasswordResetHelper = () =>{
   }
 
   //サーバーサイドのpassword_reset/password_updateに、
-  //ユーザー検索用のemailと更新用のパスワードの、params付きでPATCHリクエストを送る。
+  //ユーザー検索用のemailと更新用のパスワードと認証用のreset_tokenの、params付きでPATCHリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
   const update_password_reset = 
     async function( body: { password_reset: {
                               email:string, 
-                            }
+                            },
                             user:{
                               password:string,
                               password_confirmation:string,
-                            }
-                          ,
+                            },
+                            reset_token: String,
                         },
                     headers:{},         
                 ){
@@ -97,6 +125,7 @@ export const PasswordResetHelper = () =>{
   return {  reset_status: reset_status,
             check_email_to_post: check_email_to_post,
             create_password_reset: create_password_reset,
+            check_token: check_token,
             update_password_reset: update_password_reset,
             set_reset_status: set_reset_status,
           }

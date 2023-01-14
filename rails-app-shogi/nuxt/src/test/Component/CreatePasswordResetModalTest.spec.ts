@@ -22,7 +22,6 @@ describe("CreatePasswordResetModal test", async() => {
                                           { csrf_token:"this is csrf_token", 
                                             reset_status: reset_status,
                                             create_password_reset: create_password_reset,
-                                            update_password_reset: update_password_reset, 
                                             set_reset_status: set_reset_status,
                                             email: ref("test@example.com") },
                                           { is_test:true },

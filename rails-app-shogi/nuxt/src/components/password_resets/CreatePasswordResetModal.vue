@@ -29,7 +29,6 @@
   const csrf_token = inject('csrf_token')
   const reset_status = inject('reset_status')
   const create_password_reset = inject('create_password_reset')
-  const update_password_reset = inject('update_password_reset')
   const set_reset_status = inject('set_reset_status')
   const email = inject('email')
 
@@ -62,10 +61,6 @@
   provide('reactive_model', password_reset_flg)
   provide('hidden_fnc', hidden_modal)
   provide('is_test', false)
-  provide('csrf_token', csrf_token)
-  provide('reset_status', reset_status)
-  provide('update_password_reset',  update_password_reset)
-  provide('set_reset_status',  set_reset_status)
 
   //reset_status.valueの値が"check_email"だったらモダルを表示する
   watch(reset_status,()=>{ 
@@ -77,6 +72,5 @@
     }
   })
 
-  defineExpose({  csrf_token, reset_status, create_password_reset, 
-                  update_password_reset, set_reset_status, hidden_modal })
+  defineExpose({  csrf_token, reset_status, create_password_reset, set_reset_status, hidden_modal })
 </script>
