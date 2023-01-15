@@ -64,7 +64,7 @@ export const PasswordResetHelper = () =>{
     async function( body: { password_reset: {
                               email:string, 
                             },
-                            reset_token: String,
+                            reset_token: string,
                           },
                     headers:{},          
                 ){

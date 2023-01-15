@@ -40,7 +40,7 @@
   //子コンポーネントでModalが非表示になった際にreset_statusの値を戻す
   const hidden_modal = function(){
     //非表示になった時に次のステータスだったら戻さない
-    if(reset_status.value != "create_password_reset") set_reset_status("ready")
+    if(reset_status.value != "check_token") set_reset_status("ready")
   }
 
   const submit = async function(){
@@ -51,7 +51,7 @@
                         )
   }
 
-  // 子コンポーネントに送るやつら
+  //--子コンポーネントに送るやつら--
   const modal_props = { centered: true,
                         noCloseOnBackdrop: true,
                         noCloseOnEsc: true,
@@ -62,7 +62,7 @@
   provide('hidden_fnc', hidden_modal)
   provide('is_test', false)
 
-  //reset_status.valueの値が"check_email"だったらモダルを表示する
+  //reset_status.valueの値が今のステータスだったらモダルを表示する
   watch(reset_status,()=>{ 
     if(reset_status.value == "create_password_reset"){ 
       password_reset_flg.value = true 

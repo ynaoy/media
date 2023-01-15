@@ -6,7 +6,7 @@ import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 describe("CreatePasswordResetModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, create_password_reset, update_password_reset, set_reset_status }
+  const { reset_status, create_password_reset, set_reset_status }
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
