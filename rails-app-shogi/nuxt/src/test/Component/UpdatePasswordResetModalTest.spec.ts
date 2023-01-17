@@ -1,12 +1,12 @@
 import { describe, it, expect,vi,afterAll } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
-import CheckResetTokenModal from "../../components/password_resets/CheckResetTokenModal.vue"
+import UpdatePasswordResetModal from "../../components/password_resets/UpdatePasswordResetModal.vue"
 import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 
-describe("CheckResetTokenModal test", async() => {
+describe("UpdatePasswordResetModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, check_token, set_reset_status }
+  const { reset_status, update_password_reset, set_reset_status }
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
@@ -18,16 +18,16 @@ describe("CheckResetTokenModal test", async() => {
                                       <slot name="footer"> </slot>
                                     </div>`
                       }
-  const wrapper = Mount(CheckResetTokenModal,  {  csrf_token:"this is csrf_token", 
-                                                  email: ref(""),
-                                                  reset_token: ref(""),
-                                                  reset_status: reset_status,
-                                                  check_token: check_token,
-                                                  set_reset_status: set_reset_status },
-                                              { is_test:true },
-                                              { "Modal": stub_template },
-                                              {},
-                                              false
+  const wrapper = Mount(UpdatePasswordResetModal, {  csrf_token:"this is csrf_token", 
+                                                    email: ref(""),
+                                                    reset_token: ref(""),
+                                                    reset_status: reset_status,
+                                                    update_password_reset: update_password_reset,
+                                                    set_reset_status: set_reset_status },
+                                                  { is_test:true },
+                                                  { "Modal": stub_template },
+                                                  {},
+                                                  false
                                       )
 
   const { mock_func} = TestHelper(wrapper)
@@ -45,15 +45,18 @@ describe("CheckResetTokenModal test", async() => {
     wrapper.vm.$forceUpdate()
 
     //フォームが存在するかチェック
-    expect(wrapper.find("input[type='text']").exists()).toBeTruthy()
+    expect(wrapper.find("#update_password").exists()).toBeTruthy()
+    expect(wrapper.find("#update_password_confirmation").exists()).toBeTruthy()
 
     //フォームに値を入力してsubmitをクリック
-    wrapper.find("input[type='text']").setValue("12345678")
+    wrapper.find("#update_password").setValue("12345678")
+    wrapper.find("#update_password_confirmation").setValue("12345678")
     wrapper.find("button[type='submit']").trigger('click')
     wrapper.vm.$nextTick()
 
     //フォームに正しく反映されているかチェック
-    expect(wrapper.vm.reset_token).toBe("12345678")
+    expect(wrapper.vm.update_form.password).toBe("12345678")
+    expect(wrapper.vm.update_form.password_confirmation).toBe("12345678")
 
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
@@ -62,16 +65,16 @@ describe("CheckResetTokenModal test", async() => {
 
   describe("watchが正しく動作しているかチェック",()=>{
 
-    it("check_reset_token_flgがtrueになるとき", async() => {
-      reset_status.value = "check_token"
+    it("update_password_reset_flgがtrueになるとき", async() => {
+      reset_status.value = "update_password_reset"
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.check_reset_token_flg).toBeTruthy()
+      expect(wrapper.vm.update_password_reset_flg).toBeTruthy()
     })
 
-    it("check_reset_token_flgがfalseになるとき", async() => {
+    it("update_password_reset_flgがfalseになるとき", async() => {
       reset_status.value = "falthy_flg"
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.check_reset_token_flg).toBeFalsy()
+      expect(wrapper.vm.update_password_reset_flg).toBeFalsy()
     })
   })
 })

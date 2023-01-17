@@ -111,6 +111,7 @@ export const PasswordResetHelper = () =>{
       .then((data) => {
         console.log(data)
         reset_status.value= "ready"
+        location.href = "/"
       })
       .catch((error) => {
         console.log(error)

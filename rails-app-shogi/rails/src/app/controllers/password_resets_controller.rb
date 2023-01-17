@@ -22,7 +22,7 @@ class PasswordResetsController < ApplicationController
     if @user
       @user.create_reset_digest
       #@user.send_password_reset_email
-
+      p @user.reset_token
       respond_to do |format|
         format.html { redirect_to root_url }
         format.json { render json: { success: "email sent with password reset" } }
