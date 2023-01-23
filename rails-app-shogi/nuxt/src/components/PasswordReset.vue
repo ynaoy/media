@@ -24,8 +24,8 @@
   //リアクティブな変数群とメソッド群
   const email = ref('')
   const reset_token = ref('')
-  const { reset_status, check_email_to_post, create_password_reset,
-          check_token, update_password_reset, set_reset_status }
+  const { reset_status, validation, check_email_to_post, create_password_reset,
+          check_token, update_password_reset, set_reset_status, reset_validation }
       = PasswordResetHelper()
 
   //子コンポーネントに渡す変数群
@@ -33,12 +33,15 @@
   provide('email', email)
   provide('reset_token', reset_token)
   provide('reset_status', reset_status)
+  provide('validation', validation)
   provide('check_email_to_post', check_email_to_post)
   provide('create_password_reset', create_password_reset)
   provide('check_token',check_token)
   provide('update_password_reset',  update_password_reset)
   provide('set_reset_status',  set_reset_status)
+  provide('reset_validation',  reset_validation)
 
-  defineExpose({  csrf_token, email, reset_token, reset_status, set_reset_status,
-                  check_email_to_post, create_password_reset, check_token, update_password_reset })
+  defineExpose({  csrf_token, email, reset_token, reset_status, validation,
+                  set_reset_status, reset_validation, check_email_to_post, create_password_reset,
+                  check_token, update_password_reset })
 </script>
