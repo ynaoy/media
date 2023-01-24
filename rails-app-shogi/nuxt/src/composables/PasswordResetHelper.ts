@@ -1,8 +1,10 @@
 import { UrlHelper } from "./UrlHelper"
+import { ValidationHelper } from "./ValidationHelper"
 
 export const PasswordResetHelper = () =>{
   //使う関数のインポート
-  const { FetchResponse } =UrlHelper()
+  const { FetchResponse } = UrlHelper()
+  const { get_validation, set_validation, reset_validation } = ValidationHelper()
   const reset_status = ref("ready")
   const validation = ref("")
 
@@ -30,7 +32,7 @@ export const PasswordResetHelper = () =>{
         })
         .catch((error) => {
           console.log(error)
-          validation.value = "ユーザーが存在しません"
+          set_validation("ユーザーが存在しません")
         })
   }
 
@@ -87,7 +89,7 @@ export const PasswordResetHelper = () =>{
       })
       .catch((error) => {
         console.log(error)
-        validation.value = "認証コードが間違っています"
+        set_validation("認証コードが間違っています")
       })
   }
 
@@ -122,7 +124,7 @@ export const PasswordResetHelper = () =>{
       })
       .catch((error) => {
         console.log(error)
-        validation.value = "パスワードが不正です"
+        set_validation("パスワードが不正です")
       })
   }
 
@@ -130,18 +132,15 @@ export const PasswordResetHelper = () =>{
     reset_status.value=status
   }
 
-  const reset_validation = function(){
-    validation.value = ""
-  }
-
-
   return {  reset_status: reset_status,
             validation: validation,
+            get_validation: get_validation,
+            set_validation: set_validation,
+            reset_validation: reset_validation,
             check_email_to_post: check_email_to_post,
             create_password_reset: create_password_reset,
             check_token: check_token,
             update_password_reset: update_password_reset,
             set_reset_status: set_reset_status,
-            reset_validation: reset_validation,
           }
 }
