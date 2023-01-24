@@ -25,13 +25,11 @@ export const PasswordResetHelper = () =>{
         })
         .then((data) => {
           console.log(data)
-          console.log("a")
           reset_validation()
           reset_status.value= "create_password_reset"
         })
         .catch((error) => {
           console.log(error)
-          console.log("e")
           validation.value = "ユーザーが存在しません"
         })
   }

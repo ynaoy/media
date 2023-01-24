@@ -1,4 +1,4 @@
-import { describe, it, expect,vi,afterAll } from 'vitest'
+import { describe, it, expect, vi, afterAll, afterEach } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
 import CheckEmailModal from "../../components/password_resets/CheckEmailModal.vue"
 import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
@@ -6,7 +6,7 @@ import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 describe("CheckEmailModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, check_email_to_post, set_reset_status }
+  const { reset_status, validation, check_email_to_post, set_reset_status, reset_validation }
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
@@ -21,8 +21,10 @@ describe("CheckEmailModal test", async() => {
   const wrapper = Mount(CheckEmailModal,  { csrf_token:"this is csrf_token", 
                                             email: ref(""),
                                             reset_status: reset_status,
+                                            validation: validation,
                                             check_email_to_post: check_email_to_post,
-                                            set_reset_status: set_reset_status },
+                                            set_reset_status: set_reset_status,
+                                            reset_validation: reset_validation},
                                           { is_test:true },
                                           { "Modal": stub_template },
                                           {},
@@ -37,6 +39,9 @@ describe("CheckEmailModal test", async() => {
   afterAll(()=>{
     vi.clearAllMocks
   })
+  afterEach(()=>{
+    spy_fetch.mockClear()
+  })
 
   it("フォームが正しく動作しているかチェック", async() => {
     //submit関数が呼び出されているかのチェック用
@@ -49,7 +54,7 @@ describe("CheckEmailModal test", async() => {
     //フォームに値を入力してsubmitをクリック
     wrapper.find("input[type='text']").setValue("test@example.com")
     wrapper.find("button[type='submit']").trigger('click')
-    wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
 
     //フォームに正しく反映されているかチェック
     expect(wrapper.vm.email).toBe("test@example.com")
@@ -57,6 +62,13 @@ describe("CheckEmailModal test", async() => {
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
     spy.mockReset()
+  })
+
+  it("validationが正しく動作しているかチェック", async() => {
+    validation.value = "ユーザーが存在しません"
+    await wrapper.vm.$nextTick()
+    //validationが表示されている
+    expect(wrapper.text()).toContain("ユーザーが存在しません")
   })
 
   describe("watchが正しく動作しているかチェック",()=>{
