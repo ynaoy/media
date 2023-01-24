@@ -43,16 +43,7 @@ describe("PasswordReset test", async() => {
       expect(spy_fetch).toHaveBeenCalled()
       expect(reset_status.value).toBe("check_token")
     })
-
-    it("apiからのレスポンスがエラー時に正しく動作するかチェック", async() => {
-      spy_fetch.mockRejectedValueOnce(new Error("error"))
-      await create_password_reset({ password_reset:{ email:"testuser@example.com",} },
-                                  {})
-      expect(spy_fetch).toHaveBeenCalled()
-      expect(validation.value).toBe("ユーザーが存在しません")
-    })
   })
-  
 
   describe("check_tokenメソッド",()=>{
     it("正しく動作するかチェック", async() => {

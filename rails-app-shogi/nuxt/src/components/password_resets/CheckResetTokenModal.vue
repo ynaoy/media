@@ -11,6 +11,7 @@
           <input type="text" maxlength="8" class="form-control" id="reset_token"
             ref ="focus_this"
             v-model="reset_token">
+          <div class="invalid_form"> {{ validation }} </div>
         </div>
       </form>
     </template>
@@ -32,8 +33,10 @@
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
   const reset_status = inject('reset_status')
+  const validation = inject('validation')
   const check_token = inject('check_token')
   const set_reset_status = inject('set_reset_status')
+  const reset_validation = inject('reset_validation')
   const email = inject('email')
   const reset_token = inject('reset_token')
 
@@ -52,6 +55,7 @@
   const hidden_modal = function(){
     //非表示になった時に次のステータスだったら戻さない
     if(reset_status.value != "update_password_reset") set_reset_status("ready")
+    reset_validation()
   }
 
   const submit = async function(){
@@ -84,6 +88,6 @@
     }
   })
 
-  defineExpose({  csrf_token, reset_status, check_token, 
-                  set_reset_status, hidden_modal, reset_token })
+  defineExpose({  csrf_token, reset_status, validation, check_token, 
+                  set_reset_status, reset_validation, hidden_modal, reset_token })
 </script>

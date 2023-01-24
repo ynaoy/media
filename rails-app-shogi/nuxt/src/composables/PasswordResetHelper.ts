@@ -58,7 +58,6 @@ export const PasswordResetHelper = () =>{
       })
       .catch((error) => {
         console.log(error)
-        validation.value = "ユーザーが存在しません"
       })
   }
 
