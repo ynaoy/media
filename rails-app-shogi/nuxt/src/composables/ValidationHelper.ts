@@ -1,3 +1,5 @@
+// 再利用可能な設計にしたかったため、現在はこのヘルパーは使わず
+// ./validations/以下のClassで管理する方法を使っている
 export const ValidationHelper = () =>{
   //--メンバ変数--
   const validation = ref("")

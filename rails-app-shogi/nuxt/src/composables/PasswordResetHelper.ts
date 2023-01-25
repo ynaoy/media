@@ -1,12 +1,11 @@
 import { UrlHelper } from "./UrlHelper"
-import { ValidationHelper } from "./ValidationHelper"
+import { PasswordValidationClass } from "./validations/PasswordValidationClass"
 
 export const PasswordResetHelper = () =>{
   //使う関数のインポート
   const { FetchResponse } = UrlHelper()
-  const { get_validation, set_validation, reset_validation, valid_password } = ValidationHelper()
+  const reset_validation_class = new PasswordValidationClass()
   const reset_status = ref("ready")
-  const validation = ref("")
 
   //サーバーサイドのpassword_reset/check_emailに、ユーザー検索用のemailのparams付きでPostリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
@@ -27,12 +26,12 @@ export const PasswordResetHelper = () =>{
         })
         .then((data) => {
           console.log(data)
-          reset_validation()
+          reset_validation_class.reset()
           reset_status.value= "create_password_reset"
         })
         .catch((error) => {
           console.log(error)
-          set_validation("ユーザーが存在しません")
+          reset_validation_class.set("ユーザーが存在しません")
         })
   }
 
@@ -55,7 +54,7 @@ export const PasswordResetHelper = () =>{
       })
       .then((data) => {
         console.log(data)
-        reset_validation()
+        reset_validation_class.reset()
         reset_status.value= "check_token"
       })
       .catch((error) => {
@@ -84,12 +83,12 @@ export const PasswordResetHelper = () =>{
       })
       .then((data) => {
         console.log(data)
-        reset_validation()
+        reset_validation_class.reset()
         reset_status.value= "update_password_reset"
       })
       .catch((error) => {
         console.log(error)
-        set_validation("認証コードが間違っています")
+        reset_validation_class.set("認証コードが間違っています")
       })
   }
 
@@ -118,13 +117,13 @@ export const PasswordResetHelper = () =>{
       })
       .then((data) => {
         console.log(data)
-        reset_validation()
+        reset_validation_class.reset()
         reset_status.value= "ready"
         location.href = "/"
       })
       .catch((error) => {
         console.log(error)
-        set_validation("パスワードが不正です")
+        reset_validation_class.set("パスワードが不正です")
       })
   }
 
@@ -133,11 +132,10 @@ export const PasswordResetHelper = () =>{
   }
 
   return {  reset_status: reset_status,
-            validation: validation,
-            get_validation: get_validation,
-            set_validation: set_validation,
-            reset_validation: reset_validation,
-            valid_password: valid_password,
+            get_validation: reset_validation_class.get,
+            set_validation: reset_validation_class.set,
+            reset_validation: reset_validation_class.reset,
+            valid_password: reset_validation_class.valid_password,
             check_email_to_post: check_email_to_post,
             create_password_reset: create_password_reset,
             check_token: check_token,
