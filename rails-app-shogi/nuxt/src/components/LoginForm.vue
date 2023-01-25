@@ -13,7 +13,7 @@
           <input class="form-control" type="password" name="session[password]" id="session_password"
             v-model="session_form.password">
           <PasswordReset>
-            <p> パスワードを忘れた？ </p>
+            <p class="password_reset"> パスワードを忘れた？ </p>
           </PasswordReset>
           <input type="submit" name="commit" value="ログインする" class="btn btn-primary" data-disable-with="ログインする"
             @click.prevent="submit">
@@ -43,6 +43,15 @@
   defineExpose( { session_form, login, login_check, submit } );
 
 </script>
-
-<style scoped>
+<style lang="scss" scoped>
+  .password_reset {
+    float: right;
+    color: 	#0D7EFD;
+    text-decoration: underline;
+    cursor: pointer;
+    
+    &:hover {
+      color: 		#0A58CA;
+    }
+  }
 </style>
