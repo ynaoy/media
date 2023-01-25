@@ -6,7 +6,8 @@ import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 describe("CheckEmailModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, validation, check_email_to_post, set_reset_status, reset_validation }
+  const { reset_status, get_validation, set_validation, reset_validation,
+          check_email_to_post, set_reset_status, }
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
@@ -21,11 +22,10 @@ describe("CheckEmailModal test", async() => {
   const wrapper = Mount(CheckEmailModal,  { csrf_token:"this is csrf_token", 
                                             email: ref(""),
                                             reset_status: reset_status,
-                                            validation: validation,
+                                            get_validation: get_validation,
+                                            reset_validation: reset_validation,
                                             check_email_to_post: check_email_to_post,
-                                            set_reset_status: set_reset_status,
-                                            reset_validation: reset_validation},
-                                          { is_test:true },
+                                            set_reset_status: set_reset_status, },                                  { is_test:true },
                                           { "Modal": stub_template },
                                           {},
                                           false
@@ -65,7 +65,7 @@ describe("CheckEmailModal test", async() => {
   })
 
   it("validationが正しく動作しているかチェック", async() => {
-    validation.value = "ユーザーが存在しません"
+    set_validation("ユーザーが存在しません")
     await wrapper.vm.$nextTick()
     //validationが表示されている
     expect(wrapper.text()).toContain("ユーザーが存在しません")

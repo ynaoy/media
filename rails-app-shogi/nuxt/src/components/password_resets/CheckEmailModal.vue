@@ -11,7 +11,7 @@
           <input type="text" class="form-control" id="ChekEmail"
             ref ="focus_this"
             v-model="email">
-          <div class="invalid_form"> {{ validation }} </div>
+          <div class="invalid_form"> {{ get_validation() }} </div>
         </div>
       </form>
     </template>
@@ -33,7 +33,7 @@
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
   const reset_status = inject('reset_status')
-  const validation = inject('validation')
+  const get_validation = inject('get_validation')
   const check_email_to_post = inject('check_email_to_post')
   const set_reset_status = inject('set_reset_status')
   const reset_validation = inject('reset_validation')
@@ -87,6 +87,6 @@
     }
   })
 
-  defineExpose({  csrf_token, reset_status, validation, check_email_to_post,
+  defineExpose({  csrf_token, reset_status, get_validation, check_email_to_post,
                   set_reset_status, reset_validation, hidden_modal })
 </script>

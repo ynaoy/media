@@ -6,7 +6,8 @@ import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 describe("CheckResetTokenModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, validation, check_token, set_reset_status, reset_validation }
+  const { reset_status, get_validation, set_validation, reset_validation,
+          check_token, set_reset_status,}
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
@@ -22,10 +23,10 @@ describe("CheckResetTokenModal test", async() => {
                                                   email: ref(""),
                                                   reset_token: ref(""),
                                                   reset_status: reset_status,
-                                                  validation: validation,
+                                                  get_validation: get_validation,
+                                                  reset_validation: reset_validation,
                                                   check_token: check_token,
-                                                  set_reset_status: set_reset_status,
-                                                  reset_validation: reset_validation },
+                                                  set_reset_status: set_reset_status, },
                                               { is_test:true },
                                               { "Modal": stub_template },
                                               {},
@@ -63,7 +64,7 @@ describe("CheckResetTokenModal test", async() => {
   })
 
   it("validationが正しく動作しているかチェック", async() => {
-    validation.value = "認証コードが間違っています"
+    set_validation("認証コードが間違っています")
     await wrapper.vm.$nextTick()
     //validationが表示されている
     expect(wrapper.text()).toContain("認証コードが間違っています")
