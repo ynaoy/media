@@ -11,10 +11,13 @@
           <input class="form-control" type="password" id="update_password"
             ref ="focus_this"
             v-model="update_form.password">
-
+          
           <label for="user_password_confirmation">パスワードの確認</label>
           <input class="form-control" type="password" id="update_password_confirmation"
             v-model="update_form.password_confirmation">
+
+          <div class="invalid_form"> {{ get_validation() }} </div>
+          
         </div>
       </form>
     </template>
@@ -36,6 +39,9 @@
   //親コンポーネントから貰う奴ら。
   const csrf_token = inject('csrf_token')
   const reset_status = inject('reset_status')
+  const get_validation = inject('get_validation')
+  const reset_validation = inject('reset_validation')
+  const valid_password = inject('valid_password')
   const update_password_reset = inject('update_password_reset')
   const set_reset_status = inject('set_reset_status')
   const email = inject('email')
@@ -57,15 +63,18 @@
   const hidden_modal = function(){
     //非表示になった時に次のステータスだったら戻さない
     if(reset_status.value != "ready") set_reset_status("ready")
+    reset_validation()
   }
 
   const submit = async function(){
-    update_password_reset(  { password_reset: JSON.stringify( { email:email.value,} ),
-                              user: JSON.stringify( update_form ),
-                              reset_token: reset_token.value,
-                            },
-                            { "Authorization" : csrf_token }
-                          )
+    if(valid_password(update_form.password, update_form.password_confirmation)){
+      update_password_reset(  { password_reset: JSON.stringify( { email:email.value,} ),
+                                user: JSON.stringify( update_form ),
+                                reset_token: reset_token.value,
+                              },
+                              { "Authorization" : csrf_token }
+                            )
+    }
   }
 
   //--子コンポーネントに送るやつら--
@@ -90,6 +99,7 @@
     }
   })
 
-  defineExpose({  csrf_token, update_form, reset_status, update_password_reset,
+  defineExpose({  csrf_token, update_form, reset_status, get_validation, valid_password,
+                  reset_validation, update_password_reset, 
                   set_reset_status, hidden_modal, reset_token })
 </script>

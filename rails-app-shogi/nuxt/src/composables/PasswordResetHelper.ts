@@ -4,7 +4,7 @@ import { ValidationHelper } from "./ValidationHelper"
 export const PasswordResetHelper = () =>{
   //使う関数のインポート
   const { FetchResponse } = UrlHelper()
-  const { get_validation, set_validation, reset_validation } = ValidationHelper()
+  const { get_validation, set_validation, reset_validation, valid_password } = ValidationHelper()
   const reset_status = ref("ready")
   const validation = ref("")
 
@@ -137,6 +137,7 @@ export const PasswordResetHelper = () =>{
             get_validation: get_validation,
             set_validation: set_validation,
             reset_validation: reset_validation,
+            valid_password: valid_password,
             check_email_to_post: check_email_to_post,
             create_password_reset: create_password_reset,
             check_token: check_token,

@@ -24,7 +24,7 @@
   //リアクティブな変数群とメソッド群
   const email = ref('')
   const reset_token = ref('')
-  const { reset_status, get_validation, reset_validation, 
+  const { reset_status, get_validation, reset_validation, valid_password,
           check_email_to_post, create_password_reset, check_token, update_password_reset,
           set_reset_status, }
       = PasswordResetHelper()
@@ -36,6 +36,7 @@
   provide('reset_status', reset_status)
   provide('get_validation', get_validation)
   provide('reset_validation',  reset_validation)
+  provide('valid_password', valid_password)
   provide('check_email_to_post', check_email_to_post)
   provide('create_password_reset', create_password_reset)
   provide('check_token',check_token)
@@ -43,6 +44,6 @@
   provide('set_reset_status',  set_reset_status)
 
   defineExpose({  csrf_token, email, reset_token, reset_status,
-                  get_validation, reset_validation, set_reset_status,
+                  get_validation, reset_validation, set_reset_status, valid_password,
                   check_email_to_post, create_password_reset, check_token, update_password_reset })
 </script>

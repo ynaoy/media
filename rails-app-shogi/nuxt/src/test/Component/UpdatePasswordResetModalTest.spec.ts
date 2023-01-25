@@ -6,7 +6,8 @@ import { PasswordResetHelper } from '../../composables/PasswordResetHelper'
 describe("UpdatePasswordResetModal test", async() => {
 
   //コンポーネントにprovideするメソッドたち
-  const { reset_status, update_password_reset, set_reset_status }
+  const { reset_status,get_validation, set_validation, reset_validation, valid_password,
+          update_password_reset, set_reset_status }
       = PasswordResetHelper()
   
   //テストヘルパーの呼び出しとコンポーネントのマウント
@@ -22,6 +23,9 @@ describe("UpdatePasswordResetModal test", async() => {
                                                     email: ref(""),
                                                     reset_token: ref(""),
                                                     reset_status: reset_status,
+                                                    get_validation: get_validation,
+                                                    reset_validation: reset_validation,
+                                                    valid_password: valid_password,
                                                     update_password_reset: update_password_reset,
                                                     set_reset_status: set_reset_status },
                                                   { is_test:true },
@@ -61,6 +65,13 @@ describe("UpdatePasswordResetModal test", async() => {
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
     spy.mockReset()
+  })
+
+  it("validationが正しく動作しているかチェック", async() => {
+    set_validation("パスワードが不正です")
+    await wrapper.vm.$nextTick()
+    //validationが表示されている
+    expect(wrapper.text()).toContain("パスワードが不正です")
   })
 
   describe("watchが正しく動作しているかチェック",()=>{

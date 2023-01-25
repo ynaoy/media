@@ -11,13 +11,14 @@ export const ValidationHelper = () =>{
 
   // パスワードが不正ならバリデーションを表示してfalseを返す。そうでなければtrueを返す
   const valid_password = (password:string, password_confirmation:string) =>{
-    if(password != password_confirmation){
-      set_validation("パスワードとパスワードの確認が一致しません")
+
+    if(password.length < 8){
+      set_validation("パスワードが短すぎます。8文字以上にしてください")
       return false
     }
 
-    else if(password.length < 8){
-      set_validation("パスワードが短すぎます。8文字以上にしてください")
+    else if(password != password_confirmation){
+      set_validation("パスワードとパスワードの確認が一致しません")
       return false
     }
 
