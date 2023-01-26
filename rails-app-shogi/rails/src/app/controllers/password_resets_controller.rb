@@ -21,8 +21,7 @@ class PasswordResetsController < ApplicationController
   def create
     if @user
       @user.create_reset_digest
-      #@user.send_password_reset_email
-      p @user.reset_token
+      @user.send_password_reset_email
       respond_to do |format|
         format.html { redirect_to root_url }
         format.json { render json: { success: "email sent with password reset" } }
