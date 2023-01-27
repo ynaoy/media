@@ -6,7 +6,12 @@ export class PasswordValidationClass extends BaseValidationClass {
   // パスワードが不正ならバリデーションを表示してfalseを返す。そうでなければtrueを返す
   valid_password = (password:string, password_confirmation:string)=>{
 
-    if(password.length < 8){
+    if(password.length == 0){
+      this.set("パスワードを入力してください")
+      return false
+    }
+
+    else if(password.length < 8){
       this.set("パスワードが短すぎます。8文字以上にしてください")
       return false
     }

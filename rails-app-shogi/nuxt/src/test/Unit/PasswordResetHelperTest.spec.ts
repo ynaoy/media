@@ -9,7 +9,7 @@ describe("PasswordReset test", async() => {
   // $fetchメソッドをモックする
   const spy_fetch = mock_func("$fetch",{ data:"data" },true)
   //このテストでチェックするやつら
-  const { reset_status, validation, get_validation,
+  const { reset_status, get_validation,
           check_email_to_post, create_password_reset, check_token, update_password_reset }
     = PasswordResetHelper()
 

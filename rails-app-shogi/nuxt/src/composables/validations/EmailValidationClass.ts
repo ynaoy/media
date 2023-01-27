@@ -6,8 +6,8 @@ export class EmailValidationClass extends BaseValidationClass {
   // パスワードが不正ならバリデーションを表示してfalseを返す。そうでなければtrueを返す
   valid_email = (email:string)=>{
     const VALID_EMAIL_REGEX = /^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+/i
+    
     if(email.length == 0){
-
       this.set("メールアドレスを入力してください")
       return false
     }

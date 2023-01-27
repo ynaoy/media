@@ -11,7 +11,7 @@ describe("UserHelper test", async() => {
     
   //このテストでチェックするやつら
   const { create_user, update_user, get_all_user, delete_user, post_account_activations,
-          get_user, get_users_history, get_users_favorite } = UserHelper()
+          get_user, get_users_history, get_users_favorite, get_email_validation } = UserHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -20,13 +20,25 @@ describe("UserHelper test", async() => {
     spy_fetch.mockClear()
   })
 
-  it("create_userメソッドが正しく動作するかチェック", async() => {
-    await create_user({user:{name:"TestUser",
-                            email:"testuser@example.com",
-                            password:"password",
-                            password_confirmation:"password"}},{})
-    expect(spy_fetch).toHaveBeenCalled()
+  describe("create_userメソッド",()=>{
+    it("正しく動作するかチェック", async() => {
+      await create_user({user:{name:"TestUser",
+                              email:"testuser@example.com",
+                              password:"password",
+                              password_confirmation:"password"}},{})
+      expect(spy_fetch).toHaveBeenCalled()
+    })
+
+    it("apiからのレスポンスがエラー時に正しく動作するかチェック", async() => {
+      spy_fetch.mockRejectedValueOnce(new Error("error"))
+      await create_user({user:{ name:"TestUser",
+                                email:"testuser@example.com",
+                                password:"password",
+                                password_confirmation:"password"}},{})
+      expect(spy_fetch).toHaveBeenCalled()
+      expect(get_email_validation()).toBe("このメールアドレスは既に使われています")
   })
+})
 
   it("update_userメソッドが正しく動作するかチェック", async() => {
     await update_user({ id:1, user:{ name:"TestUser"} },{})

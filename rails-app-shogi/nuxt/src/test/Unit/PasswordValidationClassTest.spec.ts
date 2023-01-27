@@ -11,6 +11,12 @@ describe("PasswordValidationClass test", async() => {
       validation_class.reset()
     })
     
+    it("パスワードが空の時、バリデーションが表示されfalseが返る", async() => {
+      let ret = validation_class.valid_password("", "")
+      expect(ret).toBe(false)
+      expect(validation_class.get()).toBe("パスワードを入力してください")
+    })
+
     it("パスワードとパスワードの確認が一致しない時、バリデーションが表示されfalseが返る", async() => {
       let ret = validation_class.valid_password("password", "false_password")
       expect(ret).toBe(false)

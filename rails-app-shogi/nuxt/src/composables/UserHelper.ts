@@ -1,11 +1,18 @@
 import { UrlHelper } from "./UrlHelper"
+import { EmailValidationClass } from "./validations/EmailValidationClass"
+import { UserNameValidationClass } from "./validations/UserNameValidationClass"
+import { PasswordValidationClass } from "./validations/PasswordValidationClass"
 
 export const UserHelper = () => {
-  //使う関数のインポート
+  // 使う関数のインポート
   const { FetchResponse } =UrlHelper()
+  // 使うクラスの作成
+  const email_validation_class = new EmailValidationClass()
+  const user_name_validation_class = new UserNameValidationClass()
+  const password_validation_class = new PasswordValidationClass()
 
-  //サーバーサイドのnew_users_URLにparams付きでPostリクエストを送る。
-  //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
+  // サーバーサイドのnew_users_URLにparams付きでPostリクエストを送る。
+  // jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   // <<Todo succes_flgがダサい。そのうち改善する >>
   const create_user = 
     async function( body: { user: {
@@ -28,11 +35,12 @@ export const UserHelper = () => {
         .then((data) => {
           console.log(data)
           if(success_flg) success_flg.value= true
-          //location.href = "/"
+          reset_all_validation()
         })
         .catch((error) => {
           console.log(error)
           if(success_flg) success_flg.value= false
+          email_validation_class.set("このメールアドレスは既に使われています")
         })
       return success_flg
     }
@@ -59,8 +67,8 @@ export const UserHelper = () => {
         })
     }
 
-  //サーバーサイドusersコントローラーにparams付きでDELETEリクエストを送る。
-  //レスポンスには{ success: String }が入ってる
+  // サーバーサイドusersコントローラーにparams付きでDELETEリクエストを送る。
+  // レスポンスには{ success: String }が入ってる
   const delete_user = async ( params:{ id: number },
     headers:{} ) =>{
     params['format'] = 'json'
@@ -79,8 +87,8 @@ export const UserHelper = () => {
       })
   }
 
-  //サーバーサイドのaccount_activations_URLにparams付きでPostリクエストを送る。
-  //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
+  // サーバーサイドのaccount_activations_URLにparams付きでPostリクエストを送る。
+  // jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   const post_account_activations = 
     async function( body: { account_activation: {
                               email:string,
@@ -190,6 +198,24 @@ export const UserHelper = () => {
         })
       return { "favorite_kifus": ret }
     }
+  
+  // すべてのバリデーションをリセットする
+  const reset_all_validation = ()=>{
+    email_validation_class.reset()
+    user_name_validation_class.reset()
+    password_validation_class.reset()
+  }
+  
+  // すべてのバリデーションをチェックしてその結果をbool値で返す
+  const check_validation = (form: { name:string,
+                                    email:string, 
+                                    password:string,
+                                    password_confirmation:string },
+                                  ) =>{
+    return  email_validation_class.valid_email(form.email) &&
+            user_name_validation_class.valid_user_name(form.name) &&
+            password_validation_class.valid_password(form.password, form.password_confirmation)
+  }
 
   return {  create_user: create_user,
             update_user: update_user,
@@ -199,5 +225,12 @@ export const UserHelper = () => {
             get_user: get_user,
             get_users_history: get_users_history,
             get_users_favorite: get_users_favorite,
+            check_validation: check_validation,
+            get_email_validation: email_validation_class.get,
+            get_user_name_validation: user_name_validation_class.get,
+            get_password_validation: password_validation_class.get,
+            set_email_validation: email_validation_class.set,
+            set_user_name_validation: user_name_validation_class.set,
+            set_password_validation: password_validation_class.set,
           }
 }
