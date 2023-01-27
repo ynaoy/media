@@ -6,7 +6,7 @@ describe("UserNameValidationClass test", async() => {
   //このテストでチェックするやつら
   const validation_class = new UserNameValidationClass()
 
-  describe("valid_passwordメソッド",()=>{
+  describe("valid_user_nameメソッド",()=>{
     afterEach(()=>{ 
       validation_class.reset()
     })
