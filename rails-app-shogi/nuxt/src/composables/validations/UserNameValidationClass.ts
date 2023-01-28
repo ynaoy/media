@@ -17,6 +17,7 @@ export class UserNameValidationClass extends BaseValidationClass {
     }
 
     else{ 
+      this.reset()
       return true 
     }
   }

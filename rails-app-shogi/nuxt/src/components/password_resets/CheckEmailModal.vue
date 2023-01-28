@@ -8,7 +8,7 @@
       <form>
         <div class="mb-3">
           <label for="ChekEmail" class="col-form-label"> メールアドレス: </label>
-          <input type="text" class="form-control" id="ChekEmail"
+          <input type="text" class="form-control with-validation" id="ChekEmail"
             ref ="focus_this"
             v-model="email">
           <div class="invalid_form"> {{ get_validation() }} </div>

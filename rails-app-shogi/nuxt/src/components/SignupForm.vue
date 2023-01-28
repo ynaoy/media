@@ -4,18 +4,21 @@
     <div class="row justify-content-md-center">
       <div class="col-md-6 col-md-offset-3">
         <form class="form_css" accept-charset="UTF-8">
-      
+
           <label for="user_name">ユーザー名</label>
-          <input class="form-control" type="text" name="user[name]" id="user_name"
-            @input="bindKeyword">
+          <input class="form-control with-validation" type="text" name="user[name]" id="user_name"
+              @input="bindKeyword">
+              <div class="invalid_form"> {{ get_user_name_validation() }} </div>
 
           <label for="user_email">メールアドレス</label>
-          <input class="form-control" type="email" name="user[email]" id="user_email"
+          <input class="form-control with-validation" type="email" name="user[email]" id="user_email"
             v-model="signup_form.email">
+          <div class="invalid_form"> {{ get_email_validation() }} </div>
 
           <label for="user_password">パスワード</label>
-          <input class="form-control" type="password" name="user[password]" id="user_password"
+          <input class="form-control with-validation" type="password" name="user[password]" id="user_password"
             v-model="signup_form.password">
+          <div class="invalid_form"> {{ get_password_validation() }} </div>
 
           <label for="user_password_confirmation">パスワードの確認</label>
           <input class="form-control" type="password" name="user[password_confirmation]" id="user_password_confirmation"
@@ -52,8 +55,11 @@
   provide('email', toRef(signup_form,'email') )
   provide('user_created_flg',  user_created_flg )
   
-  // submit時にapiと通信する
-  const { create_user } = UserHelper()
+  // ヘルパーから使うメソッドをもらう。create_userはapiと通信するメソッド
+  const { create_user, reset_all_validation, check_validation, 
+          get_email_validation, get_user_name_validation, get_password_validation,
+          set_email_validation, set_user_name_validation, set_password_validation
+        } = UserHelper()
 
   // このコンポーネントで使うメソッド群
   //日本語を扱う際に変換確定前の文字がformに反映されない問題を解決
@@ -64,13 +70,16 @@
   const submit = async function(){
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    create_user(  { user: JSON.stringify(signup_form)},
-                  { "Authorization" : csrf_token },
-                  user_created_flg
-                                      )
-    console.log(user_created_flg.value)
+    if(check_validation(signup_form)){
+      create_user(  { user: JSON.stringify(signup_form)},
+                    { "Authorization" : csrf_token },
+                    user_created_flg
+                  )
+      console.log(user_created_flg.value)
+    }
   }
-  defineExpose( { signup_form, submit } );
+  defineExpose({  set_email_validation, set_user_name_validation, set_password_validation,
+                  reset_all_validation, signup_form, submit } );
 </script>
 
 <style scoped>

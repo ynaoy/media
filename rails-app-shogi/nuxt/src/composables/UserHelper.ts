@@ -212,9 +212,11 @@ export const UserHelper = () => {
                                     password:string,
                                     password_confirmation:string },
                                   ) =>{
-    return  email_validation_class.valid_email(form.email) &&
-            user_name_validation_class.valid_user_name(form.name) &&
-            password_validation_class.valid_password(form.password, form.password_confirmation)
+      const email_validation_result = email_validation_class.valid_email(form.email)
+      const user_name_validation_result = user_name_validation_class.valid_user_name(form.name)
+      const password_validation_result = 
+                password_validation_class.valid_password(form.password, form.password_confirmation)
+    return  email_validation_result && user_name_validation_result && password_validation_result
   }
 
   return {  create_user: create_user,
@@ -225,6 +227,7 @@ export const UserHelper = () => {
             get_user: get_user,
             get_users_history: get_users_history,
             get_users_favorite: get_users_favorite,
+            reset_all_validation: reset_all_validation,
             check_validation: check_validation,
             get_email_validation: email_validation_class.get,
             get_user_name_validation: user_name_validation_class.get,

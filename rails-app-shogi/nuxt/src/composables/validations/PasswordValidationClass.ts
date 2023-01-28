@@ -22,6 +22,7 @@ export class PasswordValidationClass extends BaseValidationClass {
     }
 
     else{ 
+      this.reset()
       return true 
     }
   }

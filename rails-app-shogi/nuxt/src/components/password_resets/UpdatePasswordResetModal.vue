@@ -13,7 +13,7 @@
             v-model="update_form.password">
           
           <label for="user_password_confirmation">パスワードの確認</label>
-          <input class="form-control" type="password" id="update_password_confirmation"
+          <input class="form-control with-validation" type="password" id="update_password_confirmation"
             v-model="update_form.password_confirmation">
 
           <div class="invalid_form"> {{ get_validation() }} </div>

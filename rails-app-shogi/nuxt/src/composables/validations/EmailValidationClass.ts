@@ -23,6 +23,7 @@ export class EmailValidationClass extends BaseValidationClass {
     }
 
     else{ 
+      this.reset()
       return true 
     }
   }
