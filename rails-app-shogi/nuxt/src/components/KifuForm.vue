@@ -10,19 +10,22 @@
             v-model="kifu_form.title">
 
           <label for="kifu_player1">先手</label>
-          <input class="form-control" maxlength="10" size="10" type="text" name="kifu[player1]" id="kifu_player1"
+          <input class="form-control with-validation" maxlength="10" size="10" type="text" name="kifu[player1]" id="kifu_player1"
             v-model="kifu_form.player1">
+          <div class="invalid_form"> {{ get_kifu_player1_validation() }} </div>
 
           <label for="kifu_player2">後手</label>
-          <input class="form-control" maxlength="10" size="10" type="text" name="kifu[player2]" id="kifu_player2"
+          <input class="form-control with-validation" maxlength="10" size="10" type="text" name="kifu[player2]" id="kifu_player2"
             v-model="kifu_form.player2"/>
+          <div class="invalid_form"> {{ get_kifu_player2_validation() }} </div>
 
           <div class="form_kifu">
             <label for="kifu_content">棋譜</label>
             <p>※必須</p>
           </div>
-          <textarea class="form-control" required="required" name="kifu[content]" id="kifu_content" cols="0" rows="8"
+          <textarea class="form-control with-validation" required="required" name="kifu[content]" id="kifu_content" cols="0" rows="8"
             v-model="kifu_form.content"></textarea>
+          <div class="invalid_form"> {{ get_kifu_content_validation() }} </div>
 
           <label for="kifu_tag">タグ</label>
           <div class="tag_form">
@@ -62,7 +65,10 @@
   const { tags } = defineProps(['tags'])
 
   // 使うメソッドをヘルパーからもらう
-  const { create_kifu } = KifuHelper()
+  const { create_kifu, get_kifu_player1_validation, get_kifu_player2_validation,
+          get_kifu_content_validation, set_kifu_player1_validation, set_kifu_player2_validation,
+          set_kifu_content_validation, reset_all_validation, check_validation
+        } = KifuHelper()
   const { force_login } = SessionHelper()
 
   // ログインしていなかったらログインページに飛ばす
@@ -75,10 +81,15 @@
   const submit = async function(){
     //<<バグ inputに日本語と英字両方が混ざっていると>>
     //<<Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
-    create_kifu({ kifu:  JSON.stringify(kifu_form)}, { "Authorization" : csrf_token })
+    if(check_validation({ player1: kifu_form.player1, 
+                          player2: kifu_form.player2, 
+                          content: kifu_form.content,})){
+      create_kifu({ kifu:  JSON.stringify(kifu_form)}, { "Authorization" : csrf_token })
+    }
   }
 
-  defineExpose( { kifu_form, tags, create_kifu, submit } );
+  defineExpose( { set_kifu_player1_validation, set_kifu_player2_validation, set_kifu_content_validation,
+                  reset_all_validation, kifu_form, tags, create_kifu, submit } );
 
 </script>
 

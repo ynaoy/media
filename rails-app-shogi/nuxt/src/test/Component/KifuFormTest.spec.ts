@@ -1,4 +1,4 @@
-import { describe, it, expect,vi,afterAll } from 'vitest'
+import { describe, it, expect,vi, afterAll, afterEach } from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
 import KifuForm from "../../components/KifuForm.vue"
 
@@ -15,6 +15,10 @@ describe("KifuForm test", async() => {
 
   afterAll(()=>{
     vi.clearAllMocks
+  })
+
+  afterEach(()=>{
+    wrapper.vm.reset_all_validation()
   })
 
   it("フォームが正しく動作しているかチェック", async() => {
@@ -60,5 +64,16 @@ describe("KifuForm test", async() => {
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
 
+  })
+
+  it("validationが正しく動作しているかチェック", async() => {
+    const validations = [ '名前が長すぎます。10文字以下にしてください',
+                          '棋譜を入力してください', ]
+    wrapper.vm.set_kifu_player1_validation(validations[0])
+    wrapper.vm.set_kifu_player2_validation(validations[0])
+    wrapper.vm.set_kifu_content_validation(validations[1])
+    await wrapper.vm.$nextTick()
+    // バリデーションが表示されているか
+    check_text(validations)
   })
 })

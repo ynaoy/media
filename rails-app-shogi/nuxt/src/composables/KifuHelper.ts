@@ -104,6 +104,6 @@ export const KifuHelper = () => {
             "set_kifu_player2_validation": set_kifu_player2_validation,
             "set_kifu_content_validation": set_kifu_content_validation,
             "reset_all_validation":  reset_all_validation,
-            "check_kifu_validation": check_kifu_validation,
+            "check_validation": check_kifu_validation, // 名前が変わるので注意
           }
 }
