@@ -4,52 +4,36 @@ import { ValidationHelper } from "../../composables/ValidationHelper";
 describe("ValidationHelper test", async() => {
   
   //このテストでチェックするやつら
-  const { get_validation, set_validation, reset_validation, valid_password } = ValidationHelper()
+  const { get_email_validation, get_user_name_validation, get_password_validation,
+          set_email_validation, set_user_name_validation, set_password_validation,
+          reset_all_validation, check_signup_validation } = ValidationHelper()
+  
+  afterEach(()=>{
+    set_email_validation("")
+    set_user_name_validation("")
+    set_password_validation("")
+  })
 
-  describe("get_validationメソッド",()=>{
-    it("正しく動作するかチェック", async() => {
-      expect(get_validation()).toBe("")
+  describe("check_signup_validationメソッド",()=>{
+    it("問題ない時にtrueが返ってくるかチェック", async() => {
+      expect(check_signup_validation({name:"TestUser",
+                                      email:"test@example.com", 
+                                      password:"password",
+                                      password_confirmation:"password" })
+      ).toEqual(true)
     })
   })
 
-  describe("set_validationメソッド",()=>{
-    it("正しく動作するかチェック", async() => {
-      expect(get_validation()).toBe("")
-      set_validation("test")
-      expect(get_validation()).toBe("test")
+  describe("reset_all_validationメソッド",()=>{
+    it("バリデーションがすべてリセットされているか", async() => {
+      set_email_validation("テストバリデーション")
+      set_user_name_validation("テストバリデーション")
+      set_password_validation("テストバリデーション")
+      reset_all_validation()
+      expect(get_email_validation()).toBe("")
+      expect(get_user_name_validation()).toBe("")
+      expect(get_password_validation()).toBe("")
     })
   })
 
-  describe("reset_validationメソッド",()=>{
-    it("正しく動作するかチェック", async() => {
-      set_validation("test")
-      expect(get_validation()).toBe("test")
-      reset_validation()
-      expect(get_validation()).toBe("")
-    })
-  })
-
-  describe("valid_passwordメソッド",()=>{
-    afterEach(()=>{ 
-      reset_validation()
-    })
-    
-    it("パスワードとパスワードの確認が一致しない時、バリデーションが表示されfalseが返る", async() => {
-      let ret = valid_password("password", "false_password")
-      expect(ret).toBe(false)
-      expect(get_validation()).toBe("パスワードとパスワードの確認が一致しません")
-    })
-
-    it("パスワードが8文字より短い時、バリデーションが表示されfalseが返る", async() => {
-      let ret = valid_password("ppppppp", "ppppppp")
-      expect(ret).toBe(false)
-      expect(get_validation()).toBe("パスワードが短すぎます。8文字以上にしてください")
-    })
-
-    it("パスワードに不正がない時、バリデーションが表示されずtrueが返る", async() => {
-      let ret = valid_password("password", "password")
-      expect(ret).toBe(true)
-      expect(get_validation()).toBe("")
-    })
-  })
 })
