@@ -1,15 +1,12 @@
 import { UrlHelper } from "./UrlHelper"
-import { EmailValidationClass } from "./validations/EmailValidationClass"
-import { UserNameValidationClass } from "./validations/UserNameValidationClass"
-import { PasswordValidationClass } from "./validations/PasswordValidationClass"
+import { ValidationHelper } from "./ValidationHelper"
 
 export const UserHelper = () => {
   // 使う関数のインポート
   const { FetchResponse } =UrlHelper()
-  // 使うクラスの作成
-  const email_validation_class = new EmailValidationClass()
-  const user_name_validation_class = new UserNameValidationClass()
-  const password_validation_class = new PasswordValidationClass()
+  const { get_email_validation, get_user_name_validation, get_password_validation,
+          set_email_validation, set_user_name_validation, set_password_validation,
+          reset_all_validation, check_signup_validation } = ValidationHelper()
 
   // サーバーサイドのnew_users_URLにparams付きでPostリクエストを送る。
   // jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
@@ -40,7 +37,7 @@ export const UserHelper = () => {
         .catch((error) => {
           console.log(error)
           if(success_flg) success_flg.value= false
-          email_validation_class.set("このメールアドレスは既に使われています")
+          set_email_validation("このメールアドレスは既に使われています")
         })
       return success_flg
     }
@@ -199,25 +196,6 @@ export const UserHelper = () => {
       return { "favorite_kifus": ret }
     }
   
-  // すべてのバリデーションをリセットする
-  const reset_all_validation = ()=>{
-    email_validation_class.reset()
-    user_name_validation_class.reset()
-    password_validation_class.reset()
-  }
-  
-  // すべてのバリデーションをチェックしてその結果をbool値で返す
-  const check_validation = (form: { name:string,
-                                    email:string, 
-                                    password:string,
-                                    password_confirmation:string },
-                                  ) =>{
-      const email_validation_result = email_validation_class.valid_email(form.email)
-      const user_name_validation_result = user_name_validation_class.valid_user_name(form.name)
-      const password_validation_result = 
-                password_validation_class.valid_password(form.password, form.password_confirmation)
-    return  email_validation_result && user_name_validation_result && password_validation_result
-  }
 
   return {  create_user: create_user,
             update_user: update_user,
@@ -228,12 +206,12 @@ export const UserHelper = () => {
             get_users_history: get_users_history,
             get_users_favorite: get_users_favorite,
             reset_all_validation: reset_all_validation,
-            check_validation: check_validation,
-            get_email_validation: email_validation_class.get,
-            get_user_name_validation: user_name_validation_class.get,
-            get_password_validation: password_validation_class.get,
-            set_email_validation: email_validation_class.set,
-            set_user_name_validation: user_name_validation_class.set,
-            set_password_validation: password_validation_class.set,
+            check_validation: check_signup_validation, // 名前が変わるので注意
+            get_email_validation: get_email_validation,
+            get_user_name_validation: get_user_name_validation,
+            get_password_validation: get_password_validation,
+            set_email_validation: set_email_validation,
+            set_user_name_validation: set_user_name_validation,
+            set_password_validation: set_password_validation,
           }
 }

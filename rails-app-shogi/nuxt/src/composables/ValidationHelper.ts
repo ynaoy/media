@@ -18,10 +18,10 @@ export const ValidationHelper = () =>{
   }
     
   // ユーザーネーム、メールアドレス、パスワードのバリデーションをチェックしてその結果をbool値で返す
-  const check_signup_validation = (form: { name:string,
-                                    email:string, 
-                                    password:string,
-                                    password_confirmation:string },
+  const check_signup_validation = (form: {name:string,
+                                          email:string, 
+                                          password:string,
+                                          password_confirmation:string },
                                   ) =>{
       const email_validation_result = email_validation_class.valid_email(form.email)
       const user_name_validation_result = user_name_validation_class.valid_user_name(form.name)
