@@ -30,6 +30,17 @@ export const ValidationHelper = () =>{
     return  email_validation_result && user_name_validation_result && password_validation_result
   }
 
+  // メールアドレス、パスワードのバリデーションをチェックしてその結果をbool値で返す
+  const check_login_validation = (form: {email:string, 
+                                        password:string,
+                                        password_confirmation:string },
+                                  ) =>{
+      const email_validation_result = email_validation_class.valid_email(form.email)
+      const password_validation_result = 
+                password_validation_class.valid_password(form.password, form.password_confirmation)
+      return  email_validation_result && password_validation_result
+  }
+
   return {  get_email_validation: email_validation_class.get,
             get_user_name_validation: user_name_validation_class.get,
             get_password_validation: password_validation_class.get,
@@ -38,5 +49,6 @@ export const ValidationHelper = () =>{
             set_password_validation: password_validation_class.set,
             reset_all_validation: reset_all_validation,
             check_signup_validation: check_signup_validation,
+            check_login_validation: check_login_validation,
           }
 }

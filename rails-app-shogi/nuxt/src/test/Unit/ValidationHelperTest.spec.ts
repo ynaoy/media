@@ -6,7 +6,8 @@ describe("ValidationHelper test", async() => {
   //このテストでチェックするやつら
   const { get_email_validation, get_user_name_validation, get_password_validation,
           set_email_validation, set_user_name_validation, set_password_validation,
-          reset_all_validation, check_signup_validation } = ValidationHelper()
+          reset_all_validation, check_signup_validation, check_login_validation,
+        } = ValidationHelper()
   
   afterEach(()=>{
     set_email_validation("")
@@ -18,6 +19,15 @@ describe("ValidationHelper test", async() => {
     it("問題ない時にtrueが返ってくるかチェック", async() => {
       expect(check_signup_validation({name:"TestUser",
                                       email:"test@example.com", 
+                                      password:"password",
+                                      password_confirmation:"password" })
+      ).toEqual(true)
+    })
+  })
+
+  describe("check_login_validation メソッド",()=>{
+    it("問題ない時にtrueが返ってくるかチェック", async() => {
+      expect(check_login_validation ({email:"test@example.com", 
                                       password:"password",
                                       password_confirmation:"password" })
       ).toEqual(true)
