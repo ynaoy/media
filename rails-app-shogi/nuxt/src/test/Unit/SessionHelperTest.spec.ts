@@ -27,7 +27,8 @@ describe("SessionHelper test", async() => {
   const spy_sess_removeItem = vi.spyOn(sessionStorage.__proto__,'removeItem')
 
    //このテストでチェックするやつら
-  const { login, login_check, logout, force_login, store_location, redirect_back_or_home }= SessionHelper()
+  const { login, login_check, logout, force_login, store_location, redirect_back_or_home, 
+          get_login_validation, }= SessionHelper()
 
   afterAll(()=>{
     vi.clearAllMocks()
@@ -41,10 +42,20 @@ describe("SessionHelper test", async() => {
     spy_sess_removeItem.mockClear()
   })
 
-  it("loginメソッドが正しく動作するかチェック", async() => {
-    await login({ session:{ email:"testuser@example.com",
-                            password:"password",} }, {})
-    expect(spy_fetch).toHaveBeenCalled()
+  describe("loginメソッド",()=>{
+    it("正しく動作するかチェック", async() => {
+      await login({ session:{ email:"testuser@example.com",
+                              password:"password",} }, {})
+      expect(spy_fetch).toHaveBeenCalled()
+    })
+
+    it("apiからのレスポンスがエラー時に正しく動作するかチェック", async() => {
+      spy_fetch.mockRejectedValueOnce(new Error("error"))
+      await login({ session:{ email:"testuser@example.com",
+                              password:"password",} }, {})
+      expect(spy_fetch).toHaveBeenCalled()
+      expect(get_login_validation()).toBe("メールアドレスかパスワードに誤りがあります")
+    })
   })
 
   it("logoutメソッドが正しく動作するかチェック", async() => {

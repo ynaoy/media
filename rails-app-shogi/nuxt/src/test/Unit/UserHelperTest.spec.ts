@@ -37,8 +37,8 @@ describe("UserHelper test", async() => {
                                 password_confirmation:"password"}},{})
       expect(spy_fetch).toHaveBeenCalled()
       expect(get_email_validation()).toBe("このメールアドレスは既に使われています")
+    })
   })
-})
 
   it("update_userメソッドが正しく動作するかチェック", async() => {
     await update_user({ id:1, user:{ name:"TestUser"} },{})
