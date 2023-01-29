@@ -8,7 +8,7 @@
           <label for="user_name">ユーザー名</label>
           <input class="form-control with-validation" type="text" name="user[name]" id="user_name"
               @input="bindKeyword">
-              <div class="invalid_form"> {{ get_user_name_validation() }} </div>
+          <div class="invalid_form"> {{ get_user_name_validation() }} </div>
 
           <label for="user_email">メールアドレス</label>
           <input class="form-control with-validation" type="email" name="user[email]" id="user_email"

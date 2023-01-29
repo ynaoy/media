@@ -28,8 +28,7 @@ describe("ValidationHelper test", async() => {
   describe("check_login_validation メソッド",()=>{
     it("問題ない時にtrueが返ってくるかチェック", async() => {
       expect(check_login_validation ({email:"test@example.com", 
-                                      password:"password",
-                                      password_confirmation:"password" })
+                                      password:"password", })
       ).toEqual(true)
     })
   })

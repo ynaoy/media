@@ -1,4 +1,4 @@
-import { describe, it, expect,vi,afterAll, beforeAll} from 'vitest'
+import { describe, it, expect,vi,afterAll, afterEach} from 'vitest'
 import { MountHelper,TestHelper } from "../TestHelper"
 import LoginForm from "../../components/LoginForm.vue"
 
@@ -13,6 +13,10 @@ describe("LoginForm test", async() => {
 
   afterAll(()=>{
     vi.clearAllMocks
+  })
+
+  afterEach(()=>{
+    wrapper.vm.reset_all_validation()
   })
 
   it("テキストと子コンポーネントが正しく表示されているかチェック", async() => {
@@ -44,5 +48,18 @@ describe("LoginForm test", async() => {
     //submit関数が呼び出されているかチェック
     expect(spy).toHaveBeenCalled()
     spy.mockReset()
+  })
+
+  it("validationが正しく動作しているかチェック", async() => {
+    const validations = [ 'メールアドレスを入力してください',
+                          'パスワードを入力してください', 
+                          'メールアドレスかパスワードに誤りがあります',]
+    wrapper.vm.set_email_validation(validations[0])
+    wrapper.vm.set_password_validation(validations[1])
+    wrapper.vm.set_login_validation(validations[2])
+    await wrapper.vm.$nextTick()
+    
+    // バリデーションが表示されているか
+    check_text(validations)
   })
 })
