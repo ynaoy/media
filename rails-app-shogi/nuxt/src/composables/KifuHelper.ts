@@ -3,7 +3,7 @@ import { UrlHelper } from "./UrlHelper"
 export const KifuHelper = () => {
   //使う関数のインポート
   const { FetchResponse } =UrlHelper()
-
+  
   //サーバーサイドkifus/[id]にparams付きでGETリクエストを送る。
   //棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
   const get_kifu = async (params:{ id:number },headers:{} ) =>{
