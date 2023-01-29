@@ -1,9 +1,13 @@
 import { UrlHelper } from "./UrlHelper"
+import { ValidationHelper } from "./ValidationHelper"
 
 export const KifuHelper = () => {
   //使う関数のインポート
   const { FetchResponse } =UrlHelper()
-  
+  const { get_kifu_player1_validation, get_kifu_player2_validation, get_kifu_content_validation,
+          set_kifu_player1_validation, set_kifu_player2_validation, set_kifu_content_validation,
+          reset_all_validation, check_kifu_validation } = ValidationHelper()
+
   //サーバーサイドkifus/[id]にparams付きでGETリクエストを送る。
   //棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
   const get_kifu = async (params:{ id:number },headers:{} ) =>{
@@ -41,6 +45,7 @@ export const KifuHelper = () => {
       })
       .then((data) => {
         console.log(data)
+        reset_all_validation()
         location.href = `/kifus/${data.kifu_id}`
       })
       .catch((error) => {
@@ -92,5 +97,13 @@ export const KifuHelper = () => {
             "create_kifu": create_kifu,
             "delete_kifu": delete_kifu,
             "get_users_kifu": get_users_kifu,
+            "get_kifu_player1_validation": get_kifu_player1_validation,
+            "get_kifu_player2_validation": get_kifu_player2_validation,
+            "get_kifu_content_validation": get_kifu_content_validation,
+            "set_kifu_player1_validation": set_kifu_player1_validation,
+            "set_kifu_player2_validation": set_kifu_player2_validation,
+            "set_kifu_content_validation": set_kifu_content_validation,
+            "reset_all_validation":  reset_all_validation,
+            "check_kifu_validation": check_kifu_validation,
           }
 }
