@@ -47,6 +47,7 @@ export const LoginValidationHelper = () =>{
   // 使うクラスの作成
   const email_validation_class = new EmailValidationClass()
   const password_validation_class = new PasswordValidationClass()
+  const login_validation_class = new BaseValidationClass()
 
   //--メソッド--
   // すべてのバリデーションをリセットする
@@ -68,8 +69,10 @@ export const LoginValidationHelper = () =>{
 
   return {  get_email_validation: email_validation_class.get,
             get_password_validation: password_validation_class.get,
+            get_login_validation: login_validation_class.get,
             set_email_validation: email_validation_class.set,
             set_password_validation: password_validation_class.set,
+            set_login_validation: login_validation_class.set,
             reset_all_validation: reset_all_validation,
             check_login_validation: check_login_validation,
           }

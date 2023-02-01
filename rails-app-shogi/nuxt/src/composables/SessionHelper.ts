@@ -1,12 +1,12 @@
 import { UrlHelper } from "./UrlHelper"
-import { ValidationHelper } from "./ValidationHelper"
+import { LoginValidationHelper } from "./ValidationHelper"
 
 export const SessionHelper = () => {
   //使う関数のインポート
   const { FetchResponse } =UrlHelper()
   const { get_email_validation, get_password_validation, get_login_validation,
           set_email_validation, set_password_validation, set_login_validation,
-          reset_all_validation, check_login_validation } = ValidationHelper()
+          reset_all_validation, check_login_validation } = LoginValidationHelper()
 
   //サーバーサイドのログインURLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
