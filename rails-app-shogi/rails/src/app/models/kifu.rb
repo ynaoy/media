@@ -8,7 +8,7 @@ class Kifu < ApplicationRecord
   default_scope -> { order(created_at: :desc) }
   REGEX = /[[１-９]|同][[^[)|打]]]*[)|打]/  #1～9か同から始まって、[)と打]を含まない文字が続き、[)と打]
 
-  #list形式のデータをkifu_tagにsaveする
+  #list形式で与えられるデータを順番にkifu_tagモデルに代入してsaveする
   def save_kifu_tag(list)
     for id in 0..(list.length-1) do
       next if list[id] == ""
@@ -18,7 +18,7 @@ class Kifu < ApplicationRecord
     end
   end
 
-  #kifu_tags.tag_idとtags.idを照会してINNER JOINする
+  #kifu_tagモデルのtag_idカラムとtagモデルのidを照会してINNER JOINする
   def get_tags
     self.kifu_tags.joins("INNER JOIN tags ON tags.id = kifu_tags.tag_id").select("kifu_tags.*","tags.name")
   end
@@ -28,7 +28,7 @@ class Kifu < ApplicationRecord
     self.content.scan(REGEX)
   end
 
-  #kifuモデルからattributeをstrで検索する
+  #kifuモデルの特定のカラムを文字で検索して一致するレコードを返す
   def Kifu.search_kifu(attribute = nil,str = nil)
     if attribute && str
       if attribute!="user_id"
@@ -38,7 +38,7 @@ class Kifu < ApplicationRecord
     end
   end
 
-  #kifuモデルからattributeをstrで検索する
+  #kifuモデルの特定のカラムを文字で検索して一致するレコードを返す
   #OR tagモデルのnameカラムをstrで検索して、一致するkifuモデルのレコードを返す
   def Kifu.search_kifu_and_tag(attribute = nil,str = nil)
     if attribute && str
