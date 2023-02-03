@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   post 'password_resets/check_email'
   post 'password_resets/check_token'
   patch 'password_resets/update_password'
+  get 'kifus/random'
+  get 'kifus/get_kifus'
   
   get  '/signup',  to: 'users#new'
   post '/signup', to: 'users#create'

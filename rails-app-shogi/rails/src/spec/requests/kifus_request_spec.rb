@@ -5,6 +5,9 @@ RSpec.describe "Kifus", type: :request do
   before do
     @user = FactoryBot.create(:user)
     @kifu = FactoryBot.create(:kifu, user_id: @user.id)
+    @tag = FactoryBot.create(:tag, name: "相掛かり")
+    @kifu_tag = @kifu.kifu_tags.build(tag_id: @tag.id)
+    @kifu_tag.save
   end
 
   describe "GET /new" do
@@ -147,4 +150,49 @@ RSpec.describe "Kifus", type: :request do
     end
   end
 
+  describe "GET /random" do
+
+    it "return json object with tag" do
+      get "/kifus/random", params: { format: "json", kifu:{ tag: "相掛かり"} }
+      expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
+    end
+
+    it "return json object with not exist tag" do
+      get "/kifus/random", params: { format: "json", kifu:{ tag: "not exist tag"} }
+      expect(JSON.parse(response.body).nil?).to eq false
+    end
+
+    it "return json object when params is empty" do
+      get "/kifus/random", params: { format: "json", kifu:{ tag: ""} }
+      expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
+    end
+
+    it "return json object when params is nil" do
+      get "/kifus/random", params: { format: "json", kifu:{ tag: nil} }
+      expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
+    end
+  end
+
+  describe "GET /get_kifus" do
+
+    it "return json object  with tag" do
+      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: "相掛かり"} }
+      expect(JSON.parse(response.body)[0].nil?).to eq false
+    end
+
+    it "return json object with not exist tag" do
+      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: "not exist tag"} }
+      expect(JSON.parse(response.body)[0].nil?).to eq true
+    end
+
+    it "return json object when params is empty" do
+      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: ""} }
+      expect(JSON.parse(response.body)[0].nil?).to eq false
+    end
+
+    it "return json object when params is nil" do
+      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: nil} }
+      expect(JSON.parse(response.body)[0].nil?).to eq false
+    end
+  end
 end
