@@ -51,4 +51,14 @@ class Kifu < ApplicationRecord
     end
   end
 
+  # kifuモデルに紐づけられたkifu_tagモデルから
+  # 指定したタグで検索して一致するkifuモデルのレコードを返す
+  def Kifu.search_kifu_by_tag(tag_str = nil)
+    if tag_str
+      kifu_ids = "SELECT kifu_id FROM kifu_tags"
+      tag_ids =  "SELECT id FROM tags WHERE (name LIKE :str)"
+      Kifu.where("id IN ( #{kifu_ids} WHERE tag_id IN (#{tag_ids}) )",str: tag_str)
+    end
+  end
+
 end
