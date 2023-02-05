@@ -153,22 +153,27 @@ RSpec.describe "Kifus", type: :request do
   describe "GET /random" do
 
     it "return json object with tag" do
-      get "/kifus/random", params: { format: "json", kifu:{ tag: "相掛かり"} }
+      get "/kifus/random", params: { format: "json", tag: "相掛かり" }
       expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
     end
 
     it "return json object with not exist tag" do
-      get "/kifus/random", params: { format: "json", kifu:{ tag: "not exist tag"} }
+      get "/kifus/random", params: { format: "json", tag: "not exist tag" }
       expect(JSON.parse(response.body).nil?).to eq false
     end
 
     it "return json object when params is empty" do
-      get "/kifus/random", params: { format: "json", kifu:{ tag: ""} }
+      get "/kifus/random", params: { format: "json", tag: ""}
       expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
     end
 
     it "return json object when params is nil" do
-      get "/kifus/random", params: { format: "json", kifu:{ tag: nil} }
+      get "/kifus/random", params: { format: "json", tag: nil} 
+      expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
+    end
+
+    it "return json object when params is 全て" do
+      get "/kifus/random", params: { format: "json", tag: "全て"} 
       expect(JSON.parse(response.body)['kifu_text'].nil?).to eq false
     end
   end
@@ -176,22 +181,27 @@ RSpec.describe "Kifus", type: :request do
   describe "GET /get_kifus" do
 
     it "return json object  with tag" do
-      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: "相掛かり"} }
+      get "/kifus/get_kifus", params: { format: "json", tag: "相掛かり"}
       expect(JSON.parse(response.body)[0].nil?).to eq false
     end
 
     it "return json object with not exist tag" do
-      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: "not exist tag"} }
+      get "/kifus/get_kifus", params: { format: "json", tag: "not exist tag"}
       expect(JSON.parse(response.body)[0].nil?).to eq true
     end
 
     it "return json object when params is empty" do
-      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: ""} }
+      get "/kifus/get_kifus", params: { format: "json", tag: ""}
       expect(JSON.parse(response.body)[0].nil?).to eq false
     end
 
     it "return json object when params is nil" do
-      get "/kifus/get_kifus", params: { format: "json", kifu:{ tag: nil} }
+      get "/kifus/get_kifus", params: { format: "json", tag: nil}
+      expect(JSON.parse(response.body)[0].nil?).to eq false
+    end
+
+    it "return json object when params is 全て" do
+      get "/kifus/get_kifus", params: { format: "json", tag: "全て"}
       expect(JSON.parse(response.body)[0].nil?).to eq false
     end
   end

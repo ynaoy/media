@@ -84,8 +84,8 @@ class KifusController < ApplicationController
 
   def random
     @kifu =
-      if(valid_tag_params?)
-        Kifu.search_kifu_by_tag(params[:kifu][:tag]).sample
+      if(valid_tag_params? && params[:tag] !="全て")
+        Kifu.search_kifu_by_tag(params[:tag]).sample
       else
         Kifu.all.sample
       end
@@ -103,8 +103,8 @@ class KifusController < ApplicationController
 
   def get_kifus
     @kifus =
-      if(valid_tag_params?)
-        Kifu.search_kifu_by_tag(params[:kifu][:tag]).limit(100)
+      if(valid_tag_params? && params[:tag] !="全て")
+        Kifu.search_kifu_by_tag(params[:tag]).limit(100)
       else
         Kifu.all.limit(100)
       end
@@ -126,7 +126,7 @@ class KifusController < ApplicationController
     end
 
     def valid_tag_params?
-      !(params[:kifu][:tag].nil? || params[:kifu][:tag].length == 0)
+      !(params[:tag].nil? || params[:tag].length == 0)
     end
 
     def correct_user
