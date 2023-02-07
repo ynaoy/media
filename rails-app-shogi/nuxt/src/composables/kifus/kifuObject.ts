@@ -1,4 +1,3 @@
-
 import { reactive } from 'vue'
 
 export const  kifuObject = (kifu_data)=>{
@@ -57,3 +56,4 @@ export const  kifuObject = (kifu_data)=>{
     const kifu_methods = { 'update_board': update_board, }
     return { kifu_states, kifu_methods }
 }
+

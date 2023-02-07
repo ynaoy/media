@@ -71,7 +71,7 @@ export const KifuHelper = () => {
       .catch((error) => {
         console.log(error)
       })
-  }
+    }
 
     //ログインしているユーザーの棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
     const get_users_kifu = async () =>{
@@ -93,10 +93,56 @@ export const KifuHelper = () => {
       return { "kifus": ret }
     }
 
+    // apiからランダムに棋譜を一つ貰う。指定したタグ成分を持つ棋譜からランダムで貰う事も可能
+    const get_random_one = async( params:{ tag: string },
+                                  headers:{}) =>{
+
+      let ret = {} 
+      params['format'] = 'json'
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus/random`,
+        { method:'GET',
+          params: params,
+          headers: {},
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          ret = data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return { "kifu_data": ret }
+    }
+
+    // apiから100個の棋譜を貰う。指定したタグ成分を持つ棋譜で貰う事も可能
+    const get_kifus = async(  params:{ tag:string },
+                              headers:{}) =>{
+
+      let ret = {} 
+      params['format'] = 'json'
+      await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus/get_kifus`,
+        { method:'GET',
+          params: params,
+          headers: {},
+          credentials: 'include'
+        })
+        .then((data) => {
+          console.log(data)
+          ret = data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      return { "kifus": ret }
+    }
+
   return {  "get_kifu": get_kifu,
             "create_kifu": create_kifu,
             "delete_kifu": delete_kifu,
             "get_users_kifu": get_users_kifu,
+            "get_random_one": get_random_one,
+            "get_kifus": get_kifus,
             "get_kifu_player1_validation": get_kifu_player1_validation,
             "get_kifu_player2_validation": get_kifu_player2_validation,
             "get_kifu_content_validation": get_kifu_content_validation,

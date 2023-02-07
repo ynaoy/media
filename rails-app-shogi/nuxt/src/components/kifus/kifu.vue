@@ -40,3 +40,4 @@
 
   defineExpose({ kifu_states, request_states, update_board, change_button })
 </script>
+
