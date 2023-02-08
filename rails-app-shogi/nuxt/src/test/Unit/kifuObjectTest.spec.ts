@@ -8,7 +8,7 @@ describe("kifuObject test", () => {
   const { kifu_data } = TestHelper()
 
   //このテストでチェックするやつら
-  const { kifu_states, kifu_methods } = kifuObject(kifu_data())
+  const { kifu_states, kifu_methods } = kifuObject(ref(kifu_data()))
   const { update_board } = kifu_methods
   
   describe("update_boardメソッドが正しく動作するかチェック", () => {

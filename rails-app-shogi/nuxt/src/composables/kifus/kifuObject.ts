@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, computed, } from 'vue'
 
 export const  kifuObject = (kifu_data)=>{
 
@@ -8,7 +8,7 @@ export const  kifuObject = (kifu_data)=>{
     //リアクティブな変数群
     const kifu_states =reactive({
         state: 0,
-        max_state: kifu_data.kifu_text.length-1,
+        max_state: computed(()=>kifu_data.value.kifu_text.length-1),
         board_text: [],     //[n][8][8]
         board_flg: [],      //[n][10][8] ※[n][9][8]と[n][10][8]は持ち駒の枚数
         sub_board_text: [], //[2][8]
@@ -20,9 +20,9 @@ export const  kifuObject = (kifu_data)=>{
     //'update_state'イベントが発火されたら、
     //画面に表示されるリアクティブな変数を更新する
     const update_board= function(event){
-        kifu_states.state = event;
-        kifu_states.board_text = kifu_data.kifu_text[kifu_states.state];
-        kifu_states.board_flg = kifu_data.kifu_flg[kifu_states.state];
+        kifu_states.state = event
+        kifu_states.board_text = kifu_data.value.kifu_text[kifu_states.state]
+        kifu_states.board_flg = kifu_data.value.kifu_flg[kifu_states.state]
         set_sub_board()
     }
 

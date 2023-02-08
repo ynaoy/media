@@ -13,7 +13,7 @@ describe("requestObject test", () => {
   const { kifu_data } = TestHelper("")
 
   //このテストでチェックするやつら
-  const { request_states,request_methods } = requestObject( kifu_data(),"this is csrf_token")
+  const { request_states,request_methods } = requestObject(ref(kifu_data()),"this is csrf_token")
   const { change_button, 
           fetch_kentos, 
           post_kentos, 

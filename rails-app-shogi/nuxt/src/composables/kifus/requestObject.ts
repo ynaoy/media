@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { UrlHelper } from "../UrlHelper"
 
 export const requestObject = (kifu_data, csrf_token)=>{
@@ -8,9 +8,10 @@ export const requestObject = (kifu_data, csrf_token)=>{
 
   //リアクティブな変数群
   const request_states =reactive({
-    favorite_flg: kifu_data.favorite_flg,
-    kento: kifu_data.kento,
-    processing: false
+    favorite_flg: kifu_data.value.favorite_flg,
+    kento: kifu_data.value.kento,
+    processing: false,
+    kifu_id: computed(()=> kifu_data.value.kifu_id)
   })
 
   //メソッド群
@@ -18,8 +19,9 @@ export const requestObject = (kifu_data, csrf_token)=>{
   //"change_favorite"イベントで発火
   //processing.valueは子コンポーネントに飛ばして処理中ならお気に入りbuttonを押せなくする
   const change_button = async function(event){
+    console.log(request_states.favorite_flg)
     request_states.processing = true;
-    await send_favorites(event, kifu_data.kifu_id)
+    await send_favorites(event, request_states.kifu_id)
     request_states.processing = false;
   }
 
@@ -28,7 +30,7 @@ export const requestObject = (kifu_data, csrf_token)=>{
   const send_favorites = async function(event, kifu_id){
     
     let request
-
+    console.log(request_states.favorite_flg)
     if(request_states.favorite_flg){
       request = send_delete('favorites',
                             {'favorite': JSON.stringify({'kifu_id': kifu_id}) },
@@ -41,7 +43,7 @@ export const requestObject = (kifu_data, csrf_token)=>{
     }
     return  request
             .then((res) => {
-              request_states.favorite_flg = event
+              update_favorite_flg(event)
             })
             .catch((err) => {
               console.log(err)
@@ -52,13 +54,13 @@ export const requestObject = (kifu_data, csrf_token)=>{
   const fetch_kentos = async function(){
     
     let request = fetch_data('kentos',
-                            { 'id': kifu_data.kifu_id  }, 
+                            { 'id': request_states.kifu_id  }, 
                             {},
                         )
   return  request
           .then((res: { kento: String }) => {
             console.log(res)
-            request_states.kento = res.kento
+            update_kento(res.kento)
           })
           .catch((err) => {
             console.log(err)
@@ -83,13 +85,13 @@ export const requestObject = (kifu_data, csrf_token)=>{
   const post_kentos = async function(){
     
       let request = send_post('kentos',
-                              { 'kento': JSON.stringify({'id': kifu_data.kifu_id }) }, 
+                              { 'kento': JSON.stringify({'id': request_states.kifu_id }) }, 
                               { 'Authorization': csrf_token },
                           )
     return  request
             .then((res: { kento: String }) => {
               console.log(res)
-              request_states.kento = res.kento
+              update_kento(res.kento)
             })
             .catch((err) => {
               console.log(err)
@@ -130,9 +132,19 @@ export const requestObject = (kifu_data, csrf_token)=>{
     })
   }
 
+  const update_favorite_flg = (new_favorite_flg)=>{
+    request_states.favorite_flg = new_favorite_flg
+    
+  }
+  const update_kento = (new_kento)=>{
+    request_states.kento = new_kento
+  }
+
   const request_methods = { 'change_button':          change_button,
                             'fetch_kentos' :          fetch_kentos,
                             'post_kentos'  :          post_kentos,
-                            'fetch_kentos_interval':  fetch_kentos_interval,}
+                            'fetch_kentos_interval':  fetch_kentos_interval,
+                            'update_favorite_flg':    update_favorite_flg,
+                            'update_kento':           update_kento,}
   return { request_states, request_methods,}
 }

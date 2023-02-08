@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-  import { ref, provide, toRefs  } from 'vue'
+  import { ref, provide, toRefs, computed  } from 'vue'
   import { kifuObject } from '../../composables/kifus/kifuObject'
   import { requestObject } from '../../composables/kifus/requestObject'
   import { provideObject } from '../../composables/kifus/provideObject'
@@ -16,7 +16,8 @@
   import Favorite from './favorite.vue'
 
   //親コンポーネントから貰う奴ら。
-  const { kifu_data } = defineProps(["kifu_data"])
+  const props = defineProps(['kifu_data'])
+  const kifu_data = toRef(props,'kifu_data')
   const csrf_token = inject('csrf_token')
   const loginFlg = inject('loginFlg')
 
@@ -28,16 +29,24 @@
   provideObject(toRefs(kifu_states))
   provideObject(toRefs(request_states))
   provide('loginFlg', loginFlg)
-  provide('player1',  kifu_data.player1)
-  provide('player2',  kifu_data.player2)
-  provide('my_kifu',  kifu_data.my_kifu)
+  provide('player1',  computed(()=> kifu_data.value.player1))
+  provide('player2',  computed(()=> kifu_data.value.player2))
+  provide('my_kifu',  computed(()=> kifu_data.value.my_kifu))
   provide('post_kentos',           request_methods['post_kentos'] ) 
   provide('fetch_kentos_interval', request_methods['fetch_kentos_interval']) 
 
   //このコンポーネントで使うメソッド
   const update_board = kifu_methods['update_board']
   const change_button = request_methods['change_button']
+  const update_favorite_flg = request_methods['update_favorite_flg']
+  const update_kento = request_methods['update_kento']
 
-  defineExpose({ kifu_states, request_states, update_board, change_button })
+  watch( kifu_data,()=>{  update_board(0)
+                          update_favorite_flg(kifu_data.value.favorite_flg)
+                          update_kento(kifu_data.value.kento)
+                        })
+
+  defineExpose({  kifu_data, kifu_states, request_states, 
+                  update_board, update_favorite_flg, update_kento, change_button })
 </script>
 
