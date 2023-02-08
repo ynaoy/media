@@ -9,7 +9,8 @@
 
 <script setup>
   //親コンポーネントから貰う奴ら。
-  const { tags } = defineProps(["tags"])
+  const props = defineProps(["tags"])
+  const tags = toRef(props,"tags")
   
   defineExpose( { tags } )
 </script>
