@@ -22,7 +22,8 @@
   const loginFlg = inject('loginFlg')
   const user_id = inject('user_id')
   const csrf_token = inject('csrf_token')
-  const { kifus } = defineProps(['kifus'])
+  const props = defineProps(['kifus'])
+  const kifus = toRef(props,'kifus')
 
   // 子コンポーネントに渡す奴ら。
   provide('user_id',user_id)

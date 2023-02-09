@@ -18,7 +18,8 @@
 
 <script setup>
   // 親コンポーネントから貰う奴ら。
-  const { items, parPage, currentPage } = defineProps(['items','parPage', 'currentPage'])
+  const props = defineProps(['items','parPage', 'currentPage'])
+  const { items, parPage, currentPage } = toRefs(props)
 
   const emit = defineEmits(['pageNum'])
   //このコンポーネントで使うメソッド
@@ -27,7 +28,7 @@
   }
 
   const getPageCount = (items)=>{
-    return Math.ceil(items.length/parPage)
+    return Math.ceil(items.length/parPage.value)
   }
 
   defineExpose( { items } )
