@@ -1,7 +1,7 @@
 export const AppHelper = ()=>{
   // 引数が空かどうか判定
-  const check_is_empty = (items:object[])=>{
-    return (items != undefined) && (items.length != 0) 
+  const check_is_empty = (items: any[]|{})=>{
+    return (items != undefined) && (Object.keys(items).length != 0) 
   }
 
   // JST(UTCの日本版)形式の時刻データを、yyyy年MM月dd日hh時mm分に成形する

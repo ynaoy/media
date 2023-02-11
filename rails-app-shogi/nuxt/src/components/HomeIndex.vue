@@ -12,7 +12,7 @@
       </button>
     </div>
 
-    <div>
+    <div v-if="check_is_empty(kifu_data)">
       <Kifu :kifu_data="kifu_data" />
       <kifuTag :tags="JSON.parse(kifu_data.tags)"/>
     </div>
