@@ -1,13 +1,11 @@
 <template>
   <div>
     <div class="control_data">
-      <b-dropdown :text="tag" variant="light" menu-class="dropdown-menu-light" >
-        <b-dropdown-item-button  v-for="(value,key) in tags" :key="key" 
-          @click.prevent="emit('update_tag', value)">
-          {{ value }}
-        </b-dropdown-item-button>
-      </b-dropdown>
-
+      <DropDown
+        :text = "tag"
+        :items = "tags"
+        :click_callback = "(value)=>{ return emit('update_tag',value) }"
+      />
       <button class="reload_button" 
         @click.prevent="emit_and_processing('update_kifu')" v-bind:disabled= processing>
         <img src="/更新ボタン.png" alt="更新">
@@ -26,6 +24,7 @@
   import KifusItems from './kifus/kifus-items.vue'
   import Kifu from './kifus/kifu.vue'
   import KifuTag from './kifus/kifu-tag.vue'
+  import DropDown from './DropDown.vue'
   import { AppHelper } from '../composables/AppHelper'
 
   // このコンポーネントで使うヘルパー
@@ -46,17 +45,16 @@
   provide('loginFlg',loginFlg)
   provide('user_id',user_id)
 
-  // このコンポーネントで使う変数群
+  // --このコンポーネントで使う変数群--
   const processing = ref(false) //apiと通信中かどうかを管理する変数
 
-  // このコンポーネントで使うメソッド群
+  // --このコンポーネントで使うメソッド群--
   const emit_and_processing =(emit_name,value="")=>{
     processing.value = true
     emit(emit_name, value)
   }
 
   watch(kifu_data,async()=>{
-    console.log("aa")
     processing.value = false
   })
 

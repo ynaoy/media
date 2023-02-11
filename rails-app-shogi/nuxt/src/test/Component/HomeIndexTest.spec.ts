@@ -26,6 +26,7 @@ describe("HomeIndex test", async() => {
   })
 
   it("子コンポーネントが表示されているかチェック", () => {
+    expect(wrapper.html()).toContain("<drop-down")
     expect(wrapper.html()).toContain("<kifu")
     expect(wrapper.html()).toContain("<kifu-tag")
     expect(wrapper.html()).toContain("<kifus-items")

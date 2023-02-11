@@ -45,7 +45,8 @@
   }
   //------------------------------------
 
-  //クリエイト時にapiから表示する棋譜データを貰う
+  // --Created--
+  // apiから表示する棋譜データを貰う
   await get_data_from_api(tag.value)
         .then((res) => {
           kifu_data.value = res[0].kifu_data
