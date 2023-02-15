@@ -11,7 +11,7 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe KifusHelper, type: :helper do
-  describe "my_kifu?" do
+  describe "my_kifu? and my_kifu_jwt?" do
 
     before do
       @user = FactoryBot.create(:user)
@@ -21,16 +21,37 @@ RSpec.describe KifusHelper, type: :helper do
       @kifu2 = FactoryBot.create(:kifu, user_id: @user2.id)
     end
 
-    it "should work" do
+    it "my_kifu? should work" do
+      # 未ログイン時
       flg = helper.my_kifu?(@kifu1)
       expect(flg).to eq false
+      # ログイン時
       session[:user_id] = @user.id
       flg = helper.my_kifu?(@kifu1)
       expect(flg).to eq true
+      # ログイン時かつ他人の棋譜
       flg = helper.my_kifu?(@kifu2)
       expect(flg).to eq false
     end
+
+    it "my_kifu_jwt? should work" do
+      # 未ログイン時
+      flg = helper.my_kifu_jwt?(nil, @kifu1)
+      expect(flg).to eq false
+
+      # ログイン時
+      payload =  { user_id: @user.id }
+      token = encode_token(payload)
+      session[:user_id] = @user.id
+      flg = helper.my_kifu_jwt?(token, @kifu1)
+      expect(flg).to eq true
+
+      # ログイン時かつ他人の棋譜
+      flg = helper.my_kifu_jwt?(token, @kifu2)
+      expect(flg).to eq false
+    end
   end
+
 
   describe "kifu_to_board" do
     it "should work" do
@@ -95,4 +116,41 @@ RSpec.describe KifusHelper, type: :helper do
     end
   end
 
+  
+  describe "convert_usi_to_kifu" do
+    it "should work" do
+
+      #それぞれpvの値がtest_retの値に変換されていれば成功
+      usi = { "0"=> { "cp"=> "0", "pv"=> "7776 3334 7675" } ,
+              "1"=> { "cp"=> "1", "pv"=> "3334 2726" } ,
+              "2"=> { "cp"=> "2", "pv"=> "8822+ 3122" } ,
+              "3"=> { "cp"=> "3", "pv"=> "3122" } ,
+              "4"=> { "cp"=> "4", "pv"=> "B*88" } ,
+            }
+      test_ret = [  %w[▲７六歩(77) △３四歩(33) ▲７五歩(76)],
+                    %w[△３四歩(33) ▲２六歩(27)],
+                    %w[▲２二角成(88) △２二銀(31)],
+                    %w[△２二銀(31)],
+                    %w[▲８八角打],               
+                  ]
+      kifu = %w[７六歩(77) ３四歩(33) ２二角成(88) ２二銀(31) ８八角打]
+      kifu_text, kifu_flg = helper.kifu_to_board(kifu)
+      expect(kifu_text).not_to be_empty
+
+      ret = helper.convert_usi_to_kifu(kifu_text, usi)
+
+      expect(ret.nil?).to eq false
+      for n in 0..(ret.length-1) do
+        expect(ret[n.to_s]["cp"].nil?).to eq false
+        expect(ret[n.to_s]["pv"]).to eq test_ret[n]
+      end
+    end
+  end
+
+  describe "convert_uppercase_and_kanji" do
+    it "should work" do
+      ret = helper.convert_uppercase_and_kanji("11")
+      expect(ret).to eq "１一"
+    end
+  end
 end

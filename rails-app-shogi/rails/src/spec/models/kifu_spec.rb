@@ -39,4 +39,12 @@ RSpec.describe Kifu, type: :model do
     expect(@kifu.extract_kifu).not_to be_empty
   end
 
+  it "search_kifu_by_tag should be work" do
+    tag = FactoryBot.create(:tag, name: "相掛かり")
+    kifu = FactoryBot.create(:kifu, user_id: @user.id)
+    kifu_tag = kifu.kifu_tags.build(tag_id: tag.id)
+    kifu_tag.save
+    expect(Kifu.search_kifu_by_tag(tag_str = "相掛かり").length).to eq 1
+  end
+
 end

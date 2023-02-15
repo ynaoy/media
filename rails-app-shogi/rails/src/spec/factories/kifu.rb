@@ -47,5 +47,6 @@ FactoryBot.define do
 
               まで30手で後手の勝ち"
             }
+    kento { nil }
   end
 end

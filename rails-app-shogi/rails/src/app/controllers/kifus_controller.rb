@@ -1,6 +1,7 @@
 class KifusController < ApplicationController
   before_action :logged_in_user, only: %i[new create destroy index]
   before_action :correct_user,   only: :destroy
+  before_action :check_json_request, only: :create
 
   def new
     @kifu = Kifu.new
@@ -10,52 +11,177 @@ class KifusController < ApplicationController
   def create
     params[:kifu] = fetch_data_from_content(params[:kifu])
     @kifu = current_user.kifus.build(kifus_params)
-
     if @kifu.save
-
       @tag = @kifu.save_kifu_tag(tags_params[:tag][:tag_ids])
-      render new if !@tag
+      if @tag
 
-      flash.now[:success] = "Kifu created!"
-      redirect_to kifu_path(id:@kifu.id)
-    end
+        if params[:kifu][:kento]
+          # Jobを実行してバックグラウンドで別APIと通信する
+          SocketSubApi1Job.perform_later(@kifu)
+          @kifu.update({kento: "processing_now"})
+        end
+
+        respond_to do |format|
+          format.html { flash.now[:success] = "Kifu created!"
+                        redirect_to kifu_path(id:@kifu.id) }
+          format.json { render json: { success: "create kifu!!", kifu_id: @kifu.id } }
+        end
+
+      #タグがエラーだった場合
+      else
+        respond_to do |format|
+          format.html { render new }
+          format.json { render json: { errors: "tag error"}, status:500 }
+        end
+      end
+
+    #棋譜がエラーだった場合
+    else
+      respond_to do |format|
+        format.html { render new }
+        format.json { render json: { errors: @kifu.errors.full_messages}, status:500 }
+      end
+    end 
   end
 
   def show
+    # << TODO 棋譜が存在しなかったときの処理を追加する >>
     @kifu = Kifu.find(params[:id])
-    @tags = @kifu.get_tags 
+    response_json = kifu_response(@kifu)
 
-    kifu_list = @kifu.extract_kifu
-    @kifu_text, @kifu_flg = kifu_to_board(kifu_list)
-
-    if logged_in?
-      current_user.histories.create!(kifu_id: @kifu.id)
-      @favorite_flg = current_user.is_favorite_kifu?(kifu_id = @kifu.id)
+    respond_to do |format|
+      format.html { render "show"}
+      format.json { render json: response_json }
     end
   end
 
   def index
-    @kifus = Kifu.search_kifu("user_id",current_user.id).order(id: "desc").page(params[:page]).per(20)
+    user_id = if(params[:format]=="json" && !Rails.env.test?)
+      session_user(request.cookies["jwt"]).id
+    else
+      current_user.id
+    end
+    
+    @kifus = Kifu.search_kifu("user_id",user_id).order(id: "desc")
+    respond_to do |format|
+      format.html { @kifus = @kifus.page(params[:page]).per(20)
+                    render "index"}
+      format.json { render json: @kifus.to_json(only: %i[ id user_id title player1 player2 win created_at ])}
+    end
   end
 
   def destroy
+    if(params[:format]=="json")
+      return if(!check_csrf_token)
+    end
     Kifu.find(params[:id]).destroy
-    flash.now[:success] = "Kifu deleted"
-    redirect_back_or(root_url)
+    respond_to do |format|
+      format.html { flash.now[:success] = "Kifu deleted"
+                    redirect_back_or(root_url)}
+      format.json { render json: { success: "delete kifu!!" } }
+    end
+  end
+
+  def random
+    @kifu =
+      if(valid_tag_params? && params[:tag] !="全て")
+        Kifu.search_kifu_by_tag(params[:tag]).sample
+      else
+        Kifu.all.sample
+      end
+    
+    if @kifu.nil?
+      responce_no_kifu 
+      return
+    end
+
+    response_json = kifu_response(@kifu)
+    respond_to do |format|
+      format.json { render json: response_json }
+    end
+  end
+
+  def get_kifus
+    @kifus =
+      if(valid_tag_params? && params[:tag] !="全て")
+        Kifu.search_kifu_by_tag(params[:tag]).limit(100)
+      else
+        Kifu.all.limit(100)
+      end
+    
+    respond_to do |format|
+      format.json { render json: @kifus.to_json(only: %i[ id user_id title player1 player2 win created_at ])}
+    end
+
   end
 
   private
 
     def kifus_params
-      params.require(:kifu).permit(:title, :player1, :player2, :content, :win )
+      params.require(:kifu).permit(:title, :player1, :player2, :content, :win, )
     end
 
     def tags_params
       params.require(:kifu).permit(tag: [tag_ids:[] ])
     end
 
+    def valid_tag_params?
+      !(params[:tag].nil? || params[:tag].length == 0)
+    end
+
     def correct_user
-      @kifus = current_user.kifus.find_by(id: params[:id])
-      redirect_to root_url if @kifus.nil?
+      if((ENV["RAILS_ENV"]!="test")&&(params[:format]=="json"))
+        @kifus = session_user(request.cookies["jwt"]).kifus.find_by(id: params[:id])
+        if @kifus.nil?
+          response_unauthorized
+          return 
+        end
+      else
+        @kifus = current_user.kifus.find_by(id: params[:id])
+        redirect_to root_url if @kifus.nil?
+      end
+    end
+
+    def check_json_request
+      if(params[:format]=="json")
+        return if(!check_csrf_token)
+        params[:kifu] = JSON.parse(params[:kifu],symbolize_names: true)
+      end
+    end
+
+    # Kifuモデルのデータを、レスポンスに渡すjson形式のデータに変換する
+    def kifu_response(kifu)
+      @tags = kifu.get_tags 
+
+      kifu_list = kifu.extract_kifu # list[n]
+      @kifu_text, @kifu_flg = kifu_to_board(kifu_list) # list[n][9][9], list[n][9][9]とlist[n][2][8]がconcatされてる
+  
+      @kento = if (kifu.kento.nil?)
+          nil 
+        else 
+          if (kifu.kento =="processing_now") 
+            "processing_now"
+          else 
+            convert_usi_to_kifu(@kifu_text.deep_dup, JSON.parse(kifu.kento)) 
+          end
+        end 
+      # 自分の棋譜かどうか
+      my_kifu = (params[:format]=="json")? my_kifu_jwt?(request.cookies["jwt"], kifu) : my_kifu?(kifu)
+  
+      if logged_in?
+        current_user.histories.create!(kifu_id: kifu.id)
+        @favorite_flg = current_user.is_favorite_kifu?(kifu_id = kifu.id)
+      end
+  
+      return {  kifu_text: @kifu_text, kifu_flg: @kifu_flg,
+                favorite_flg: @favorite_flg, kifu_id: kifu.id, my_kifu: my_kifu,
+                player1: kifu.player1, player2: kifu.player2, kento: @kento,
+                tags: @tags.to_json(only:[:name]) }
+    end
+
+    def responce_no_kifu
+      respond_to do |format|
+        format.json { render json: {}}
+      end
     end
 end

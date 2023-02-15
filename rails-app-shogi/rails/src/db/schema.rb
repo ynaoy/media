@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_18_081119) do
+ActiveRecord::Schema.define(version: 2022_12_31_051950) do
+
+  create_table "delayed_jobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
 
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "kifu_id", null: false
@@ -46,6 +61,7 @@ ActiveRecord::Schema.define(version: 2022_05_18_081119) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "title", null: false
     t.integer "win"
+    t.text "kento"
     t.index ["user_id", "created_at"], name: "index_kifus_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_kifus_on_user_id"
   end
@@ -65,6 +81,11 @@ ActiveRecord::Schema.define(version: 2022_05_18_081119) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "remember_digest"
+    t.string "activation_token"
+    t.boolean "activated", default: false
+    t.datetime "activated_at"
+    t.string "reset_digest"
+    t.datetime "reset_sent_at"
   end
 
   add_foreign_key "favorites", "users"

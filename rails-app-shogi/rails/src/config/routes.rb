@@ -1,17 +1,21 @@
 Rails.application.routes.draw do
 
-  get 'histories/index'
-  get 'kifus/new'
-  get 'kifus/create'
-  get 'kifus/show'
-  get 'kifus/delete'
-  get 'sessions/new'
   root 'application#home'
+  get 'kentos/create'
+  get 'histories/index'
+  get 'sessions/new'
+  post 'password_resets/check_email'
+  post 'password_resets/check_token'
+  patch 'password_resets/update_password'
+  get 'kifus/random'
+  get 'kifus/get_kifus'
+  
   get  '/signup',  to: 'users#new'
   post '/signup', to: 'users#create'
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
+  get '/login_check', to: 'sessions#login_check'
   get '/search', to: 'searchs#search'
   post '/favorites', to:'favorites#create'
   delete '/favorites', to:'favorites#destroy'
@@ -22,4 +26,7 @@ Rails.application.routes.draw do
     end
   end
   resources :kifus, only: %i[new create show index destroy]
+  resources :kentos, only: %i[create show]
+  resources :account_activations, only: %i[create]
+  resources :password_resets, only: %i[create]
 end

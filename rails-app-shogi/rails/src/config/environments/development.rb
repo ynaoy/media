@@ -34,7 +34,23 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  #config.action_mailer.raise_delivery_errors = true
+  #config.action_mailer.delivery_method = :test
+  #host = 'localhost:3000'
+  #config.action_mailer.default_url_options = { host: host, protocol: 'http' }
+
+  config.action_mailer.default_url_options = {  host: 'localhost', port: 3000 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV['MAIL_ADDRESS'],
+    domain: ENV['MAIL_DOMAIN'],
+    port: 587,
+    #user_name: Rails.application.credentials.gmail[:user_name],  #Gmailアドレス（credentials.yml.encに記載）
+    #password: Rails.application.credentials.gmail[:password],  #アプリパスワード（credentials.yml.encに記載）
+    user_name: ENV['MAIL_USER_NAME'],
+    password: ENV['MAIL_PASSWORD'],
+    authentication: :login
+  }
 
   config.action_mailer.perform_caching = false
 
@@ -73,4 +89,5 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
 end

@@ -4,6 +4,16 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# Ignore nuxt node.
+rails-app-shogi/nuxt/src/node_modules
+rails-app-shogi/nuxt/src/*.log*
+rails-app-shogi/nuxt/src/.nuxt
+rails-app-shogi/nuxt/src/.nitro
+rails-app-shogi/nuxt/src/.cache
+rails-app-shogi/nuxt/src/.output
+rails-app-shogi/nuxt/src/.env
+rails-app-shogi/nuxt/src/dist
+
 # Ignore bundler config.
 rails-app-shogi/rails/src/.bundle
 
@@ -36,3 +46,4 @@ rails-app-shogi/rails/src/yarn-debug.log*
 rails-app-shogi/rails/src/.yarn-integrity
 rails-app-shogi/rails/src/db/mysql_data
 rails-app-shogi/rails/src/db/seeds.rb
+rails-app-shogi/rails/src/.env

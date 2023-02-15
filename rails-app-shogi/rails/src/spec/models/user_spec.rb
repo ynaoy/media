@@ -11,6 +11,11 @@ RSpec.describe User, type: :model do
     expect(@user).to be_valid
   end
 
+  it "should create activation_token before created" do
+    @user.save
+    expect(@user.activation_token.nil?).to eq false
+  end
+  
   it "name should be present" do
     @user.name = "     "
     expect(@user).not_to be_valid
@@ -80,4 +85,76 @@ RSpec.describe User, type: :model do
     expect(@user.is_favorite_kifu?(kufu_id = 1)).to eq true
     expect(@user.is_favorite_kifu?(kifu_id = 2)).to eq false
   end
+
+  describe "authenticated?" do
+
+    it "if token is wrong, authenticated? return false" do
+      token = User.new_token
+      @user.remember_digest = User.digest(token)
+  
+      expect(@user.authenticated?(:remember, "wrong_token")).to eq false
+    end
+
+    it "authenticated? should work" do
+      token = User.new_token
+      @user.remember_digest = User.digest(token)
+
+      expect(@user.authenticated?(:remember, token)).to eq true
+    end
+
+  end
+
+  describe "correct_token?" do
+    before do
+      @user.save
+    end
+
+    it "if token is wrong, correct_token? return false" do
+      expect(@user.correct_token?(:activation, "wrong_token")).to eq false
+    end
+
+    it "correct_token? should work" do
+      expect(@user.correct_token?(:activation, @user.activation_token)).to eq true
+    end
+
+  end
+
+  it "activate should work" do
+    @user.save
+    expect(@user.activated).to eq false
+    expect(@user.activated_at).to be nil
+
+    @user.activate
+    expect(@user.activated).to eq true
+    expect(@user.activated_at).not_to be nil
+
+  end
+
+  it "create_reset_digest" do
+    @user.save
+    expect(@user.reset_digest).to be nil 
+    expect(@user.reset_sent_at).to be nil 
+
+    @user.create_reset_digest
+    expect(@user.reset_digest).not_to be nil 
+    expect(@user.reset_sent_at).not_to be nil 
+  end
+
+  describe "expired?" do
+    before do
+      @user.save
+    end
+
+    it "if created_at is expired, expired? return true" do
+      @user.created_at = 2.hours.ago
+      @user.save
+      expect(@user.expired?(:created)).to eq true
+    end
+
+    it "if created_at is not expired, expired? return false" do
+      expect(@user.expired?(:created)).to eq false
+    end
+
+  end
+
 end

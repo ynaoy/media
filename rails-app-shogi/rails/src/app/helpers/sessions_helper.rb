@@ -60,4 +60,50 @@ module SessionsHelper
   def store_location
     session[:forwarding_url] = request.original_url if request.get?
   end
+
+  #---------------------------------------------------
+  # ここからRailsApi+NuxtSpaで認証で、jwtトークンをcookieに保存する場合
+  #---------------------------------------------------
+
+  # 認証が通らなかったときに"401 Unauthorized"が入ったjsonオブジェクトを返す
+  def response_unauthorized
+    render status: 401, json: { status: 401, message: 'Unauthorized' }
+  end
+
+  #cookieにjwtトークンをセットする
+  def jwt_token(user)
+    payload = {user_id: user.id }
+    token = encode_token(payload)
+    cookies[:jwt] = { value:token,httponly:true }
+  end
+
+  # payloadをjwtトークンにエンコードする
+  def encode_token(payload)
+    JWT.encode(payload,ENV['JWT_SECRET_KEY'],'HS256')
+  end
+
+  # jwtトークンをデコードしてuser_idが存在するならUserModelを返し、存在しなければnilを返す
+  def session_user(token)
+    decoded_hash = decoded_token(token)
+    if decoded_hash
+        user_id = decoded_hash[0]['user_id']
+        @user = User.find_by(id: user_id)
+    end
+  end
+
+  # ログインしているユーザーと与えられたユーザーが一致するか返す
+  def session_user?(token, user)
+    session_user(token).id == user.id
+  end
+
+  #トークンがnilじゃなければjwtトークンをデコードして返す
+  def decoded_token(token)
+    if token
+      begin
+        JWT.decode(token, ENV['JWT_SECRET_KEY'], true, algorithm: 'HS256')
+      rescue JWT::DecodeError
+        nil
+      end
+    end
+  end
 end

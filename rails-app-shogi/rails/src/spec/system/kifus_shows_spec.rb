@@ -11,7 +11,7 @@ RSpec.describe "KifusShows", type: :system do
 
   describe "Kifu_Test" do
 
-    it "change state" , js: true do
+    it "change state", js: true do
 
       visit kifu_path(id:@kifu.id)
 
@@ -66,7 +66,7 @@ RSpec.describe "KifusShows", type: :system do
       expect(current_url).to eq search_url+"?"+URI.encode_www_form(query: @tag1.name)
     end
 
-    it "display normaly",js:true do
+    it "display normaly", js:true do
       visit kifu_path(id:@kifu.id)
 
       expect(page).to have_selector("#player")
@@ -83,7 +83,7 @@ RSpec.describe "KifusShows", type: :system do
 
     end
 
-    it "display koma's move",js:true do
+    it "display koma's move", js:true do
       visit kifu_path(id:@kifu.id)
 
       # 〇〇駒(××)、同　駒(××)、〇〇駒打、〇〇駒成(××)、〇〇成駒(××)、についてそれぞれテストする

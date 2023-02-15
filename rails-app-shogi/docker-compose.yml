@@ -14,12 +14,44 @@ services:
 
   web:
     build: ./rails
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: >
+      bash -c "rm -f tmp/pids/server.pid && 
+      bundle exec rails r lib/worker_daemon.rb start && 
+      bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - ./rails/src:/app
+      - ./rails/src:/rails
     ports:
       - "3000:3000"
     environment:
-      RAILS_ENV: development
+      - RAILS_ENV=development
+      - SPA_ORIGIN=http://localhost:3001
+      - JWT_SECRET_KEY=my_secret_key
+    env_file:
+      - ./rails/src/.env
     depends_on:
       - db
+      - sub_api1
+
+  app:
+    build: ./nuxt
+    command: yarn dev -p 3001
+    volumes:
+      - ./nuxt/src:/nuxt:cached
+    #working_dir: "/nuxt/src"
+    ports:
+      - "3001:3001"
+      - "24678:24678"
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
+      - VITE_API_ORIGIN=http://localhost:3000
+
+  sub_api1:
+    build: ./sub_api1
+    command: ruby ./parent.rb
+    ports:
+      - "20000:20000"
+    environment:
+      - CHILD_PROCESS_NAME=Shogi-Soft-by-clang
+
