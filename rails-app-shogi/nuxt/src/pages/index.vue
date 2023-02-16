@@ -4,14 +4,14 @@
   </HomeIndex>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
   // 使うメソッドをヘルパーからもらう
   const { get_all_tag } = TagHelper()
   const { get_kifus, get_random_one } = KifuHelper()
 
   //すべてのタグを呼び出す
-  const tags = await get_all_tag()
+  const tags: string[] = await get_all_tag()
   tags.unshift("全て")
 
   //--このコンポーネントで初期化する変数たち--
@@ -24,13 +24,13 @@
 
   //--このコンポーネントで使うメソッド達--
 
-  const update_tag = (new_tag)=>{
+  const update_tag = (new_tag: string)=>{
     tag.value = new_tag
   }
 
   //apiと通信してkifu_data変数を貰うメソッド
-  const get_kifu_data_from_api = async(tag)=>{
-    await get_random_one({ tag: tag })
+  const get_kifu_data_from_api = async(tag:string)=>{
+    await get_random_one({ tag: tag },{})
             .then((res)=>{
               kifu_data.value = res.kifu_data
               console.log(kifu_data.value)
@@ -38,9 +38,9 @@
   }
 
   //apiと通信して画面に表示するデータを貰うメソッド
-  const get_data_from_api = async(tag)=>{
-    return Promise.all([  get_random_one({ tag: tag }),
-                          get_kifus({ tag: tag })
+  const get_data_from_api = async(tag:string)=>{
+    return Promise.all([  get_random_one({ tag: tag },{}),
+                          get_kifus({ tag: tag },{})
                       ])
   }
   //------------------------------------
