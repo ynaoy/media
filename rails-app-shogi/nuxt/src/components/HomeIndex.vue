@@ -20,12 +20,13 @@
   </div>
 </template>
 
-<script setup>
+<script lang ="ts" setup>
   import KifusItems from './kifus/kifus-items.vue'
   import Kifu from './kifus/kifu.vue'
   import KifuTag from './kifus/kifu-tag.vue'
   import DropDown from './DropDown.vue'
   import { AppHelper } from '../composables/AppHelper'
+  import { Ref } from '@vue/reactivity'
 
   // このコンポーネントで使うヘルパー
   const { check_is_empty } = AppHelper()
@@ -33,12 +34,16 @@
   const emit = defineEmits(['update_tag','update_kifu'])
 
   //親コンポーネントから貰う奴ら。
-  const props = defineProps(['kifu_data', 'kifus', 'tags'])
+  const props = defineProps<{
+    kifu_data: { [key:string]: any}, 
+    kifus: { [key:string]: any},
+    tags: Array<string>
+  }>()
   const { kifu_data, kifus, tags } = toRefs(props)
-  const csrf_token = inject('csrf_token')
-  const loginFlg = inject('loginFlg')
-  const user_id = inject('user_id')
-  const tag = inject('tag')
+  const csrf_token :string = inject('csrf_token')
+  const loginFlg :boolean = inject('loginFlg')
+  const user_id :number = inject('user_id')
+  const tag : Ref<string> = inject('tag')
 
   //子コーポネントに流すやつら
   provide('csrf_token',csrf_token)
@@ -46,10 +51,10 @@
   provide('user_id',user_id)
 
   // --このコンポーネントで使う変数群--
-  const processing = ref(false) //apiと通信中かどうかを管理する変数
+  const processing: Ref<boolean> = ref(false) //apiと通信中かどうかを管理する変数
 
   // --このコンポーネントで使うメソッド群--
-  const emit_and_processing =(emit_name,value="")=>{
+  const emit_and_processing =(emit_name: Parameters<typeof emit>[0], value="")=>{
     processing.value = true
     emit(emit_name, value)
   }

@@ -9,9 +9,13 @@
   </div>
 </template>
 
-<script setup>
+<script lang ="ts" setup>
+
   // 親コンポーネントから貰う奴ら。
-  const props = defineProps(['text', 'items', 'click_callback'])
+  const props = defineProps<{
+    text: string, items: Array<string>, click_callback<T>(value:T): any
+  }>()
+
   const { text, items, click_callback } = toRefs(props)
 
   // このコンポーネントでのコンストラクタ
