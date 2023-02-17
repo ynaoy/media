@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { ref, provide, toRefs, computed  } from 'vue'
   import { kifuObject } from '../../composables/kifus/kifuObject'
   import { requestObject } from '../../composables/kifus/requestObject'
@@ -16,10 +16,10 @@
   import Favorite from './favorite.vue'
 
   //親コンポーネントから貰う奴ら。
-  const props = defineProps(['kifu_data'])
+  const props = defineProps<{ kifu_data: { [key:string]: any} }>()
   const kifu_data = toRef(props,'kifu_data')
-  const csrf_token = inject('csrf_token')
-  const loginFlg = inject('loginFlg')
+  const csrf_token:string = inject('csrf_token')
+  const loginFlg:boolean = inject('loginFlg')
 
   //リアクティブな変数群とメソッド群
   const { kifu_states, kifu_methods } = kifuObject(kifu_data)

@@ -6,18 +6,19 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
   import { subBoardObject } from '../../composables/kifus/subBoardObject'
+  import { Ref } from 'vue'
 
   //リアクティブな変数群とメソッド群
-  const sub_board_text = inject('sub_board_text')
-  const sub_board_num  = inject('sub_board_num')
-  const sub_board_id   = inject('sub_board_id')
+  const sub_board_text: Ref<string[][]> = inject('sub_board_text')
+  const sub_board_num: Ref<number[][]>  = inject('sub_board_num')
+  const sub_board_id: number   = inject('sub_board_id')
   const { sub_board_methods } = subBoardObject(sub_board_text, sub_board_num, sub_board_id)
 
   //このコンポーネントで使うメソッド
-  const process_num = sub_board_methods['process_num']
+  const process_num: <T>(num:T)=>string|void = sub_board_methods['process_num']
 
 </script>
 

@@ -5,14 +5,15 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import Kifu from './kifus/kifu.vue'
   import KifuTag from './kifus/kifu-tag.vue'
 
   //親コンポーネントから貰う奴ら。
-  const { kifu_data } = defineProps(["kifu_data"])
-  const csrf_token = inject('csrf_token')
-  const loginFlg = inject('loginFlg')
+  const props = defineProps<{ kifu_data: { [key:string]: any} }>()
+  const kifu_data = toRef(props,'kifu_data')
+  const csrf_token:string = inject('csrf_token')
+  const loginFlg:boolean = inject('loginFlg')
 
   //子コーポネントに流すやつら
   provide('csrf_token',csrf_token)
