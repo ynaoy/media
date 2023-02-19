@@ -10,18 +10,17 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import kifuKentoItems from './kifu-kento-items.vue'
+  import { Ref, ComputedRef } from 'vue'
 
   //親コンポーネントから貰う変数群
-  const my_kifu     = inject('my_kifu')
-  const kento       = inject('kento')
-  const state       = inject('state')
-  const post_kentos = inject('post_kentos')
-  const fetch_kentos_interval = inject('fetch_kentos_interval')
-  console.log(my_kifu)
-  console.log(kento.value)
-  console.log(state.value)
+  const my_kifu: ComputedRef<boolean>    = inject('my_kifu')
+  const kento: <T>()=> T                 = inject('kento')
+  const state: Ref<number>               = inject('state')
+  const post_kentos: ()=>void            = inject('post_kentos')
+  const fetch_kentos_interval: <T>(interval_ms:number, timer?:T)=> NodeJS.Timer|number
+    = inject('fetch_kentos_interval')
   
   //子コンポーネントに渡す変数群
   provide('kento', kento)

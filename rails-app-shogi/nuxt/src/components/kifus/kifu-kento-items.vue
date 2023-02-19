@@ -7,11 +7,12 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+  import { Ref } from 'vue'
 
   //親コンポーネントから貰う変数群
-  const kento     = inject('kento')
-  const state     = inject('state')
+  const kento: <T>()=> T                 = inject('kento')
+  const state: Ref<number>               = inject('state')
 
   //このコンポーネントで使うメソッド
 

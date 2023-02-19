@@ -12,22 +12,22 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
-  import { inject } from 'vue'
+  import { inject, Ref } from 'vue'
   import { mainBoardObject } from '../../composables/kifus/mainBoardObject'
   import setIndex from './set-index.vue'
   import setColumns from './set-columns.vue'
 
   //リアクティブな変数群とメソッド群
-  const board_text = inject('board_text')
-  const board_flg  = inject('board_flg')
+  const board_text: Ref<string[][]>   = inject('board_text')
+  const board_flg: Ref<number[][]>    = inject('board_flg')
   const { main_board_methods } = mainBoardObject(board_text, board_flg)
 
   //このコンポーネントで使うメソッド
-  const compute_i = main_board_methods['compute_i']
-  const compute_j = main_board_methods['compute_j']
-  const setStyle = main_board_methods['setStyle']
+  const compute_i: (n:number)=>number = main_board_methods['compute_i']
+  const compute_j: (n:number)=>number = main_board_methods['compute_j']
+  const setStyle : (n:number)=>string = main_board_methods['setStyle']
 
   defineExpose([ board_text, board_flg, setStyle ])
 

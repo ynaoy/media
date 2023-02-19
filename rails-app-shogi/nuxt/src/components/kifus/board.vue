@@ -24,7 +24,7 @@
   const kento: <T>()=> T                 = inject('kento')
   const state: Ref<number>               = inject('state')
   const post_kentos: ()=>void            = inject('post_kentos')
-  const fetch_kentos_interval: <T>(interval_ms:number, timer:T)=> NodeJS.Timer|number
+  const fetch_kentos_interval: <T>(interval_ms:number, timer?:T)=> NodeJS.Timer|number
     = inject('fetch_kentos_interval')
 
   //子コンポーネントに渡す変数群

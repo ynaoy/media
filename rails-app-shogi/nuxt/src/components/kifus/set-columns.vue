@@ -4,7 +4,7 @@
   </div> 
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
   const columns = ["一","二","三","四","五","六","七","八","九"]
 
