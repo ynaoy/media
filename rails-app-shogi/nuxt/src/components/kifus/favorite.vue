@@ -11,14 +11,15 @@
   </button>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+  import { Ref } from 'vue'
 
   const emit = defineEmits(['change_favorite'])
 
   //親コンポーネントからもらうやつら
-  const loginFlg = inject('loginFlg')
-  const favorite_flg = inject('favorite_flg')
-  const processing = inject('processing')
+  const loginFlg: boolean = inject('loginFlg')
+  const favorite_flg: Ref<boolean> = inject('favorite_flg')
+  const processing: boolean = inject('processing')
 
   //メソッド群
   const change_favorite = function(){

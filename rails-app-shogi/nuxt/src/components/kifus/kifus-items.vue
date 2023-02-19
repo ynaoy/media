@@ -12,17 +12,17 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import KifuItems from './kifu-items.vue'
   import Pagination from '../Pagination.vue'
   import { AppHelper } from '../../composables/AppHelper'
   import { PaginationObject } from '../../composables/PaginationObject'
 
   // 親コンポーネントから貰う奴ら。
-  const loginFlg = inject('loginFlg')
-  const user_id = inject('user_id')
-  const csrf_token = inject('csrf_token')
-  const props = defineProps(['kifus'])
+  const loginFlg:boolean = inject('loginFlg')
+  const user_id:number = inject('user_id')
+  const csrf_token:string = inject('csrf_token')
+  const props = defineProps<{ kifus: any }>()
   const kifus = toRef(props,'kifus')
 
   // 子コンポーネントに渡す奴ら。

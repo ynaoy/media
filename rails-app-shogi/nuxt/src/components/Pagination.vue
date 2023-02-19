@@ -16,18 +16,20 @@
 
 </template>
 
-<script setup>
+<script lang="ts" setup>
   // 親コンポーネントから貰う奴ら。
-  const props = defineProps(['items','parPage', 'currentPage'])
+  const props = defineProps<{ items: any[],
+                              parPage: number,
+                              currentPage: number }>()
   const { items, parPage, currentPage } = toRefs(props)
 
   const emit = defineEmits(['pageNum'])
   //このコンポーネントで使うメソッド
-  const clickCallback = (pageNum)=>{
+  const clickCallback = (pageNum:number)=>{
     emit('pageNum', Number(pageNum))
   }
 
-  const getPageCount = (items)=>{
+  const getPageCount = (items:any[])=>{
     return Math.ceil(items.length/parPage.value)
   }
 

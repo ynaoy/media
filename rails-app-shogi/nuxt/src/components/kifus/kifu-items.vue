@@ -6,14 +6,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
   import kifuUrl from './kifu-url.vue'
   
   // 親コンポーネントから貰う奴ら。
-  const user_id = inject('user_id')
-  const csrf_token = inject('csrf_token')
-  const props = defineProps(['kifus'])
+  const user_id:number = inject('user_id')
+  const csrf_token:string = inject('csrf_token')
+  const props = defineProps<{ kifus: any }>()
   const kifus = toRef(props,'kifus')
 
    // 子コンポーネントに渡す奴ら。

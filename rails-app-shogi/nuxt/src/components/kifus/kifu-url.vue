@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang ="ts" setup>
   import { KifuHelper } from '../../composables/KifuHelper'
   import { AppHelper } from '../../composables/AppHelper'
 
@@ -38,9 +38,9 @@
   const { delete_kifu } = KifuHelper()
 
   // 親コンポーネントから貰う奴ら。
-  const user_id = inject('user_id')
-  const csrf_token = inject('csrf_token')
-  const { kifu } = defineProps(['kifu'])
+  const user_id:number = inject('user_id')
+  const csrf_token:string = inject('csrf_token')
+  const { kifu } = defineProps<{ kifu: { [key:string]:any }}>()
 
   // このコンポーネントで使うメソッド
   const win_or_lose =   (win,kifu)=>{

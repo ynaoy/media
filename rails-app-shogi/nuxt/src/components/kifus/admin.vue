@@ -10,19 +10,19 @@
   </div>
 </template>
 
-<script setup>
-  import { inject } from 'vue'
+<script lang="ts" setup>
+  import { inject, Ref } from 'vue'
   import { adminObject } from '../../composables/kifus/adminObject'
 
   const emit = defineEmits(['update_state'])
 
   //リアクティブな変数群
-  const state = inject('state')
-  const max_state = inject('max_state')
+  const state: Ref<number> = inject('state')
+  const max_state: Ref<number> = inject('max_state')
   const{ admin_methods } = adminObject(state, max_state, emit)
 
   //このコンポーネントで使うメソッド
-  const update_state = admin_methods['update_state']
+  const update_state: (str:string)=>void = admin_methods['update_state']
 
   defineExpose( { state, max_state, update_state } )
 </script>

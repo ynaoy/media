@@ -7,10 +7,12 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+  import { Ref } from 'vue'
+
   //親コンポーネントから貰う奴ら。
-  const props = defineProps(["tags"])
-  const tags = toRef(props,"tags")
+  const props = defineProps<{ tags: any[] }>()
+  const tags  = toRef(props,"tags")
   
   defineExpose( { tags } )
 </script>
