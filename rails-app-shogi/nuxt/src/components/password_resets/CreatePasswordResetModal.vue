@@ -21,16 +21,17 @@
   </Modal>
 </template>
 
-<script setup>
-  import { provide} from 'vue'
+<script lang="ts" setup>
+  import { provide, Ref} from 'vue'
   import Modal  from '../Modal.vue'
 
   //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
-  const reset_status = inject('reset_status')
-  const create_password_reset = inject('create_password_reset')
-  const set_reset_status = inject('set_reset_status')
-  const email = inject('email')
+  const csrf_token :string               = inject('csrf_token')
+  const reset_status :Ref<string>        = inject('reset_status')
+  const create_password_reset :(body:{}, header:{})=>void
+    = inject('create_password_reset')
+  const set_reset_status :(string)=>void = inject('set_reset_status')
+  const email: Ref<string>               = inject('email')
 
   //このコンポーネントで使う変数群
   const password_reset_flg = ref(false)

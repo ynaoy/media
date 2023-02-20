@@ -26,18 +26,19 @@
   </Modal>
 </template>
 
-<script setup>
-  import { provide} from 'vue'
+<script lang="ts" setup>
+  import { provide, Ref } from 'vue'
   import Modal  from '../Modal.vue'
 
   //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
-  const reset_status = inject('reset_status')
-  const get_validation = inject('get_validation')
-  const check_email_to_post = inject('check_email_to_post')
-  const set_reset_status = inject('set_reset_status')
-  const reset_validation = inject('reset_validation')
-  const email = inject('email')
+  const csrf_token :string               = inject('csrf_token')
+  const reset_status :Ref<string>        = inject('reset_status')
+  const get_validation :()=>string       = inject('get_validation')
+  const check_email_to_post :(body:{}, header:{})=>void 
+    = inject('check_email_to_post')
+  const set_reset_status :(string)=>void = inject('set_reset_status')
+  const reset_validation :()=>void       = inject('reset_validation')
+  const email: Ref<string> = inject('email')
 
   //このコンポーネントで使う変数群
   const check_email_flg = ref(false)
@@ -46,12 +47,12 @@
   //--このコンポーネントで使うメソッド群--
 
   //描写されたと同時にinputにfocusする
-  const focus_my_element = function(){
+  const focus_my_element = ()=>{
     focus_this.value.focus()
   }
 
   //子コンポーネントでModalが非表示になった際にreset_statusの値を戻す
-  const hidden_modal = function(){
+  const hidden_modal = ()=>{
     //非表示になった時に次のステータスだったら戻さない
     if(reset_status.value != "create_password_reset") set_reset_status("ready")
     reset_validation()

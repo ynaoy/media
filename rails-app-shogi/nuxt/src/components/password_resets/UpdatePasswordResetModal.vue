@@ -32,20 +32,23 @@
 
 </template>
 
-<script setup>
-  import { provide} from 'vue'
+<script lang="ts" setup>
+  import { provide, Ref} from 'vue'
   import Modal  from '../Modal.vue'
 
   //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
-  const reset_status = inject('reset_status')
-  const get_validation = inject('get_validation')
-  const reset_validation = inject('reset_validation')
-  const valid_password = inject('valid_password')
-  const update_password_reset = inject('update_password_reset')
-  const set_reset_status = inject('set_reset_status')
-  const email = inject('email')
-  const reset_token = inject('reset_token')
+  const csrf_token :string               = inject('csrf_token')
+  const reset_status :Ref<string>        = inject('reset_status')
+  const get_validation :()=>string       = inject('get_validation')
+  const valid_password: (password:string, password_confirmation:any)=>boolean      
+    = inject('valid_password')
+  const update_password_reset :(body:{}, header:{})=>void
+    = inject('update_password_reset')
+  const set_reset_status :(string)=>void = inject('set_reset_status')
+  const reset_validation :()=>void       = inject('reset_validation')
+  const email: Ref<string>               = inject('email')
+  const reset_token: Ref<string>         = inject('reset_token')
+
 
   //このコンポーネントで使う変数群
   const update_password_reset_flg = ref(false)

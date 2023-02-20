@@ -10,7 +10,7 @@
   import KifuTag from './kifus/kifu-tag.vue'
 
   //親コンポーネントから貰う奴ら。
-  const props = defineProps<{ kifu_data: { [key:string]: any} }>()
+  const props = defineProps<{ kifu_data: {[key:string]: any} }>()
   const kifu_data = toRef(props,'kifu_data')
   const csrf_token:string = inject('csrf_token')
   const loginFlg:boolean = inject('loginFlg')

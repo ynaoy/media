@@ -10,8 +10,8 @@
   </div>
 </template>
 
-<script setup>
-  import { provide} from 'vue'
+<script lang="ts" setup>
+  import { provide } from 'vue'
   import { PasswordResetHelper } from '../composables/PasswordResetHelper'
   import CheckEmailModal from './password_resets/CheckEmailModal.vue'
   import CreatePasswordResetModal from './password_resets/CreatePasswordResetModal.vue'
@@ -19,7 +19,7 @@
   import UpdatePasswordResetModal from './password_resets/UpdatePasswordResetModal.vue'
 
   //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
+  const csrf_token: string = inject('csrf_token')
 
   //リアクティブな変数群とメソッド群
   const email = ref('')

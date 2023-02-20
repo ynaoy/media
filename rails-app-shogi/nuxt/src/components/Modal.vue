@@ -24,7 +24,8 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+  import { Ref } from 'vue' 
   //親コンポーネントから貰う奴ら。
   const bModalProps = defineProps({ centered: { type:Boolean, default:false} ,
                                     hideHeaderClose: { type:Boolean, default:false },
@@ -34,10 +35,10 @@
                                     ariaLabelledby: { type:String, default: "" },
                                   })
   
-  const is_test  = inject('is_test')
-  const reactive_model = inject('reactive_model')
-  const shown_fnc = inject('shown_fnc')
-  const hidden_fnc = inject('hidden_fnc')
+  const is_test: boolean          = inject('is_test')
+  const reactive_model: Ref<any>  = inject('reactive_model')
+  const shown_fnc: ()=>void       = inject('shown_fnc')
+  const hidden_fnc: ()=>void      = inject('hidden_fnc')
 
   defineExpose( { bModalProps } )
 </script>
