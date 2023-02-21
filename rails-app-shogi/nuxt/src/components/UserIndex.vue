@@ -12,17 +12,17 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import UserItems from './users/user-items.vue'
   import { AppHelper } from '../composables/AppHelper'
   import { SessionHelper } from '../composables/SessionHelper'
   import { PaginationObject } from '../composables/PaginationObject'
 
   // 親コンポーネントから貰う奴ら。
-  const loginFlg = inject('loginFlg')
-  const admin = inject('admin')
-  const csrf_token = inject('csrf_token')
-  const { users } = defineProps(['users'])
+  const loginFlg:boolean  = inject('loginFlg')
+  const admin:boolean     = inject('admin')
+  const csrf_token:string = inject('csrf_token')
+  const { users } = defineProps<{ users: [{[key:string]: any}] }>()
 
   // 子コンポーネントに渡す奴ら。
   provide('loginFlg',loginFlg)

@@ -12,17 +12,17 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { UserHelper } from '../../composables/UserHelper'
 
   //このコンポーネントで使うヘルパー
   const { delete_user } = UserHelper()
 
   // 親コンポーネントから貰う奴ら。
-  const loginFlg = inject('loginFlg')
-  const admin = inject('admin')
-  const csrf_token = inject('csrf_token')
-  const { user } = defineProps(['user'])
+  const loginFlg:boolean  = inject('loginFlg')
+  const admin:boolean     = inject('admin')
+  const csrf_token:string = inject('csrf_token')
+  const { user } = defineProps<{ user:{[key:string]: any} }>()
   
   // 棋譜の削除を実行するメソッド
   const submit_delete = ()=>{

@@ -6,15 +6,15 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
   import userUrl from './user-url.vue'
   
   // 親コンポーネントから貰う奴ら。
-  const loginFlg = inject('loginFlg')
-  const admin = inject('admin')
-  const csrf_token = inject('csrf_token')
-  const { users } = defineProps(['users'])
+  const loginFlg:boolean  = inject('loginFlg')
+  const admin:boolean     = inject('admin')
+  const csrf_token:string = inject('csrf_token')
+  const { users } = defineProps<{ users: [{[key:string]: any}] }>()
 
   // 子コンポーネントに渡す奴ら。
   provide('loginFlg',loginFlg)

@@ -17,7 +17,7 @@ export const MountHelper = () =>{
   return {  Mount: Mount }
 }
 
-export const TestHelper = (wrapper="") =>{
+export const TestHelper = (wrapper= MountHelper().Mount(null)) =>{
   // 使うメソッドをヘルパーからもらう
   const { timewithzone_to_str } = AppHelper()
 

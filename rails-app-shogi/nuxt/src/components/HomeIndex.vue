@@ -36,7 +36,7 @@
   //親コンポーネントから貰う奴ら。
   const props = defineProps<{
     kifu_data: { [key:string]: any}, 
-    kifus: { [key:string]: any},
+    kifus: [{ [key:string]: any }],
     tags: Array<string>
   }>()
   const { kifu_data, kifus, tags } = toRefs(props)

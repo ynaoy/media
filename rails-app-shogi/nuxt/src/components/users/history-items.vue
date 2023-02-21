@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import KifuUrl from '../kifus/kifu-url.vue'
   import { AppHelper } from '../../composables/AppHelper'
   import { HistoryHelper } from '../../composables/HistoryHelper'
@@ -19,9 +19,10 @@
   const { display_day, display_flg, kifu_flg } = HistoryHelper()
 
   // 親コンポーネントから貰う奴ら。
-  const user_id = inject('user_id')
-  const csrf_token = inject('csrf_token')
-  const { items } = defineProps(['items'])
+  const user_id:number    = inject('user_id')  
+  const csrf_token:string = inject('csrf_token')
+  const loginFlg:boolean  = inject('loginFlg')
+  const { items } = defineProps<{ items: [{[key:string]: any}] }>()
 
   // 子コンポーネントに渡す奴ら。
   provide('user_id',user_id)
