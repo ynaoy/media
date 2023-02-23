@@ -55,14 +55,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { SessionHelper } from '../composables/SessionHelper'
   import { KifuHelper } from '../composables/KifuHelper'
   
   // 親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
-  const loginFlg = inject('loginFlg')
-  const { tags } = defineProps(['tags'])
+  const csrf_token :string = inject('csrf_token')
+  const loginFlg :boolean = inject('loginFlg')
+  const { tags } = defineProps<{ tags: any[] }>()
 
   // 使うメソッドをヘルパーからもらう
   const { create_kifu, get_kifu_player1_validation, get_kifu_player2_validation,
