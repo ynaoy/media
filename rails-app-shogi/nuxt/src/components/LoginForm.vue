@@ -28,12 +28,12 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { SessionHelper } from '../composables/SessionHelper'
   import PasswordReset from './PasswordReset.vue'
 
   //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
+  const csrf_token :string =  inject('csrf_token')
 
   const { login, login_check, reset_all_validation, check_validation, 
           get_email_validation, get_password_validation, get_login_validation, 
