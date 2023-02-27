@@ -30,18 +30,19 @@
   </header>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { SessionHelper } from '../composables/SessionHelper'
   import { SearchHelper } from '../composables/SearchHelper'
+  import { Ref } from 'vue'
 
   // このコンポーネントで使うメソッドをヘルパーからもらう
   const { logout } = SessionHelper()
   const { move_search } = SearchHelper()
 
   //親コンポーネントから貰う奴ら。未ログイン時にはuser_nameにはnullが入ってるので注意
-  const csrf_token = inject('csrf_token')
-  const user_name = ref(inject('user_name'))
-  const loginFlg = ref(inject('loginFlg'))
+  const csrf_token :string      = inject('csrf_token')
+  const user_name :Ref<string>  = ref(inject('user_name'))
+  const loginFlg :Ref<boolean>  = ref(inject('loginFlg'))
 
   //フォームで使うやつら
   const search_form = { text: ""}
@@ -63,13 +64,13 @@
     move_search(search_form.text)
   }
 
-  defineExpose( user_name,
-                loginFlg,
-                search_form,
-                bindKeyword,
-                session_logout,
-                move_search,
-                submit );
+  defineExpose( { user_name,
+                  loginFlg,
+                  search_form,
+                  bindKeyword,
+                  session_logout,
+                  move_search,
+                  submit  } );
 </script>
 
 <style scoped>

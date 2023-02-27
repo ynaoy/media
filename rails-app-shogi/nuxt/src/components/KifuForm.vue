@@ -23,7 +23,7 @@
             <label for="kifu_content">棋譜</label>
             <p>※必須</p>
           </div>
-          <textarea class="form-control with-validation" required="required" name="kifu[content]" id="kifu_content" cols="0" rows="8"
+          <textarea class="form-control with-validation" required="true" name="kifu[content]" id="kifu_content" cols="0" rows="8"
             v-model="kifu_form.content"></textarea>
           <div class="invalid_form"> {{ get_kifu_content_validation() }} </div>
 
