@@ -15,20 +15,24 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import UserItems from './users/user-items.vue'
   import KifusItems from './kifus/kifus-items.vue'
   import { AppHelper } from '../composables/AppHelper'
+  import { Ref } from 'vue'
 
   // このコンポーネントで使うヘルパー
   const { check_is_empty } = AppHelper()
 
   // 親コンポーネントから貰う奴ら。
-  const loginFlg = inject('loginFlg')
-  const admin = inject('admin')
-  const user_id = inject('user_id')
-  const csrf_token = inject('csrf_token')
-  let { users, kifus, query} = defineProps(['users', 'kifus', 'query'])
+  const loginFlg :boolean  = inject('loginFlg')
+  const admin :boolean     = inject('admin')
+  const user_id :number    = inject('user_id')
+  const csrf_token :string = inject('csrf_token')
+  let { users, kifus, query } = 
+    defineProps<{ users :Ref<[{ [key:string]: any }]>,
+                  kifus :Ref<[{ [key:string]: any }]>,
+                  query :Ref<string> }>()
 
   // 子コンポーネントに渡す奴ら。
   provide('user_id',user_id)
