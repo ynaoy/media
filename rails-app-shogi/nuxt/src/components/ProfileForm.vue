@@ -17,13 +17,13 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { UserHelper } from '../composables/UserHelper'
 
  //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
-  const user_id = inject('user_id')
-  const user_name = inject('user_name')
+  const csrf_token :string  = inject('csrf_token')
+  const user_id :number     = inject('user_id')
+  const user_name :string   = inject('user_name')
   const { update_user } = UserHelper()
 
   const update_form = { name:"" }
