@@ -28,11 +28,11 @@
   </div>
 </template>
 
-<script setup>
-
+<script lang="ts" setup>
+  import { Ref } from 'vue'
   //親コンポーネントから貰う奴ら
-  const user_id = inject('user_id')
-  const loginFlg = ref(inject('loginFlg'))
+  const user_id :number = inject('user_id')
+  const loginFlg :Ref<boolean>= ref(inject('loginFlg'))
 
   const tags = ["相掛かり","矢倉","角換わり","横歩取り","三間飛車","四間飛車","角交換四間飛車","角交換中飛車"]
   let class_name = "list-group-item list-group-item-action list-group-item-secondary"
