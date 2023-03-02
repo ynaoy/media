@@ -33,7 +33,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { UserHelper } from '../composables/UserHelper'  
   import SignupModal from './SignupModal.vue'
 
@@ -45,7 +45,7 @@
                         password_confirmation:"" })
 
   //親コンポーネントから貰う奴ら。
-  const csrf_token = inject('csrf_token')
+  const csrf_token: string = inject('csrf_token')
 
   // このコンポーネントで使う変数群
   const user_created_flg = ref(false)
@@ -63,11 +63,11 @@
 
   // このコンポーネントで使うメソッド群
   //日本語を扱う際に変換確定前の文字がformに反映されない問題を解決
-  const  bindKeyword = function({ target }){
+  const  bindKeyword = ({ target }):void =>{
     signup_form.name =  target.value;
   }
 
-  const submit = async function(){
+  const submit = async ():Promise<void> =>{
     //<<Bug inputに日本語と英字両方が混ざっていると
     //Error: Failed to execute 'setEnd' on 'Range': There is no child at offset 1.が出る>>
     if(check_validation(signup_form)){
