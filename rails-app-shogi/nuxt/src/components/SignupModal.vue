@@ -25,15 +25,16 @@
   </Modal>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import { UserHelper } from '../composables/UserHelper'  
   import Modal  from './Modal.vue'
+  import { Ref } from 'vue'
 
   //親コンポーネントから貰う奴ら。
-  const { is_test } = defineProps(['is_test'])
-  const csrf_token = inject('csrf_token')
-  const email = inject('email')
-  const user_created_flg = inject('user_created_flg')
+  const { is_test } = defineProps<{ is_test:boolean }>()
+  const csrf_token :string              = inject('csrf_token')
+  const email :Ref<string>              = inject('email')
+  const user_created_flg :Ref<boolean>  = inject('user_created_flg')
 
   const { post_account_activations } = UserHelper()
 
