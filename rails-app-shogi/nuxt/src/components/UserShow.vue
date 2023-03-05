@@ -11,14 +11,13 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   import KifusItems from './kifus/kifus-items.vue'
 
   // 親コンポーネントから貰う奴ら。
-  const user_id = inject('user_id')
-  const csrf_token = inject('csrf_token')
-  const { user_data } = defineProps(['user_data'])
-
+  const user_id :number = inject('user_id')
+  const csrf_token :string= inject('csrf_token')
+  const { user_data } = defineProps<{user_data: {[key:string]: any}}>()
   // 子コンポーネントに渡す奴ら。
   provide('user_id',user_id)
   provide('csrf_token',csrf_token)
@@ -28,7 +27,7 @@
   
   // このコンポーネントで使うメソッド群
   // リスト形式の変数kifusのサイズを返す
-  const kifus_size = computed(()=>{
+  const kifus_size = computed(():number =>{
     if(kifus == undefined) return 0
     return kifus.length
   })
