@@ -14,7 +14,7 @@
   import { inject, Ref } from 'vue'
   import { adminObject } from '../../composables/kifus/adminObject'
 
-  const emit = defineEmits(['update_state'])
+  const emit = defineEmits<{ (event:'update_state',value:number):void }>()
 
   //リアクティブな変数群
   const state: Ref<number> = inject('state')

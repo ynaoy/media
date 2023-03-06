@@ -1,6 +1,7 @@
-import { reactive, defineEmits } from 'vue'
+import { reactive, Ref } from 'vue'
 
-export const  adminObject = (state, max_state, emit)=>{
+interface emitType { (event:'update_state', value:number):void }
+export const  adminObject = (state:Ref<number>, max_state:Ref<number>, emit: emitType)=>{
 
   //リアクティブな変数群
   const admin_states =reactive({ })
@@ -9,7 +10,7 @@ export const  adminObject = (state, max_state, emit)=>{
 
   //strに応じて"update_state"イベントを発火させる。
   //strが"down"は-1、"down_10"は-10,"up"は+1,"up_10"は+10、stateを増やす
-  const update_state = function(str){
+  const update_state = (str:string):void =>{
     if(str=="down"){
       (state.value-1<0)? emit('update_state', 0): emit('update_state', state.value-1)
     }
