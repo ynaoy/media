@@ -1,6 +1,6 @@
-import { reactive, computed, } from 'vue'
+import { reactive, computed, Ref } from 'vue'
 
-export const  kifuObject = (kifu_data)=>{
+export const  kifuObject = (kifu_data: Ref<{[key:string]:any}>)=>{
 
     //リアクティブでない変数群
     const sub_board_label = ["飛","角","金","銀","桂","香","歩","玉"]
@@ -19,7 +19,7 @@ export const  kifuObject = (kifu_data)=>{
     
     //'update_state'イベントが発火されたら、
     //画面に表示されるリアクティブな変数を更新する
-    const update_board= function(event){
+    const update_board= (event:number):void =>{
         kifu_states.state = event
         kifu_states.board_text = kifu_data.value.kifu_text[kifu_states.state]
         kifu_states.board_flg = kifu_data.value.kifu_flg[kifu_states.state]
@@ -29,7 +29,7 @@ export const  kifuObject = (kifu_data)=>{
     //sub_board_textとsub_board_numを更新する
     //表示される駒をtextsに、その枚数をnumsに入れる。padsには表示されない部分を数合わせとして入れる
     //それを先手と後手二つ分用意する
-    const set_sub_board = function(){
+    const set_sub_board = ():void =>{
         kifu_states.sub_board_text = []
         kifu_states.sub_board_num = []
         for (let i=0; i<2; i++){
