@@ -1,6 +1,6 @@
-import { reactive } from 'vue'
+import { reactive,Ref } from 'vue'
 
-export const  mainBoardObject = (board_text, board_flg)=>{
+export const  mainBoardObject = (board_text:Ref<string[][]>, board_flg:Ref<number[][]>)=>{
 
   //リアクティブな変数群
   const main_board_states =reactive({ })
@@ -8,15 +8,15 @@ export const  mainBoardObject = (board_text, board_flg)=>{
   //メソッド群
 
   // nには0..80以下の整数が入る。それをlist[i][j]の形に変換する
-  const compute_i= function(n){
+  const compute_i= (n:number):number =>{
     return Math.floor((n)/9)
   }
 
-  const compute_j= function(n){
+  const compute_j= (n:number):number =>{
     return (n)%9
   }
 
-  const setStyle= function(n){
+  const setStyle= (n:number):string =>{
     if(board_flg.value[compute_i(n)][compute_j(n)] == 2){
       return "transform: scale(-1,-1);"
     }
