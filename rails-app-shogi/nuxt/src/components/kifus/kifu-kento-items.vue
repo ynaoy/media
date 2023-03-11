@@ -11,8 +11,8 @@
   import { Ref } from 'vue'
 
   //親コンポーネントから貰う変数群
-  const kento: <T>()=> T                 = inject('kento')
-  const state: Ref<number>               = inject('state')
+  const kento: null|string|{[key:string]:any} = inject('kento')
+  const state: Ref<number>                    = inject('state')
 
   //このコンポーネントで使うメソッド
 

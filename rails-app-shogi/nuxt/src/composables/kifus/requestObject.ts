@@ -1,24 +1,28 @@
-import { reactive, computed } from 'vue'
+import { reactive, computed, Ref } from 'vue'
 import { UrlHelper } from "../UrlHelper"
 
-export const requestObject = (kifu_data, csrf_token)=>{
+interface kifu_data_type {  [key:string]: any,
+                            favorite_flg: boolean,
+                            kento: null|string|{[key:string]:any},
+                            kifu_id: number }
 
+export const requestObject = (kifu_data:Ref<kifu_data_type>, csrf_token:string)=>{
   //使う関数のインポート
   const { FetchResponse } = UrlHelper()
 
   //リアクティブな変数群
-  const request_states =reactive({
-    favorite_flg: kifu_data.value.favorite_flg,
-    kento: kifu_data.value.kento,
-    processing: false,
-    kifu_id: computed(()=> kifu_data.value.kifu_id)
-  })
+  const request_states= reactive({
+      favorite_flg: kifu_data.value.favorite_flg,
+      kento: kifu_data.value.kento,
+      processing: false,
+      kifu_id: computed(()=> kifu_data.value.kifu_id)
+    })
 
   //メソッド群
     
   //"change_favorite"イベントで発火
   //processing.valueは子コンポーネントに飛ばして処理中ならお気に入りbuttonを押せなくする
-  const change_button = async function(event){
+  const change_button = async(event:boolean):Promise<void>=>{
     console.log(request_states.favorite_flg)
     request_states.processing = true;
     await send_favorites(event, request_states.kifu_id)
@@ -27,9 +31,9 @@ export const requestObject = (kifu_data, csrf_token)=>{
 
   //favoritesコントローラーに対して、
   //お気に入りフラグがtrueならdeleteメソッドを、falseならpostメソッドを飛ばして、お気に入りフラグを更新する
-  const send_favorites = async function(event, kifu_id){
+  const send_favorites = async(event:boolean, kifu_id:number):Promise<any>=>{
     
-    let request
+    let request:Promise<any>
     console.log(request_states.favorite_flg)
     if(request_states.favorite_flg){
       request = send_delete('favorites',
@@ -51,14 +55,14 @@ export const requestObject = (kifu_data, csrf_token)=>{
   }
 
   //kentosコントローラーに対して、getメソッドを飛ばして、kento変数を更新する
-  const fetch_kentos = async function(){
+  const fetch_kentos = async ():Promise<any> =>{
     
     let request = fetch_data('kentos',
                             { 'id': request_states.kifu_id  }, 
                             {},
                         )
   return  request
-          .then((res: { kento: String }) => {
+          .then((res: { kento:string }) => {
             console.log(res)
             update_kento(res.kento)
           })
@@ -68,7 +72,7 @@ export const requestObject = (kifu_data, csrf_token)=>{
   }
 
   //kento変数の値に応じて、定期的にapiのkentosと通信する、timerを指定すると共通のtimerを使いまわせる
-  const fetch_kentos_interval = async function(interval_ms:number, timer=null) {
+  const fetch_kentos_interval = async(interval_ms:number, timer=null) :Promise<NodeJS.Timer|number>=>{
     timer = setInterval(()=>{
       console.log(request_states.kento)
       if(request_states.kento=='processing_now'){
@@ -82,14 +86,14 @@ export const requestObject = (kifu_data, csrf_token)=>{
   }
 
   //kentosコントローラーに対して、postメソッドを飛ばして、kento変数を更新する
-  const post_kentos = async function(){
+  const post_kentos = async():Promise<any>=>{
     
-      let request = send_post('kentos',
-                              { 'kento': JSON.stringify({'id': request_states.kifu_id }) }, 
-                              { 'Authorization': csrf_token },
+    let request = send_post('kentos',
+                            { 'kento': JSON.stringify({'id': request_states.kifu_id }) }, 
+                            { 'Authorization': csrf_token },
                           )
     return  request
-            .then((res: { kento: String }) => {
+            .then((res: { kento:string }) => {
               console.log(res)
               update_kento(res.kento)
             })
@@ -99,7 +103,9 @@ export const requestObject = (kifu_data, csrf_token)=>{
   }
 
   //コントローラーにgetメソッドを飛ばしてDBと通信 
-  const fetch_data = function(controller:String, params:{}, headers:{}, ){
+  const fetch_data = (controller:string,
+                      params:{[key:string]:any},
+                      headers:{[key:string]:any}):Promise<any>=>{
     params['format'] = 'json'
     return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}/${params.id}`,
     { method:'GET',
@@ -110,7 +116,9 @@ export const requestObject = (kifu_data, csrf_token)=>{
   }
 
   //コントローラーにpostメソッドを飛ばしてDBと通信 
-  const send_post = function(controller:String, body:{}, headers:{}, ){
+  const send_post = ( controller:string, 
+                      body:{[key:string]:any},
+                      headers:{[key:string]:any}):Promise<any>=>{
     headers['Content-Type'] = 'application/json'
     return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}`,
     { method:'POST',
@@ -122,7 +130,9 @@ export const requestObject = (kifu_data, csrf_token)=>{
   }
 
   //コントローラーにdeleteメソッドを飛ばしてDBと通信
-  const send_delete = function(controller, params, headers){
+  const send_delete = ( controller:string,
+                        params:{[key:string]:any},
+                        headers:{[key:string]:any}):Promise<any>=>{
     params['format'] = 'json'
     return FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/${controller}`,
     { method:'DELETE',
@@ -132,11 +142,11 @@ export const requestObject = (kifu_data, csrf_token)=>{
     })
   }
 
-  const update_favorite_flg = (new_favorite_flg)=>{
+  const update_favorite_flg = (new_favorite_flg:boolean):void=>{
     request_states.favorite_flg = new_favorite_flg
     
   }
-  const update_kento = (new_kento)=>{
+  const update_kento = (new_kento:string):void=>{
     request_states.kento = new_kento
   }
 

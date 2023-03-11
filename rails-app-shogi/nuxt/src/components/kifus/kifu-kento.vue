@@ -15,10 +15,10 @@
   import { Ref, ComputedRef } from 'vue'
 
   //親コンポーネントから貰う変数群
-  const my_kifu: ComputedRef<boolean>    = inject('my_kifu')
-  const kento: <T>()=> T                 = inject('kento')
-  const state: Ref<number>               = inject('state')
-  const post_kentos: ()=>void            = inject('post_kentos')
+  const my_kifu: ComputedRef<boolean>         = inject('my_kifu')
+  const kento: null|string|{[key:string]:any} = inject('kento')
+  const state: Ref<number>                    = inject('state')
+  const post_kentos: ()=>void                 = inject('post_kentos')
   const fetch_kentos_interval: <T>(interval_ms:number, timer?:T)=> NodeJS.Timer|number
     = inject('fetch_kentos_interval')
   
