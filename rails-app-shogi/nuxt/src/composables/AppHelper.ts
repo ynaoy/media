@@ -1,11 +1,11 @@
 export const AppHelper = ()=>{
   // 引数が空かどうか判定
-  const check_is_empty = (items: any[]|{})=>{
+  const check_is_empty = (items: any[]|{}):boolean=>{
     return (items != undefined) && (Object.keys(items).length != 0) 
   }
 
   // JST(UTCの日本版)形式の時刻データを、yyyy年MM月dd日hh時mm分に成形する
-  const timewithzone_to_str = (datetime, with_time=false)=>{
+  const timewithzone_to_str = (datetime:string, with_time=false):string=>{
     datetime = new Date(datetime)
     let year = datetime.getFullYear(), month = datetime.getMonth()+1, date = datetime.getDate()
     let hour = datetime.getHours(), minute = datetime.getMinutes()
