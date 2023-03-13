@@ -5,7 +5,7 @@ export const AppHelper = ()=>{
   }
 
   // JST(UTCの日本版)形式の時刻データを、yyyy年MM月dd日hh時mm分に成形する
-  const timewithzone_to_str = (datetime:string, with_time=false):string=>{
+  const timewithzone_to_str = (datetime:string|number|Date, with_time=false):string=>{
     datetime = new Date(datetime)
     let year = datetime.getFullYear(), month = datetime.getMonth()+1, date = datetime.getDate()
     let hour = datetime.getHours(), minute = datetime.getMinutes()
