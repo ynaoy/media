@@ -10,7 +10,8 @@ export const KifuHelper = () => {
 
   //サーバーサイドkifus/[id]にparams付きでGETリクエストを送る。
   //棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
-  const get_kifu = async (params:{ id:number },headers:{} ) =>{
+  const get_kifu = async (params:{ id:number },headers:{[key:string]:any} )
+    :Promise<{[key:string]:any}>  =>{
 
     let ret = {}
     params['format'] = 'json'
@@ -20,7 +21,7 @@ export const KifuHelper = () => {
         headers: headers,
         credentials: 'include'
       })
-      .then((data) => {
+      .then((data:{[key:string]:any}) => {
         console.log(data)
         ret = data
       })
@@ -34,7 +35,7 @@ export const KifuHelper = () => {
   //レスポンスには{ success: String, kifu_id: Number }が入ってる
   const create_kifu = async ( body:{ kifu:{ title:"",player1:"",player2:"",kento:false,content:"",
                                             tag:{ tag_ids:[] } }},
-                              headers:{} ) =>{
+                              headers:{[key:string]:any} ):Promise<void>=>{
     headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus`,
       { method:'POST',
@@ -43,7 +44,7 @@ export const KifuHelper = () => {
         credentials: 'include',
         body: body
       })
-      .then((data) => {
+      .then((data:{[key:string]:any}) => {
         console.log(data)
         reset_all_validation()
         location.href = `/kifus/${data.kifu_id}`
@@ -56,7 +57,7 @@ export const KifuHelper = () => {
   //サーバーサイドkifusコントローラーにparams付きでDELETEリクエストを送る。
   //レスポンスには{ success: String }が入ってる
   const delete_kifu = async ( params:{ id: number },
-                              headers:{} ) =>{
+                              headers:{[key:string]:any} ):Promise<void>=>{
     params['format'] = 'json'
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus/${params.id}`,
       { method:'DELETE',
@@ -64,7 +65,7 @@ export const KifuHelper = () => {
         headers: headers,
         credentials: 'include'
       })
-      .then((data) => {
+      .then((data:{[key:string]:any}) => {
         console.log(data)
         location.href =  location.href
       })
@@ -74,7 +75,7 @@ export const KifuHelper = () => {
     }
 
     //ログインしているユーザーの棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
-    const get_users_kifu = async () =>{
+    const get_users_kifu = async ():Promise<{[key:string]:any}>=>{
 
       let ret = {} 
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/kifus`,
@@ -83,7 +84,7 @@ export const KifuHelper = () => {
           headers: {},
           credentials: 'include'
         })
-        .then((data) => {
+        .then((data:{[key:string]:any}) => {
           console.log(data)
           ret = data
         })
@@ -95,7 +96,8 @@ export const KifuHelper = () => {
 
     // apiからランダムに棋譜を一つ貰う。指定したタグ成分を持つ棋譜からランダムで貰う事も可能
     const get_random_one = async( params:{ tag: string },
-                                  headers:{}) =>{
+                                  headers:{[key:string]:any}
+                                ):Promise<{[key:string]:any}> =>{
 
       let ret = {} 
       params['format'] = 'json'
@@ -117,7 +119,8 @@ export const KifuHelper = () => {
 
     // apiから100個の棋譜を貰う。指定したタグ成分を持つ棋譜で貰う事も可能
     const get_kifus = async(  params:{ tag:string },
-                              headers:{}) =>{
+                              headers:{[key:string]:any}
+                            ):Promise<{[key:string]:any}> =>{
 
       let ret = {} 
       params['format'] = 'json'
