@@ -1,5 +1,7 @@
 import { UrlHelper } from "./UrlHelper"
 import { SignupValidationHelper } from "./ValidationHelper"
+import { Ref } from 'vue'
+import { ReturnVoid } from "~~/pages/__VLS_types"
 
 export const UserHelper = () => {
   // 使う関数のインポート
@@ -12,15 +14,15 @@ export const UserHelper = () => {
   // jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   // <<Todo succes_flgがダサい。そのうち改善する >>
   const create_user = 
-    async function( body: { user: {
-                              name:string,
-                              email:string, 
-                              password:string,
-                              password_confirmation:string },
-                          },
-                    headers:{},
-                    success_flg= null           
-                  ){
+    async ( body: { user: {
+                            name:string,
+                            email:string, 
+                            password:string,
+                            password_confirmation:string },
+                  },
+                  headers:{[key:string]:any},
+                  success_flg:Ref<boolean> = null//指定しない場合はフラグが更新されない       
+                  )=>{
       headers['Content-Type'] = 'application/json',
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/signup`,
         { method:'POST',
@@ -43,11 +45,11 @@ export const UserHelper = () => {
     }
 
   const update_user = 
-    async function( params:{  id: number,
-                              user: { name:string }
-                              },
-                    headers:{},                      
-                  ){
+    async ( params:{  id: number,
+                      user: { name:string }
+                    },
+            headers:{[key:string]:any},                      
+                  ):Promise<void>=>{
       params['format'] = 'json'
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params['id']}`,
         { method:'PATCH',
@@ -67,16 +69,17 @@ export const UserHelper = () => {
   // サーバーサイドusersコントローラーにparams付きでDELETEリクエストを送る。
   // レスポンスには{ success: String }が入ってる
   const delete_user = async ( params:{ id: number },
-    headers:{} ) =>{
+                              headers:{[key:string]:any}
+                            ):Promise<void> =>{
     params['format'] = 'json'
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/users/${params.id}`,
       { method:'DELETE',
-      params: params,
-      headers: headers,
-      credentials: 'include'
+        params: params,
+        headers: headers,
+        credentials: 'include'
       })
       .then((data) => {
-      console.log(data)
+        console.log(data)
         location.href =  location.href
       })
       .catch((error) => {
@@ -87,13 +90,12 @@ export const UserHelper = () => {
   // サーバーサイドのaccount_activations_URLにparams付きでPostリクエストを送る。
   // jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
   const post_account_activations = 
-    async function( body: { account_activation: {
-                              email:string,
-                              activation_token:string,
-                              },
-                          },
-                    headers:{},                      
-                  ){
+    async ( body: { account_activation: {
+                    email:string,
+                    activation_token:string,
+                  }},
+            headers:{},                      
+          ):Promise<void>=>{
       headers['Content-Type'] = 'application/json',
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/account_activations`,
         { method:'POST',
@@ -112,7 +114,7 @@ export const UserHelper = () => {
     }
 
   const get_all_user = 
-    async function( params = {}, headers = {} ){
+    async ( params = {}, headers = {} ):Promise<{[key:string]:any}>=>{
 
       let ret = {} 
       params['format'] = 'json'
@@ -134,7 +136,9 @@ export const UserHelper = () => {
     }
   
     // ユーザーとその棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
-    const get_user = async (params:{ id:number },headers:{} ) =>{
+    const get_user = async (  params:{ id:number },
+                              headers:{[key:string]:any}
+                            ):Promise<{[key:string]:any}> =>{
 
       let ret = {}
       params['format'] = 'json'
@@ -155,7 +159,9 @@ export const UserHelper = () => {
     }
 
     // ユーザーの閲覧履歴の棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
-    const get_users_history = async (params:{ id:number },headers:{} ) =>{
+    const get_users_history = async ( params:{ id:number },
+                                      headers:{[key:string]:any}
+                                    ):Promise<{[key:string]:any}>=>{
 
       let ret = {}
       params['format'] = 'json'
@@ -176,7 +182,9 @@ export const UserHelper = () => {
     }
 
     // ユーザーのお気に入りの棋譜のデータがjson形式で帰ってくれば成功。さもなくばエラーを吐き出す
-    const get_users_favorite = async (params:{ id:number },headers:{} ) =>{
+    const get_users_favorite = async (  params:{ id:number },
+                                        headers:{[key:string]:any} 
+                                      ):Promise<{[key:string]:any}> =>{
 
       let ret = {}
       params['format'] = 'json'
