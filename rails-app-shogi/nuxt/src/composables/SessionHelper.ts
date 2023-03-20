@@ -10,7 +10,8 @@ export const SessionHelper = () => {
 
   //サーバーサイドのログインURLにparams付きでPostリクエストを送る。
   //jwtトークンが入ったcookieが帰ってくれば成功。さもなくばエラーを吐き出す
-  const login = async (body: { session:{ email:string, password:string}},headers:{} ) =>{
+  const login = async ( body: { session:{ email:string, password:string}},
+                        headers:{[key:string]:any} ):Promise<void> =>{
     headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/login`,
       { method:'POST',
@@ -33,7 +34,7 @@ export const SessionHelper = () => {
 
   //サーバーサイドのログインチェックURLにGetリクエストを送る。
   //サーバー側でチェックして成功ならtrue、失敗ならfalseを返す
-  const login_check = async() =>{
+  const login_check = async():Promise<{[key:string]:any}> =>{
     let Flg = false
     let data = {}
     let csrf_token :string
@@ -53,7 +54,7 @@ export const SessionHelper = () => {
     return { 'data':data, 'loginFlg':Flg, 'csrf_token':csrf_token, }
   }
 
-  const logout = async (headers:{} ) =>{
+  const logout = async (headers:{[key:string]:any}):Promise<void> =>{
     const params = {}
     params['format'] = 'json'
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/logout`,
@@ -72,7 +73,7 @@ export const SessionHelper = () => {
   }
 
   //ログインしていなかったらログインページに飛ばす
-  const force_login= (loginFlg)=>{
+  const force_login= (loginFlg:boolean)=>{
     if (!loginFlg) {
       store_location()
       return navigateTo('/login') 
@@ -80,12 +81,12 @@ export const SessionHelper = () => {
   }
 
   //sessionに今いるページのurlを保持する
-  const store_location = ()=>{
+  const store_location = ():void=>{
     sessionStorage.setItem('store_location', location.href)
   }
 
   //sessionに'store_location'キーがあればそのページに、なければホームにリダイレクトする
-  const redirect_back_or_home = ()=>{
+  const redirect_back_or_home = ():void=>{
     let sess = sessionStorage.getItem('store_location');
     console.log(sess)
     location.href = (sess == null) ? '/' : sess;
