@@ -13,7 +13,7 @@ export const SignupValidationHelper = ()=>{
   
     //--メソッド--
     // すべてのバリデーションをリセットする
-    const reset_all_validation = ()=>{
+    const reset_all_validation = ():void=>{
       email_validation_class.reset()
       user_name_validation_class.reset()
       password_validation_class.reset()
@@ -24,7 +24,7 @@ export const SignupValidationHelper = ()=>{
                                             email:string, 
                                             password:string,
                                             password_confirmation:string },
-                                    ) =>{
+                                    ):boolean =>{
         const email_validation_result = email_validation_class.valid_email(form.email)
         const user_name_validation_result = user_name_validation_class.valid_user_name(form.name)
         const password_validation_result = 
@@ -51,7 +51,7 @@ export const LoginValidationHelper = () =>{
 
   //--メソッド--
   // すべてのバリデーションをリセットする
-  const reset_all_validation = ()=>{
+  const reset_all_validation = ():void=>{
     email_validation_class.reset()
     password_validation_class.reset()
   }
@@ -60,7 +60,7 @@ export const LoginValidationHelper = () =>{
   const check_login_validation = (form: {email:string, 
                                         password:string,
                                         },
-                                  ) =>{
+                                  ):boolean =>{
       const email_validation_result = email_validation_class.valid_email(form.email)
       const password_validation_result = 
                 password_validation_class.valid_password(form.password, form.password)
@@ -86,7 +86,7 @@ export const KifuValidationHelper = () =>{
 
   //--メソッド--
   // すべてのバリデーションをリセットする
-  const reset_all_validation = ()=>{
+  const reset_all_validation = ():void=>{
     kifu_player1_validation_class.reset()
     kifu_player2_validation_class.reset()
     kifu_content_validation_class.reset()
@@ -97,7 +97,7 @@ export const KifuValidationHelper = () =>{
                                         player2:string,
                                         content:string
                                         },
-                                  ) =>{
+                                  ):boolean =>{
       const player1_validation_result = kifu_player1_validation_class.valid_kifu_user_name(form.player1)
       const player2_validation_result = kifu_player2_validation_class.valid_kifu_user_name(form.player2)
       const content_validation_result = kifu_content_validation_class.valid_kifu_content(form.content)
