@@ -10,12 +10,12 @@ export const PasswordResetHelper = () =>{
   //サーバーサイドのpassword_reset/check_emailに、ユーザー検索用のemailのparams付きでPostリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
   const check_email_to_post = 
-    async function( body: { password_reset: {
+    async ( body: { password_reset: {
                               email:string, 
                             },
                           },
-                    headers:{}         
-                  ){
+            headers:{[key:string]:any}   
+          ):Promise<void>=>{
       headers['Content-Type'] = 'application/json',
       await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets/check_email`,
         { method:'POST',
@@ -38,12 +38,12 @@ export const PasswordResetHelper = () =>{
   //サーバーサイドのpassword_resetに、ユーザー検索用に使うemailのparams付きでPostリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
   const  create_password_reset = 
-    async function( body: { password_reset: {
-                              email:string, 
-                            },
-                          },
-                    headers:{},          
-                ){
+    async ( body: { password_reset: {
+                      email:string, 
+                    },
+                  },
+            headers:{[key:string]:any},          
+                ):Promise<void>=>{
     headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets`,
       { method:'POST',
@@ -66,13 +66,13 @@ export const PasswordResetHelper = () =>{
   //認証用のreset_tokenのparams付きでPostリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
   const  check_token = 
-    async function( body: { password_reset: {
-                              email:string, 
-                            },
-                            reset_token: string,
-                          },
-                    headers:{},          
-                ){
+    async ( body: { password_reset: {
+                      email:string, 
+                    },
+                    reset_token: string,
+                  },
+            headers:{[key:string]:any},          
+          ):Promise<void>=>{
     headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets/check_token`,
       { method:'POST',
@@ -96,17 +96,17 @@ export const PasswordResetHelper = () =>{
   //ユーザー検索用のemailと更新用のパスワードと認証用のreset_tokenの、params付きでPATCHリクエストを送る。
   //Responseにsuccessキーがあればreset_statusを更新
   const update_password_reset = 
-    async function( body: { password_reset: {
-                              email:string, 
-                            },
-                            user:{
-                              password:string,
-                              password_confirmation:string,
-                            },
-                            reset_token: String,
-                        },
-                    headers:{},         
-                ){
+    async ( body: { password_reset: {
+                      email:string, 
+                    },
+                    user:{
+                      password:string,
+                      password_confirmation:string,
+                    },
+                    reset_token: String,
+                  },
+            headers:{},         
+          ):Promise<void>=>{
     headers['Content-Type'] = 'application/json',
     await FetchResponse(`${import.meta.env.VITE_API_ORIGIN}/password_resets/update_password`,
       { method:'PATCH',
@@ -127,7 +127,7 @@ export const PasswordResetHelper = () =>{
       })
   }
 
-  const set_reset_status = function(status){
+  const set_reset_status = (status:string):void=>{
     reset_status.value=status
   }
 

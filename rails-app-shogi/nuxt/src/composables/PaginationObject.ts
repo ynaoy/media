@@ -8,12 +8,12 @@ export const PaginationObject = (parPage=20)=>{
   //メソッド群
 
   // currentPageを更新する
-  const set_pageNum = (event)=>{
+  const set_pageNum = (event:number):void=>{
     currentPage.value = event
   }
 
   // paginateされたデータを返す
-  const get_items = (items)=>{
+  const get_items = (items:any[]):any[]=>{
     let current = currentPage.value * parPage
     let start = current - parPage
     return items.slice(start, current)
