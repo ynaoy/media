@@ -16,8 +16,13 @@ export const MountHelper = () =>{
 
   return {  Mount: Mount }
 }
-
-export const TestHelper = (wrapper= MountHelper().Mount(null)) =>{
+interface wrapper_type {
+  text:()=>string,
+  find:<v>(value:v)=>{  exists:()=>boolean,
+                        setValue:<v>(value:v)=>void
+                      }
+}
+export const TestHelper = (wrapper: wrapper_type=null) =>{
   // 使うメソッドをヘルパーからもらう
   const { timewithzone_to_str } = AppHelper()
 
