@@ -15,7 +15,7 @@
     "fetch-mock": "^9.11.0",
     "jsdom": "^19.0.0",
     "node-sass": "^7.0.1",
-    "nuxt": "3.0.0-rc.3",
+    "nuxt": "3.3.1",
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
     "unplugin-auto-import": "^0.8.8",
