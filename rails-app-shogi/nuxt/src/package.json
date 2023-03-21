@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@nuxt/test-utils-edge": "^3.0.0-rc.4-27585508.c9d4b2e",
-    "@vue/test-utils": "^2.0.0",
+    "@vue/test-utils": "^2.3.1",
     "add": "^2.0.6",
     "fetch-mock": "^9.11.0",
     "jsdom": "^19.0.0",

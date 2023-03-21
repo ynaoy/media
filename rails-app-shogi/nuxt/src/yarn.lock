@@ -1144,7 +1144,7 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.47.tgz#e597ef75086c6e896ff5478a6bfc0a7aa4bbd14c"
   integrity sha512-BHGyyGN3Q97EZx0taMQ+OLNuZcW3d37ZEVmEAyeoA9ERdGvm9Irc/0Fua8SNyOtV1w6BS4q25wbMzJujO9HIfQ==
 
-"@vue/test-utils@^2.0.0", "@vue/test-utils@^2.0.0-rc.17":
+"@vue/test-utils@^2.0.0-rc.17", "@vue/test-utils@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-2.3.1.tgz#411883ea52091fa3e59d9b0b83f2934111c10776"
   integrity sha512-tRtHRPEETQSUrqXgAewNZHm5iypxDFxwenfdcvMRm1kbGo4bcqHb1XHHlsaIjoDbLkuE2NYiF8vBQDNYrzlrSA==
